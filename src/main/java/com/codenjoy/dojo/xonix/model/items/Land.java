@@ -22,11 +22,11 @@ package com.codenjoy.dojo.xonix.model.items;
  * #L%
  */
 
+
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
 
 public class Land extends AbstractItem {
-
     public Land(Point pt) {
         super(pt, Elements.LAND);
     }

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.xonix.model.level;
  */
 
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.items.Land;
 import com.codenjoy.dojo.xonix.model.items.Sea;
 
@@ -47,10 +48,14 @@ public class Level {
 
 
     public List<Land> land() {
-        return getObjects(xy, map, Land::new, LAND);
+        return getObjects(xy, map, Land::new, LAND, XONIX);
     }
 
     public List<Sea> sea() {
         return getObjects(xy, map, Sea::new, SEA);
+    }
+
+    public Hero hero() {
+        return getObjects(xy, map, Hero::new, XONIX).get(0);
     }
 }

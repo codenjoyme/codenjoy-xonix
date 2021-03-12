@@ -28,7 +28,10 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.xonix.model.items.*;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.GameSettings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +40,17 @@ import static java.util.stream.Collectors.toList;
 
 public class XonixGame implements Field {
 
+    private static final Logger LOG = LoggerFactory.getLogger(XonixGame.class);
+
     private final List<Player> players = new LinkedList<>();
     private final Level level;
     private int size;
+
     private List<Sea> sea;
     private List<Land> land;
+    private Hero hero;
 
-    private GameSettings settings;
+    private final GameSettings settings;
 
     public XonixGame(Level level, GameSettings settings) {
         this.settings = settings;
@@ -55,6 +62,25 @@ public class XonixGame implements Field {
         size = level.size();
         sea = level.sea();
         land = level.land();
+        hero = level.hero();
+    }
+
+    @Override
+    public Hero getNewHero(Player player) {
+        Hero hero = this.hero;
+        hero.init(player);
+        hero.init(this);
+        return hero;
+    }
+
+    @Override
+    public boolean isLand(Point point) {
+        return land.contains(point);
+    }
+
+    @Override
+    public boolean isSea(Point point) {
+        return sea.contains(point);
     }
 
     @Override
@@ -63,18 +89,6 @@ public class XonixGame implements Field {
             .map(Player::getHero)
             .forEach(Hero::tick);
     }
-
-    @Override
-    public boolean isBarrier(Point pt) {
-        return pt.isOutOf(size)
-                || anyMatch(sea, pt);
-    }
-
-    @Override
-    public boolean isAllClear() {
-        return land.isEmpty();
-    }
-
 
     public <T extends Point> Optional<T> found(List<T> items, Point pt) {
         return items.stream()
@@ -85,21 +99,6 @@ public class XonixGame implements Field {
     public <T extends Point> boolean anyMatch(List<T> items, Point pt) {
         return items.stream()
                 .anyMatch(pt::equals);
-    }
-
-    @Override
-    public boolean isCleanPoint(Point pt) {
-        return true;
-    }
-
-    @Override
-    public boolean isDust(Point pt) {
-        return anyMatch(land, pt);
-    }
-
-    @Override
-    public void removeDust(Point pt) {
-        land.remove(pt);
     }
 
     public int getSize() {
@@ -144,6 +143,7 @@ public class XonixGame implements Field {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<>() {{
                     addAll(getHeroes());
+                    addAll(XonixGame.this.getHeroes().get(0).getTrace());
                     addAll(XonixGame.this.sea);
                     addAll(XonixGame.this.land);
                 }};

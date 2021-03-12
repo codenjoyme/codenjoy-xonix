@@ -27,16 +27,21 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.xonix.services.Event;
+import com.codenjoy.dojo.xonix.model.items.Trace;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
-    private static final int RESTART_ACTION = 0;
-
     private Direction direction;
-    private boolean reset = false;
-    private boolean win = false;
     private Player player;
+    private Point lastPointOnLand;
+    private List<Trace> trace = new ArrayList<>();
+
+    public List<Trace> getTrace() {
+        return trace;
+    }
 
     public Hero(Point pt) {
         super(pt);
@@ -51,84 +56,55 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         this.field = field;
     }
 
-    public void tryChange(Direction input) {
-        if (direction == null) {
-            direction = input;
-        }
-    }
-
     @Override
     public void down() {
-        tryChange(Direction.DOWN);
+        direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        tryChange(Direction.UP);
+        direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        tryChange(Direction.LEFT);
+        direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        tryChange(Direction.RIGHT);
+        direction = Direction.RIGHT;
     }
 
     @Override
     public void act(int... p) {
-        if (p.length > 0 && p[0] == RESTART_ACTION) {
-            reset = true;
-        }
+        // The hero can only move
     }
 
     @Override
     public void tick() {
         if (direction != null) {
-            tryMove(direction.change(this.copy()));
-        }
-
-        if (field.isAllClear()) {
-            player.event(Event.ALL_CLEAR);
-            win = true;
+            tryMove(direction.change(this));
         }
     }
 
-    public void tryMove(Point to) {
-        if (field.isBarrier(to) || !field.canMove(this, to)) {
-            direction = null;
-            return;
+    public void tryMove(Point destination) {
+        if (!isFloating() && field.isSea(destination)) {
+            lastPointOnLand = this;
+        } else if (isFloating() && field.isSea(destination)) {
+            trace.add(new Trace(this));
+        } else if (isFloating() && field.isLand(destination)) {
+            trace.add(new Trace(this));
         }
+        move(destination);
+    }
 
-        move(to);
-
-        if (field.isCleanPoint(to)) {
-            player.event(Event.TIME_WASTED);
-        }
-
-        if (field.isDust(to)) {
-            field.removeDust(to);
-            player.event(Event.DUST_CLEANED);
-        }
-
-        Point next = direction.change(to);
-        if (field.isBarrier(next)) {
-            direction = null;
-        }
+    public boolean isFloating() {
+        return lastPointOnLand != null;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.XONIX;
-    }
-
-    public boolean win() {
-        return win;
-    }
-
-    public boolean reset() {
-        return reset;
     }
 }

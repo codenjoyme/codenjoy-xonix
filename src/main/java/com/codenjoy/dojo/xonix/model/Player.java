@@ -41,19 +41,17 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero(field.getStart());
-        hero.init(this);
-        hero.init(field);
+        hero = field.getNewHero(this);
     }
 
     @Override
     public boolean isAlive() {
-        return !hero.win() && !hero.reset();
+        return true;
     }
 
     @Override
     public boolean isWin() {
-        return hero.win();
+        return false;
     }
 
     @Override

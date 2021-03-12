@@ -27,16 +27,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 public interface Field extends GameField<Player> {
-
-    boolean isBarrier(Point pt);
-
-    boolean isAllClear();
-
-    boolean isDust(Point pt);
-
-    void removeDust(Point pt);
-
-    boolean isCleanPoint(Point pt);
-
     boolean canMove(Point from, Point to);
+
+    Hero getNewHero(Player player);
+
+    boolean isLand(Point point);
+
+    boolean isSea(Point point);
 }

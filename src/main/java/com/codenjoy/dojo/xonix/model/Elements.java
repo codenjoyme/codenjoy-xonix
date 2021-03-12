@@ -32,6 +32,8 @@ public enum Elements implements CharElements {
     LAND('#'),
     SEA('.'),
 
+    TRACE('x'),
+
     XONIX('O'),
     MARINE_ENEMY('M'),
     LAND_ENEMY('L');

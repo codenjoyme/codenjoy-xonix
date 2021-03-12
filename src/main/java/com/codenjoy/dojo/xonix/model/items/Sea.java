@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
 
 public class Sea extends AbstractItem {
-
     public Sea(Point pt) {
         super(pt, Elements.SEA);
     }
