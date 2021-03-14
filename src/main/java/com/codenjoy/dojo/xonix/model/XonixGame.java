@@ -10,12 +10,12 @@ package com.codenjoy.dojo.xonix.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,20 +23,22 @@ package com.codenjoy.dojo.xonix.model;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.xonix.model.items.*;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.GameSettings;
+import com.google.common.collect.EvictingQueue;
+import com.google.common.collect.Queues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class XonixGame implements Field {
 
@@ -86,8 +88,14 @@ public class XonixGame implements Field {
     @Override
     public void tick() {
         players.stream()
-            .map(Player::getHero)
-            .forEach(Hero::tick);
+                .map(Player::getHero)
+                .forEach(hero -> {
+                   hero.tick();
+                   if (hero.isLanded()) {
+                       foo(hero);
+                       hero.clearTrace();
+                   }
+                });
     }
 
     public <T extends Point> Optional<T> found(List<T> items, Point pt) {
@@ -154,5 +162,51 @@ public class XonixGame implements Field {
     @Override
     public GameSettings settings() {
         return settings;
+    }
+
+    private void turnToLand(Point point) {
+        if (sea.remove(point)) {
+            land.add(new Land(point));
+        }
+    }
+
+    private void foo(Hero hero) {
+        List<Trace> trace = hero.getTrace();
+        if (trace.size() == 1) {
+            turnToLand(trace.get(0));
+            return;
+        }
+        Direction firstWaveDirection = hero.getDirection()
+                .counterClockwise();
+        Trace lastTraceCell = trace.get(trace.size() - 1);
+        Collection<Point> points = breadthFirstSearch(firstWaveDirection.change(lastTraceCell));
+        points.addAll(trace);
+        points.forEach(this::turnToLand);
+    }
+
+    private Collection<Point> breadthFirstSearch(Point start) {
+        ArrayDeque<Point> queue = Queues.newArrayDeque();
+        queue.offer(start);
+        HashSet<Point> visited = new HashSet<>();
+        while (!queue.isEmpty()) {
+            Point point = queue.poll();
+            visited.add(point);
+            Point left = Direction.LEFT.change(point);
+            Point up = Direction.UP.change(point);
+            Point right = Direction.RIGHT.change(point);
+            Point down = Direction.DOWN.change(point);
+            Stream.of(up, down, left, right)
+                    .filter(p -> !visited.contains(p))
+                    .filter(p -> !isTrace(p))
+                    .filter(this::isSea)
+                    .forEach(queue::offer);
+        }
+        return visited;
+    }
+
+    private boolean isTrace(Point point) {
+        return getHeroes().stream()
+                .flatMap(hero -> hero.getTrace().stream())
+                .anyMatch(trace -> trace.equals(point));
     }
 }

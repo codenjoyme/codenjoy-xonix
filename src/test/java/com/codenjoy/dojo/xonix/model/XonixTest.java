@@ -65,8 +65,33 @@ public class XonixTest extends AbstractGameTest {
 
         // then
         assertE("#####" +
-                "###.#" +
-                "O##.#" +
+                "#.###" +
+                "O####" +
+                "#####" +
+                "#####");
+    }
+
+    @Test
+    // https://www.youtube.com/watch?v=POhMfAFZ_6c (1:38)
+    public void shouldMakeLandOnlyTrace_whenTraceLengthIsOne() {
+
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#####" +
+                "#...#" +
+                "#####");
+
+        // when
+        hero.down();
+        game.tick();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("#####" +
+                "#.#.#" +
+                "##O##" +
                 "#...#" +
                 "#####");
     }

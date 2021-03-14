@@ -25,6 +25,7 @@ package com.codenjoy.dojo.xonix.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
@@ -39,8 +40,20 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private Point lastPointOnLand;
     private List<Trace> trace = new ArrayList<>();
 
+    public boolean isLanded() {
+        return !trace.isEmpty() && lastPointOnLand == null;
+    }
+
     public List<Trace> getTrace() {
         return trace;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public Point getPosition() {
+        return PointImpl.pt(x, y);
     }
 
     public Hero(Point pt) {
@@ -95,6 +108,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             trace.add(new Trace(this));
         } else if (isFloating() && field.isLand(destination)) {
             trace.add(new Trace(this));
+            lastPointOnLand = null;
         }
         move(destination);
     }
@@ -106,5 +120,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.XONIX;
+    }
+
+    public void clearTrace() {
+        trace = new ArrayList<>();
     }
 }
