@@ -30,9 +30,13 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
@@ -102,17 +106,27 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
+    private List<Point> getTraceHitbox() {
+        return trace.stream()
+                .flatMap(tr -> Stream.of(
+                        tr,
+                        Direction.LEFT.change(tr),
+                        Direction.UP.change(tr),
+                        Direction.RIGHT.change(tr),
+                        Direction.DOWN.change(tr))
+                ).filter(field::isSea)
+                .collect(Collectors.toList());
+    }
+
     public List<Point> getHitbox() {
         Point position = getPosition();
         Point left = Direction.LEFT.change(position);
         Point up = Direction.UP.change(position);
         Point right = Direction.RIGHT.change(position);
         Point down = Direction.DOWN.change(position);
-//        Point leftUp = Direction.LEFT.change(up);
-//        Point rightUp = Direction.RIGHT.change(up);
-//        Point leftDown = Direction.LEFT.change(down);
-//        Point rightDown = Direction.RIGHT.change(down);
-        return Lists.newArrayList(position, left, up, right, down);
+        HashSet<Point> hitbox = Sets.newHashSet(position, left, up, right, down);
+        hitbox.addAll(getTraceHitbox());
+        return Lists.newArrayList(hitbox);
     }
 
     public void tryMove(Point destination) {

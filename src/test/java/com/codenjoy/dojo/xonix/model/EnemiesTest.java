@@ -134,4 +134,36 @@ public class EnemiesTest extends AbstractGameTest {
                 "#...#" +
                 "#####");
     }
+
+    @Test
+    public void marineEnemyShouldKill_whenHitTrace() {
+
+        // given
+        givenFl("#####O#" +
+                "#.....#" +
+                "#.....#" +
+                "#M....#" +
+                "#.....#" +
+                "#.....#" +
+                "#######");
+        game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("#######" +
+                "#....x#" +
+                "#...Mx#" +
+                "#....O#" +
+                "#.....#" +
+                "#.....#" +
+                "#######");
+
+
+        fired("[GAME_OVER]");
+    }
 }
