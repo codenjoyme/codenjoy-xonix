@@ -331,4 +331,50 @@ public class XonixTest extends AbstractGameTest {
         // then
         fired("[GAME_OVER]");
     }
+
+    @Test
+    public void shouldWin_whenMakeRightAmountOfLand() {
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#...#" +
+                "#...#" +
+                "#####");
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        hero.left();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("#####" +
+                "#.###" +
+                "O####" +
+                "#####" +
+                "#####");
+        fired("[WIN]");
+    }
+
+    @Test
+    public void shouldDie_whenTurnsAroundAtSea() {
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#...#" +
+                "#...#" +
+                "#####");
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        hero.up();
+        game.tick();
+
+        // then
+        fired("[GAME_OVER]");
+    }
 }

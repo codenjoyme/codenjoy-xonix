@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
+import com.codenjoy.dojo.xonix.services.Event;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -74,24 +75,36 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         this.field = field;
     }
 
+    private void changeDirection(Direction direction) {
+        if (this.direction == null) {
+            this.direction = direction;
+            return;
+        }
+        if (this.direction.inverted() == direction) {
+            player.event(Event.GAME_OVER);
+            return;
+        }
+        this.direction = direction;
+    }
+
     @Override
     public void down() {
-        direction = Direction.DOWN;
+        changeDirection(Direction.DOWN);
     }
 
     @Override
     public void up() {
-        direction = Direction.UP;
+        changeDirection(Direction.UP);
     }
 
     @Override
     public void left() {
-        direction = Direction.LEFT;
+        changeDirection(Direction.LEFT);
     }
 
     @Override
     public void right() {
-        direction = Direction.RIGHT;
+        changeDirection(Direction.RIGHT);
     }
 
     @Override

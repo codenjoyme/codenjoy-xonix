@@ -64,6 +64,10 @@ public class Player extends GamePlayer<Hero, Field> {
         switch (event) {
             case GAME_OVER:
                 isAlive = false;
+                break;
+            case WIN:
+                isWin = true;
+                break;
         }
     }
 }

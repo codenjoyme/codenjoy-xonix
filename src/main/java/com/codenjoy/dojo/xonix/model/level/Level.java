@@ -68,4 +68,12 @@ public class Level {
     public List<LandEnemy> landEnemies() {
         return getObjects(xy, map, LandEnemy::new, LAND_ENEMY);
     }
+
+    public int seaCellsCount() {
+        return getObjects(xy, map, pt -> new Object(), SEA, MARINE_ENEMY).size();
+    }
+
+    public int landCellsCount() {
+        return getObjects(xy, map, pt -> new Object(), LAND, XONIX, LAND_ENEMY).size();
+    }
 }

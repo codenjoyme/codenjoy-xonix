@@ -106,22 +106,30 @@ public class XonixGame implements Field {
         players.stream()
                 .map(Player::getHero)
                 .forEach(hero -> {
-                   hero.tick();
-                   if (hero.isLanded()) {
-                       foo(hero);
-                       hero.clearTrace();
-                       hero.clearDirection();
-                   }
+                    hero.tick();
+                    if (hero.isLanded()) {
+                        foo(hero);
+                        hero.clearTrace();
+                        hero.clearDirection();
+                    }
                 });
         getEnemies().forEach(Enemy::tick);
-        if (checkKill()) {
-            players.get(0).event(Event.GAME_OVER);
+        checkKill();
+        checkWin();
+    }
+
+    private void checkWin() {
+        if ((land.size() - level.landCellsCount()) * 1.0 /  level.seaCellsCount() > 0.60) {
+            players.get(0).event(Event.WIN);
         }
     }
 
-    private boolean checkKill() {
-        return getEnemies().stream()
+    private void checkKill() {
+        boolean isKilled = getEnemies().stream()
                 .anyMatch(e -> hero.getHitbox().contains(e));
+        if (isKilled) {
+            players.get(0).event(Event.GAME_OVER);
+        }
     }
 
     public <T extends Point> Optional<T> found(List<T> items, Point pt) {
