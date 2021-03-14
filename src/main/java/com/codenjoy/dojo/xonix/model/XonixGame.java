@@ -28,8 +28,9 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.xonix.model.items.*;
 import com.codenjoy.dojo.xonix.model.level.Level;
+import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
-import com.google.common.collect.EvictingQueue;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 public class XonixGame implements Field {
 
@@ -50,7 +50,15 @@ public class XonixGame implements Field {
 
     private List<Sea> sea;
     private List<Land> land;
+    private List<MarineEnemy> marineEnemies;
+    private List<LandEnemy> landEnemies;
     private Hero hero;
+
+    public List<Enemy> getEnemies() {
+        ArrayList<Enemy> enemies = Lists.newArrayList(this.marineEnemies);
+        enemies.addAll(landEnemies);
+        return enemies;
+    }
 
     private final GameSettings settings;
 
@@ -65,6 +73,9 @@ public class XonixGame implements Field {
         sea = level.sea();
         land = level.land();
         hero = level.hero();
+        marineEnemies = level.marineEnemies();
+        landEnemies = level.landEnemies();
+        getEnemies().forEach(e -> e.setField(this));
     }
 
     @Override
@@ -86,6 +97,11 @@ public class XonixGame implements Field {
     }
 
     @Override
+    public boolean isInBounds(Point point) {
+        return !point.isOutOf(size);
+    }
+
+    @Override
     public void tick() {
         players.stream()
                 .map(Player::getHero)
@@ -94,8 +110,18 @@ public class XonixGame implements Field {
                    if (hero.isLanded()) {
                        foo(hero);
                        hero.clearTrace();
+                       hero.clearDirection();
                    }
                 });
+        getEnemies().forEach(Enemy::tick);
+        if (checkKill()) {
+            players.get(0).event(Event.GAME_OVER);
+        }
+    }
+
+    private boolean checkKill() {
+        return getEnemies().stream()
+                .anyMatch(e -> hero.getHitbox().contains(e));
     }
 
     public <T extends Point> Optional<T> found(List<T> items, Point pt) {
@@ -152,6 +178,8 @@ public class XonixGame implements Field {
                 return new LinkedList<>() {{
                     addAll(getHeroes());
                     addAll(XonixGame.this.getHeroes().get(0).getTrace());
+                    addAll(XonixGame.this.marineEnemies);
+                    addAll(XonixGame.this.landEnemies);
                     addAll(XonixGame.this.sea);
                     addAll(XonixGame.this.land);
                 }};
@@ -180,6 +208,9 @@ public class XonixGame implements Field {
                 .counterClockwise();
         Trace lastTraceCell = trace.get(trace.size() - 1);
         Collection<Point> points = breadthFirstSearch(firstWaveDirection.change(lastTraceCell));
+        if (points.size() == 0) {
+            points = breadthFirstSearch(firstWaveDirection.inverted().change(lastTraceCell));
+        }
         points.addAll(trace);
         points.forEach(this::turnToLand);
     }
@@ -190,6 +221,9 @@ public class XonixGame implements Field {
         HashSet<Point> visited = new HashSet<>();
         while (!queue.isEmpty()) {
             Point point = queue.poll();
+            if (getEnemies().contains(point)) {
+                return Lists.newArrayList();
+            }
             visited.add(point);
             Point left = Direction.LEFT.change(point);
             Point up = Direction.UP.change(point);

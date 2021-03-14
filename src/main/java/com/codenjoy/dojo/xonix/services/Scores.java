@@ -60,14 +60,14 @@ public class Scores implements PlayerScores {
             throw new IllegalArgumentException("Given object should be an instance of Event class");
         }
         switch ((Event) event) {
-            case ALL_CLEAR:
+            case GAME_OVER:
                 break;
-            case TIME_WASTED:
-                score.addAndGet(settings.integer(WASTE_OF_TIME_PENALTY) * -1);
-                break;
-            case DUST_CLEANED:
-                score.addAndGet(settings.integer(CLEANING_ONE_CELL_REWARD));
-                break;
+//            case TIME_WASTED:
+//                score.addAndGet(settings.integer(WASTE_OF_TIME_PENALTY) * -1);
+//                break;
+//            case DUST_CLEANED:
+//                score.addAndGet(settings.integer(CLEANING_ONE_CELL_REWARD));
+//                break;
         }
         score.accumulateAndGet(MIN_SCORE, Math::max);
     }

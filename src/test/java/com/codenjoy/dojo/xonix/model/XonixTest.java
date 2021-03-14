@@ -40,7 +40,6 @@ public class XonixTest extends AbstractGameTest {
         // when
         hero.down();
         game.tick();
-        hero.down();
         game.tick();
 
         // then
@@ -52,7 +51,33 @@ public class XonixTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldMakeLand_whenReturnsFromSea() {
+    public void shouldStop_whenHitsFieldBorders() {
+
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#...#" +
+                "#...#" +
+                "#####");
+
+        // when
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("####O" +
+                "#...#" +
+                "#...#" +
+                "#...#" +
+                "#####");
+    }
+
+    @Test
+    public void shouldBeAbleToTurn_whenFloating() {
 
         // given
         shouldLeaveTrace_whenGoThroughSea();
@@ -60,7 +85,6 @@ public class XonixTest extends AbstractGameTest {
         // when
         hero.left();
         game.tick();
-        hero.left();
         game.tick();
 
         // then
@@ -85,7 +109,6 @@ public class XonixTest extends AbstractGameTest {
         // when
         hero.down();
         game.tick();
-        hero.down();
         game.tick();
 
         // then
@@ -94,5 +117,218 @@ public class XonixTest extends AbstractGameTest {
                 "##O##" +
                 "#...#" +
                 "#####");
+    }
+
+    @Test
+    public void shouldNotStop_whenFloating() {
+
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#...#" +
+                "#...#" +
+                "#####");
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("#####" +
+                "#.###" +
+                "#.###" +
+                "#.###" +
+                "##O##");
+    }
+
+    @Test
+    public void shouldStop_whenLanded() {
+
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#####" +
+                "#...#" +
+                "#####");
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("#####" +
+                "#.#.#" +
+                "##O##" +
+                "#...#" +
+                "#####");
+    }
+
+    @Test
+    public void shouldNotStop_whenMovingOnLand() {
+
+        // given
+        givenFl("#####" +
+                "#...#" +
+                "##O##" +
+                "#####" +
+                "#####");
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        hero.left();
+        game.tick();
+
+        // then
+        assertE("#####" +
+                "#...#" +
+                "#####" +
+                "#####" +
+                "#O###");
+    }
+
+    @Test
+    public void shouldAvoidEnemies_whenMakeLand1() {
+
+        // given
+        givenFl("##O#######" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#M.......#" +
+                "##########");
+
+        game.getEnemies().forEach(e -> e.setDirection(null));
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("##########" +
+                "#.x..xxO.#" +
+                "#.xxxx...#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#M.......#" +
+                "##########");
+
+        hero.up();
+        game.tick();
+
+        assertE("#######O##" +
+                "#.#..###.#" +
+                "#.####...#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#M.......#" +
+                "##########");
+    }
+
+    @Test
+    public void shouldAvoidEnemies_whenMakeLand2() {
+
+        // given
+        givenFl("####O#####" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#........#" +
+                "#M......M#" +
+                "##########");
+
+        game.getEnemies().forEach(e -> e.setDirection(null));
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("##########" +
+                "#...#....#" +
+                "#...#....#" +
+                "#...#....#" +
+                "#...#....#" +
+                "#...#....#" +
+                "#...#....#" +
+                "#...#....#" +
+                "#M..#...M#" +
+                "####O#####");
+    }
+
+    @Test
+    public void shouldBeKilled_whenMeetsMarineEnemy() {
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#...#" +
+                "#.M.#" +
+                "#####");
+        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+
+        // then
+        fired("[GAME_OVER]");
+    }
+
+    @Test
+    public void shouldBeKilled_whenMeetsLandEnemy() {
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#L###" +
+                "#####" +
+                "#####");
+        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+
+        // then
+        fired("[GAME_OVER]");
     }
 }

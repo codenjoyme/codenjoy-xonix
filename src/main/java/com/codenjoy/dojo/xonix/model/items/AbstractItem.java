@@ -37,6 +37,10 @@ public abstract class AbstractItem extends PointImpl implements State<Elements, 
         this.element = element;
     }
 
+    public Point getPosition() {
+        return PointImpl.pt(x, y);
+    }
+
     @Override
     public Elements state(Player player, Object... objects) {
         return element;

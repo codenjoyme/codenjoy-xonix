@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +102,24 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
+    public List<Point> getHitbox() {
+        Point position = getPosition();
+        Point left = Direction.LEFT.change(position);
+        Point up = Direction.UP.change(position);
+        Point right = Direction.RIGHT.change(position);
+        Point down = Direction.DOWN.change(position);
+//        Point leftUp = Direction.LEFT.change(up);
+//        Point rightUp = Direction.RIGHT.change(up);
+//        Point leftDown = Direction.LEFT.change(down);
+//        Point rightDown = Direction.RIGHT.change(down);
+        return Lists.newArrayList(position, left, up, right, down);
+    }
+
     public void tryMove(Point destination) {
+        if (!field.isInBounds(destination)) {
+            direction = null;
+            return;
+        }
         if (!isFloating() && field.isSea(destination)) {
             lastPointOnLand = this;
         } else if (isFloating() && field.isSea(destination)) {
@@ -124,5 +142,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void clearTrace() {
         trace = new ArrayList<>();
+    }
+
+    public void clearDirection() {
+        this.direction = null;
     }
 }

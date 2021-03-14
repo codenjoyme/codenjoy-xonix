@@ -23,7 +23,5 @@ package com.codenjoy.dojo.xonix.services;
  */
 
 public enum Event {
-    ALL_CLEAR,
-    DUST_CLEANED,
-    TIME_WASTED;
+    GAME_OVER
 }

@@ -25,11 +25,14 @@ package com.codenjoy.dojo.xonix.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
 
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
+    private boolean isAlive = true;
+    private boolean isWin = false;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
@@ -46,16 +49,21 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public boolean isAlive() {
-        return true;
+        return isAlive;
     }
 
     @Override
     public boolean isWin() {
-        return false;
+        return isWin;
     }
 
     @Override
-    public void event(Object event) {
-        super.event(event);
+    public void event(Object e) {
+        super.event(e);
+        Event event = (Event) e;
+        switch (event) {
+            case GAME_OVER:
+                isAlive = false;
+        }
     }
 }
