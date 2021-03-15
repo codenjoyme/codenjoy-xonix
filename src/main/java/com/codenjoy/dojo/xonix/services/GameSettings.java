@@ -31,8 +31,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        CLEANING_ONE_CELL_REWARD("Cleaning one cell reward"),
-        WASTE_OF_TIME_PENALTY("Waste of time penalty");
+        VICTORY_CRITERION("How much sea Xonix should capture for victory in percents"),
+        WIN_REWARD("Reward for winning"),
+        LIVES_COUNT("Lives count");
 
         private String key;
 
@@ -47,7 +48,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        integer(CLEANING_ONE_CELL_REWARD, 1);
-        integer(WASTE_OF_TIME_PENALTY, 1);
+        integer(VICTORY_CRITERION, 50);
+        integer(WIN_REWARD, 100);
+        integer(LIVES_COUNT, 3);
     }
 }

@@ -69,6 +69,7 @@ public class Player extends GamePlayer<Hero, Field> {
                 break;
             case WIN:
                 isWin = true;
+                isAlive = false;
                 break;
         }
     }

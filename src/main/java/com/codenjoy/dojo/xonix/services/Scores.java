@@ -27,12 +27,10 @@ import com.codenjoy.dojo.services.PlayerScores;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.CLEANING_ONE_CELL_REWARD;
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WASTE_OF_TIME_PENALTY;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
-    // TODO выделить так же во всех играх
     public static final int MIN_SCORE = 0;
 
     private final AtomicInteger score;
@@ -62,12 +60,9 @@ public class Scores implements PlayerScores {
         switch ((Event) event) {
             case GAME_OVER:
                 break;
-//            case TIME_WASTED:
-//                score.addAndGet(settings.integer(WASTE_OF_TIME_PENALTY) * -1);
-//                break;
-//            case DUST_CLEANED:
-//                score.addAndGet(settings.integer(CLEANING_ONE_CELL_REWARD));
-//                break;
+            case WIN:
+                score.addAndGet(settings.integer(WIN_REWARD));
+                break;
         }
         score.accumulateAndGet(MIN_SCORE, Math::max);
     }

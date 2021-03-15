@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.VICTORY_CRITERION;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_REWARD;
 import static java.util.stream.Collectors.toList;
 
 public class XonixGame implements Field {
@@ -119,7 +121,7 @@ public class XonixGame implements Field {
     }
 
     private void checkWin() {
-        if ((land.size() - level.landCellsCount()) * 1.0 /  level.seaCellsCount() > 0.60) {
+        if ((land.size() - level.landCellsCount()) * 1.0 /  level.seaCellsCount() >= settings.integer(VICTORY_CRITERION) * 0.01) {
             players.get(0).event(Event.WIN);
         }
     }
