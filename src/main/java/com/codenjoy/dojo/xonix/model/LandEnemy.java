@@ -40,6 +40,11 @@ public class LandEnemy extends AbstractItem implements Enemy {
     }
 
     @Override
+    public Direction getDirection() {
+        return direction;
+    }
+
+    @Override
     public void tick() {
         if (direction == null) {
             return;

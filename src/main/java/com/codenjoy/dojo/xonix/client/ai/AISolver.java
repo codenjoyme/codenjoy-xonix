@@ -44,54 +44,8 @@ public class AISolver implements Solver<Board> {
         this.way = new DeikstraFindWay();
     }
 
-    public DeikstraFindWay.Possible possible(final Board board) {
-        return new DeikstraFindWay.Possible() {
-            @Override
-            public boolean possible(Point pt) {
-                return true;
-            }
-        };
-    }
-
     @Override
     public String get(final Board board) {
-        List<Direction> result = getDirections(board);
-        if (result.isEmpty()) return "";
-        return result.get(0).toString() + getBombIfNeeded(board);
-    }
-
-    private String getBombIfNeeded(Board board) {
-        Point me = board.getMe();
-        if (me.getX() % 2 == 0 && me.getY() % 2 == 0) {
-            return ", ACT";
-        } else {
-            return "";
-        }
-    }
-
-    public List<Direction> getDirections(Board board) {
-        int size = board.size();
-        if (bombsNear(board)) {
-            return Arrays.asList(Direction.random(dice));
-        }
-
-        Point from = board.getMe();
-        DeikstraFindWay.Possible map = possible(board);
-        return way.getShortestWay(size, from, Collections.singletonList(from), map);
-    }
-
-    // TODO fix Deikstra find way
-    private boolean bombsNear(Board board) {
-//        Point me = board.getMe();
-//        Point atLeft = Direction.LEFT.change(me);
-//        Point atRight = Direction.RIGHT.change(me);
-//        Point atUp = Direction.UP.change(me);
-//        Point atDown = Direction.DOWN.change(me);
-//
-//        return board.isAt(atLeft.getX(), atLeft.getY(), Elements.DUST, Elements.BARRIER, Elements.OTHER_HERO) &&
-//                board.isAt(atRight.getX(), atRight.getY(), Elements.DUST, Elements.BARRIER, Elements.OTHER_HERO) &&
-//                board.isAt(atUp.getX(), atUp.getY(), Elements.DUST, Elements.BARRIER, Elements.OTHER_HERO) &&
-//                board.isAt(atDown.getX(), atDown.getY(), Elements.DUST, Elements.BARRIER, Elements.OTHER_HERO);
-        return true;
+        return Direction.random(dice).toString();
     }
 }

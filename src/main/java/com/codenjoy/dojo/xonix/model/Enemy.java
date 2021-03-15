@@ -6,4 +6,5 @@ public interface Enemy {
     void tick();
     void setField(Field field);
     void setDirection(Direction direction);
+    Direction getDirection();
 }

@@ -23,6 +23,11 @@ public class MarineEnemy extends AbstractItem implements Enemy {
         this.direction = direction;
     }
 
+    @Override
+    public Direction getDirection() {
+        return direction;
+    }
+
     private Point diagonalStep(Point point) {
         Point position = direction.change(point);
         switch (direction) {
