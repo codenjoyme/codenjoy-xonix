@@ -39,7 +39,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.VICTORY_CRITERION;
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_REWARD;
 import static java.util.stream.Collectors.toList;
 
 public class XonixGame implements Field {
@@ -117,8 +116,7 @@ public class XonixGame implements Field {
                 });
         getEnemies().forEach(Enemy::tick);
         if (isKilled()) {
-            hero.kill();
-            hero.move(level.hero().getPosition());
+            hero.respawn(level.hero().getPosition());
             landEnemies = level.landEnemies();
             if (hero.getLives() == 0) {
                 players.get(0).event(Event.GAME_OVER);
@@ -137,6 +135,9 @@ public class XonixGame implements Field {
     }
 
     private boolean isKilled() {
+        if (hero.isKilled()) {
+            return true;
+        }
         boolean isKilled;
         if (hero.isFloating()) {
             isKilled = marineEnemies.stream()

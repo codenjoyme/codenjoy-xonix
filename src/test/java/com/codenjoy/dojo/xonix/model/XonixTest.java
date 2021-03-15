@@ -311,7 +311,7 @@ public class XonixTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[GAME_OVER]");
+        fired("[KILLED]");
     }
 
     @Test
@@ -330,7 +330,7 @@ public class XonixTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[GAME_OVER]");
+        fired("[KILLED]");
     }
 
     @Test
@@ -377,7 +377,7 @@ public class XonixTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[GAME_OVER]");
+        fired("[KILLED]");
     }
 
     @Test
@@ -398,6 +398,33 @@ public class XonixTest extends AbstractGameTest {
         game.tick();
 
         // then
-        neverFired(Event.GAME_OVER);
+        neverFired(Event.KILLED);
+    }
+
+    @Test
+    public void shouldDie_whenHitsOwnTrace() {
+
+        // given
+        givenFl("####O#" +
+                "#....#" +
+                "#....#" +
+                "#....#" +
+                "#....#" +
+                "######");
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+        hero.left();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.right();
+        game.tick();
+
+        // then
+        fired("[KILLED]");
     }
 }

@@ -183,16 +183,16 @@ public class EnemiesTest extends AbstractGameTest {
         game.tick();
 
         // then
-        assertE("#######" +
-                "#....x#" +
-                "#...Mx#" +
-                "#....O#" +
+        assertE("#####O#" +
+                "#.....#" +
+                "#...M.#" +
+                "#.....#" +
                 "#.....#" +
                 "#.....#" +
                 "#######");
 
 
-        fired("[GAME_OVER]");
+        fired("[KILLED]");
     }
 
     @Test

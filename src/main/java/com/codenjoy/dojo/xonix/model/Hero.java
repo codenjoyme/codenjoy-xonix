@@ -48,16 +48,23 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private Point lastPointOnLand;
     private List<Trace> trace = new ArrayList<>();
     private int lives;
+    private boolean isKilled = false;
 
     public int getLives() {
         return lives;
     }
 
-    public void kill() {
+    public boolean isKilled() {
+        return isKilled;
+    }
+
+    public void respawn(Point point) {
         lives--;
         clearTrace();
         direction = null;
         lastPointOnLand = null;
+        move(point);
+        isKilled = false;
     }
 
     public boolean isLanded() {
@@ -91,8 +98,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private void changeDirection(Direction direction) {
-        if (isFloating() && this.direction.inverted() == direction) {
-            player.event(Event.GAME_OVER);
+        if (isFloating() && getTrace().contains(direction.change(getPosition()))) {
+            isKilled = true;
             return;
         }
         this.direction = direction;
