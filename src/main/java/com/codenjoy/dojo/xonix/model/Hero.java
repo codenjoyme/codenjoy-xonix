@@ -57,7 +57,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         lives--;
         clearTrace();
         direction = null;
-        move(lastPointOnLand);
         lastPointOnLand = null;
     }
 

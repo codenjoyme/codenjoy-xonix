@@ -118,6 +118,8 @@ public class XonixGame implements Field {
         getEnemies().forEach(Enemy::tick);
         if (isKilled()) {
             hero.kill();
+            hero.move(level.hero().getPosition());
+            landEnemies = level.landEnemies();
             if (hero.getLives() == 0) {
                 players.get(0).event(Event.GAME_OVER);
                 return;
