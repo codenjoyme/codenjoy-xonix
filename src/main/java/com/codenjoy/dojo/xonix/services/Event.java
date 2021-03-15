@@ -24,5 +24,6 @@ package com.codenjoy.dojo.xonix.services;
 
 public enum Event {
     GAME_OVER,
-    WIN
+    WIN,
+    KILLED
 }

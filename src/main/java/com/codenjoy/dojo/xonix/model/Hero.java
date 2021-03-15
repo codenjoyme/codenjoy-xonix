@@ -39,12 +39,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
+
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private Direction direction;
     private Player player;
     private Point lastPointOnLand;
     private List<Trace> trace = new ArrayList<>();
+    private int lives;
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void kill() {
+        lives--;
+        clearTrace();
+        direction = null;
+        move(lastPointOnLand);
+        lastPointOnLand = null;
+    }
 
     public boolean isLanded() {
         return !trace.isEmpty() && lastPointOnLand == null;
@@ -73,6 +88,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void init(Field field) {
         this.field = field;
+         lives = settings().integer(LIVES_COUNT);
     }
 
     private void changeDirection(Direction direction) {
@@ -144,7 +160,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return;
         }
         if (!isFloating() && field.isSea(destination)) {
-            lastPointOnLand = this;
+            lastPointOnLand = getPosition();
         } else if (isFloating() && field.isSea(destination)) {
             trace.add(new Trace(this));
         } else if (isFloating() && field.isLand(destination)) {

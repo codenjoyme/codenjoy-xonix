@@ -64,8 +64,11 @@ public class Player extends GamePlayer<Hero, Field> {
         super.event(e);
         Event event = (Event) e;
         switch (event) {
+            case KILLED:
+                break;
             case GAME_OVER:
                 isAlive = false;
+                isWin = false;
                 break;
             case WIN:
                 isWin = true;

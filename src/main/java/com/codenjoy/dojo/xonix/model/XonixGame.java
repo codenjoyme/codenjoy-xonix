@@ -116,17 +116,25 @@ public class XonixGame implements Field {
                     }
                 });
         getEnemies().forEach(Enemy::tick);
-        checkKill();
+        if (isKilled()) {
+            hero.kill();
+            if (hero.getLives() == 0) {
+                players.get(0).event(Event.GAME_OVER);
+                return;
+            } else {
+                players.get(0).event(Event.KILLED);
+            }
+        }
         checkWin();
     }
 
     private void checkWin() {
-        if ((land.size() - level.landCellsCount()) * 1.0 /  level.seaCellsCount() >= settings.integer(VICTORY_CRITERION) * 0.01) {
+        if ((land.size() - level.landCellsCount()) * 1.0 / level.seaCellsCount() >= settings.integer(VICTORY_CRITERION) * 0.01) {
             players.get(0).event(Event.WIN);
         }
     }
 
-    private void checkKill() {
+    private boolean isKilled() {
         boolean isKilled;
         if (hero.isFloating()) {
             isKilled = marineEnemies.stream()
@@ -135,9 +143,7 @@ public class XonixGame implements Field {
             isKilled = landEnemies.stream()
                     .anyMatch(e -> hero.getHitbox().contains(e));
         }
-        if (isKilled) {
-            players.get(0).event(Event.GAME_OVER);
-        }
+        return isKilled;
     }
 
     public <T extends Point> Optional<T> found(List<T> items, Point pt) {
