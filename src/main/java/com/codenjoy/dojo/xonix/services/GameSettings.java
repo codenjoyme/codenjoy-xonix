@@ -33,7 +33,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
         VICTORY_CRITERION("How much sea Xonix should capture for victory in percents"),
         WIN_REWARD("Reward for winning"),
-        LIVES_COUNT("Lives count");
+        LIVES_COUNT("Lives count"),
+        DIE_PENALTY("Die penalty");
 
         private String key;
 
@@ -48,8 +49,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        integer(VICTORY_CRITERION, 50);
+        integer(VICTORY_CRITERION, 70);
         integer(WIN_REWARD, 100);
         integer(LIVES_COUNT, 3);
+        integer(DIE_PENALTY, 30);
     }
 }

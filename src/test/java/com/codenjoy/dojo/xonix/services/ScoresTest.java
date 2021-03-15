@@ -70,13 +70,16 @@ public class ScoresTest {
                 scores.getScore());
     }
 
-//    @Test
-//    public void shouldNotLessThanZero() {
-        // TODO сейчас очки ни за что не снимаются
-//        gameOver();
+    @Test
+    public void shouldNotLessThanZero() {
+        killed();
+        killed();
+        killed();
+        killed();
+        killed();
 
-//        assertEquals(Scores.MIN_SCORE, scores.getScore());
-//    }
+        assertEquals(Scores.MIN_SCORE, scores.getScore());
+    }
 
     @Test
     public void shouldClearScore() {

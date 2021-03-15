@@ -63,6 +63,9 @@ public class Scores implements PlayerScores {
             case WIN:
                 score.addAndGet(settings.integer(WIN_REWARD));
                 break;
+            case KILLED:
+                score.addAndGet(settings.integer(DIE_PENALTY) * -1);
+                break;
         }
         score.accumulateAndGet(MIN_SCORE, Math::max);
     }
