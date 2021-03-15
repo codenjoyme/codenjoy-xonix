@@ -76,11 +76,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private void changeDirection(Direction direction) {
-        if (this.direction == null) {
-            this.direction = direction;
-            return;
-        }
-        if (this.direction.inverted() == direction) {
+        if (isFloating() && this.direction.inverted() == direction) {
             player.event(Event.GAME_OVER);
             return;
         }

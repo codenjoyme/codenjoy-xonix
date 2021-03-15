@@ -22,6 +22,7 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
+import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
 
@@ -360,6 +361,7 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldDie_whenTurnsAroundAtSea() {
+
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -376,5 +378,26 @@ public class XonixTest extends AbstractGameTest {
 
         // then
         fired("[GAME_OVER]");
+    }
+
+    @Test
+    public void shouldNotDie_whenTurnsAroundAtLand() {
+
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "#...#" +
+                "#...#" +
+                "#####");
+
+        // when
+        hero.left();
+        game.tick();
+        game.tick();
+        hero.right();
+        game.tick();
+
+        // then
+        neverFired(Event.GAME_OVER);
     }
 }
