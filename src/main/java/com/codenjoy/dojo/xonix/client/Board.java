@@ -63,4 +63,20 @@ public class Board extends AbstractBoard<Elements> {
     public Point getMe() {
         return get(XONIX).get(0);
     }
+
+    public List<Point> getSea() {
+        return get(SEA);
+    }
+
+    public List<Point> getTrace() {
+        return get(TRACE);
+    }
+
+    public List<Point> getMarineEnemy() {
+        return get(MARINE_ENEMY);
+    }
+
+    public List<Point> getLandEnemy() {
+        return get(LAND_ENEMY);
+    }
 }
