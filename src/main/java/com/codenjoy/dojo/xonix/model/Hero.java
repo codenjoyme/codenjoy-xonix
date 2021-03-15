@@ -45,6 +45,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private Direction direction;
     private List<Trace> trace = new ArrayList<>();
     private boolean isKilled = false;
+    private boolean isWon = false;
     private int lives;
 
     public int getLives() {
@@ -180,5 +181,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void clearDirection() {
         this.direction = null;
+    }
+
+    public void setWon(boolean value) {
+        this.isWon = value;
+    }
+
+    public boolean isWon() {
+        return !isKilled && isWon;
     }
 }
