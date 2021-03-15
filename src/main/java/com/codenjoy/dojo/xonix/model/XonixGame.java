@@ -125,8 +125,14 @@ public class XonixGame implements Field {
     }
 
     private void checkKill() {
-        boolean isKilled = getEnemies().stream()
-                .anyMatch(e -> hero.getHitbox().contains(e));
+        boolean isKilled;
+        if (hero.isFloating()) {
+            isKilled = marineEnemies.stream()
+                    .anyMatch(e -> hero.getHitbox().contains(e));
+        } else {
+            isKilled = landEnemies.stream()
+                    .anyMatch(e -> hero.getHitbox().contains(e));
+        }
         if (isKilled) {
             players.get(0).event(Event.GAME_OVER);
         }

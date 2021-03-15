@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.xonix.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
 public class EnemiesTest extends AbstractGameTest {
@@ -165,5 +166,51 @@ public class EnemiesTest extends AbstractGameTest {
 
 
         fired("[GAME_OVER]");
+    }
+
+    @Test
+    public void marineEnemyShouldNotKill_whenHeroIsOnLand() {
+
+        // given
+        givenFl("#######" +
+                "#.....#" +
+                "#.MMM.#" +
+                "#.MOM.#" +
+                "#.MMM.#" +
+                "#.....#" +
+                "#######");
+        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        // when
+        game.tick();
+        game.tick();
+
+        // then
+        neverFired(Event.GAME_OVER);
+    }
+
+    @Test
+    public void landEnemyShouldNotKill_whenHeroIsAtSea() {
+
+        // given
+        givenFl("###O###" +
+                "###.###" +
+                "##L.L##" +
+                "##L.L##" +
+                "##L.L##" +
+                "##L.L##" +
+                "##LLL##");
+        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        neverFired(Event.GAME_OVER);
     }
 }

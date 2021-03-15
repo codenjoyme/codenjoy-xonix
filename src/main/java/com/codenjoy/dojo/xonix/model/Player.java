@@ -31,8 +31,8 @@ import com.codenjoy.dojo.xonix.services.GameSettings;
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
-    private boolean isAlive = true;
-    private boolean isWin = false;
+    private boolean isAlive;
+    private boolean isWin;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
@@ -45,6 +45,8 @@ public class Player extends GamePlayer<Hero, Field> {
     @Override
     public void newHero(Field field) {
         hero = field.getNewHero(this);
+        isAlive = true;
+        isWin = false;
     }
 
     @Override
