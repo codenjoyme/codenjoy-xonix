@@ -68,6 +68,33 @@ public class EnemiesTest extends AbstractGameTest {
     }
 
     @Test
+    public void shouldBounce_whenInNarrowSpace() {
+
+        // given
+        givenFl("O#######" +
+                "#......#" +
+                "#...####" +
+                "#..M...#" +
+                "#...####" +
+                "#......#" +
+                "#......#" +
+                "########");
+        game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+        // when
+        game.tick();
+
+        // then
+        assertE("O#######" +
+                "#......#" +
+                "#...####" +
+                "#......#" +
+                "#.M.####" +
+                "#......#" +
+                "#......#" +
+                "########");
+    }
+
+    @Test
     public void marineEnemyShouldProperlyBounce_whenHitTheLand() {
 
         // given
