@@ -25,8 +25,8 @@ package com.codenjoy.dojo.xonix.model.level;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.items.Land;
-import com.codenjoy.dojo.xonix.model.LandEnemy;
-import com.codenjoy.dojo.xonix.model.MarineEnemy;
+import com.codenjoy.dojo.xonix.model.items.LandEnemy;
+import com.codenjoy.dojo.xonix.model.items.MarineEnemy;
 import com.codenjoy.dojo.xonix.model.items.Sea;
 
 import java.util.List;

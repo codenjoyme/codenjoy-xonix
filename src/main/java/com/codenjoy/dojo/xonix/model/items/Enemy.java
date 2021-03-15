@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.xonix.model;
+package com.codenjoy.dojo.xonix.model.items;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.xonix.model;
  */
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.xonix.model.Field;
 
 public interface Enemy {
     void tick();

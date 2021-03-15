@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.xonix.model;
+package com.codenjoy.dojo.xonix.model.items;
 
 /*-
  * #%L
@@ -24,30 +24,16 @@ package com.codenjoy.dojo.xonix.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.xonix.model.items.AbstractItem;
+import com.codenjoy.dojo.xonix.model.Elements;
+import com.codenjoy.dojo.xonix.model.Field;
 
-public class MarineEnemy extends AbstractItem implements Enemy {
+public class LandEnemy extends AbstractItem implements Enemy {
     private Field field;
     private Direction direction;
 
-    public MarineEnemy(Point pt) {
-        super(pt, Elements.MARINE_ENEMY);
+    public LandEnemy(Point pt) {
+        super(pt, Elements.LAND_ENEMY);
         this.direction = Direction.random();
-    }
-
-    @Override
-    public void setField(Field field) {
-        this.field = field;
-    }
-
-    @Override
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    @Override
-    public Direction getDirection() {
-        return direction;
     }
 
     private Point diagonalStep(Point point) {
@@ -67,22 +53,37 @@ public class MarineEnemy extends AbstractItem implements Enemy {
     }
 
     @Override
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    @Override
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return direction;
+    }
+
+    @Override
     public void tick() {
         if (direction == null) {
             return;
         }
         Point position = getPosition();
         int limiter = 4;
-        while ((field.isLand(diagonalStep(position))
-                || field.isLand(direction.change(position))
-                || field.isLand(direction.clockwise().change(position))
+        while ((field.isSea(diagonalStep(position))
+                || field.isSea(direction.change(position))
+                || field.isSea(direction.clockwise().change(position))
                 || field.isOutOfBounds(diagonalStep(position)))
                 && limiter > 0) {
-            if (field.isLand(direction.change(position))) {
+            if (field.isSea(direction.change(position))) {
                 direction = direction.clockwise();
-            } else if (field.isLand(direction.clockwise().change(position))) {
+            } else if (field.isSea(direction.clockwise().change(position))) {
                 direction = direction.counterClockwise();
-            } else if (field.isLand(diagonalStep(position))) {
+            } else if (field.isSea(diagonalStep(position))) {
                 direction = direction.inverted();
             } else {
                 direction = direction.counterClockwise();
