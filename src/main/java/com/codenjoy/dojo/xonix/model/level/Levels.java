@@ -34,6 +34,9 @@ public class Levels {
 
     static {
         levels.add(level1());
+        levels.add(level2());
+        levels.add(level3());
+        levels.add(level4());
     }
 
     public static Level get(int number) {
