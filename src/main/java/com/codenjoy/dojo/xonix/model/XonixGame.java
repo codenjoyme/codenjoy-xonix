@@ -26,14 +26,14 @@ package com.codenjoy.dojo.xonix.model;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.xonix.model.items.*;
+import com.codenjoy.dojo.xonix.model.items.Land;
+import com.codenjoy.dojo.xonix.model.items.Sea;
+import com.codenjoy.dojo.xonix.model.items.Trace;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -43,25 +43,21 @@ import static java.util.stream.Collectors.toList;
 
 public class XonixGame implements Field {
 
-    private static final Logger LOG = LoggerFactory.getLogger(XonixGame.class);
-
     private final List<Player> players = new LinkedList<>();
+    private final GameSettings settings;
     private final Level level;
-    private int size;
 
+    private Hero hero;
     private List<Sea> sea;
     private List<Land> land;
-    private List<MarineEnemy> marineEnemies;
     private List<LandEnemy> landEnemies;
-    private Hero hero;
+    private List<MarineEnemy> marineEnemies;
 
     public List<Enemy> getEnemies() {
         ArrayList<Enemy> enemies = Lists.newArrayList(this.marineEnemies);
         enemies.addAll(landEnemies);
         return enemies;
     }
-
-    private final GameSettings settings;
 
     public XonixGame(Level level, GameSettings settings) {
         this.settings = settings;
@@ -70,19 +66,26 @@ public class XonixGame implements Field {
     }
 
     public void reset() {
-        size = level.size();
         sea = level.sea();
         land = level.land();
         hero = level.hero();
+        resetMarineEnemies();
+        resetLandEnemies();
+    }
+
+    private void resetMarineEnemies() {
         marineEnemies = level.marineEnemies();
+        marineEnemies.forEach(enemy -> enemy.setField(XonixGame.this));
+    }
+
+    private void resetLandEnemies() {
         landEnemies = level.landEnemies();
-        getEnemies().forEach(e -> e.setField(this));
+        landEnemies.forEach(enemy -> enemy.setField(XonixGame.this));
     }
 
     @Override
     public Hero getNewHero(Player player) {
         Hero hero = this.hero;
-        hero.init(player);
         hero.init(this);
         return hero;
     }
@@ -98,8 +101,8 @@ public class XonixGame implements Field {
     }
 
     @Override
-    public boolean isInBounds(Point point) {
-        return !point.isOutOf(size);
+    public boolean isOutOfBounds(Point point) {
+        return point.isOutOf(level.size());
     }
 
     @Override
@@ -109,21 +112,21 @@ public class XonixGame implements Field {
                 .forEach(hero -> {
                     hero.tick();
                     if (hero.isLanded()) {
-                        foo(hero);
+                        seizeSea(hero);
                         hero.clearTrace();
                         hero.clearDirection();
                     }
                 });
         getEnemies().forEach(Enemy::tick);
-        if (isKilled()) {
-            hero.respawn(level.hero().getPosition());
-            landEnemies = level.landEnemies();
+        if (isHeroKilled()) {
+            hero.die();
             if (hero.getLives() == 0) {
                 players.get(0).event(Event.GAME_OVER);
                 return;
-            } else {
-                players.get(0).event(Event.KILLED);
             }
+            players.get(0).event(Event.KILLED);
+            hero.respawn(level.hero().getPosition());
+            resetLandEnemies();
         }
         checkWin();
     }
@@ -134,7 +137,7 @@ public class XonixGame implements Field {
         }
     }
 
-    private boolean isKilled() {
+    private boolean isHeroKilled() {
         if (hero.isKilled()) {
             return true;
         }
@@ -149,24 +152,8 @@ public class XonixGame implements Field {
         return isKilled;
     }
 
-    public <T extends Point> Optional<T> found(List<T> items, Point pt) {
-        return items.stream()
-                .filter(pt::equals)
-                .findFirst();
-    }
-
-    public <T extends Point> boolean anyMatch(List<T> items, Point pt) {
-        return items.stream()
-                .anyMatch(pt::equals);
-    }
-
     public int getSize() {
-        return size;
-    }
-
-    @Override
-    public boolean canMove(Point from, Point to) {
-        return true;
+        return level.size();
     }
 
     public List<Hero> getHeroes() {
@@ -217,15 +204,9 @@ public class XonixGame implements Field {
         return settings;
     }
 
-    private void turnToLand(Point point) {
-        if (sea.remove(point)) {
-            land.add(new Land(point));
-        }
-    }
-
-    private void foo(Hero hero) {
+    private void seizeSea(Hero hero) {
         List<Trace> trace = hero.getTrace();
-        if (trace.size() == 1) {
+        if (trace.size() == 1) { // Like original
             turnToLand(trace.get(0));
             return;
         }
@@ -261,6 +242,12 @@ public class XonixGame implements Field {
                     .forEach(queue::offer);
         }
         return visited;
+    }
+
+    private void turnToLand(Point point) {
+        if (sea.remove(point)) {
+            land.add(new Land(point));
+        }
     }
 
     private boolean isTrace(Point point) {

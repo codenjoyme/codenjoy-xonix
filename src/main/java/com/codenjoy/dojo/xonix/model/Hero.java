@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
-import com.codenjoy.dojo.xonix.services.Event;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -44,11 +43,9 @@ import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private Direction direction;
-    private Player player;
-    private Point lastPointOnLand;
     private List<Trace> trace = new ArrayList<>();
-    private int lives;
     private boolean isKilled = false;
+    private int lives;
 
     public int getLives() {
         return lives;
@@ -59,16 +56,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void respawn(Point point) {
-        lives--;
-        clearTrace();
-        direction = null;
-        lastPointOnLand = null;
         move(point);
         isKilled = false;
     }
 
     public boolean isLanded() {
-        return !trace.isEmpty() && lastPointOnLand == null;
+        return !trace.isEmpty() && !isFloating();
     }
 
     public List<Trace> getTrace() {
@@ -87,21 +80,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         super(pt);
     }
 
-    public void init(Player player) {
-        this.player = player;
-    }
-
     @Override
     public void init(Field field) {
         this.field = field;
-         lives = settings().integer(LIVES_COUNT);
+        lives = settings().integer(LIVES_COUNT);
     }
 
     private void changeDirection(Direction direction) {
-        if (isFloating() && getTrace().contains(direction.change(getPosition()))) {
-            isKilled = true;
-            return;
-        }
         this.direction = direction;
     }
 
@@ -132,9 +117,29 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void tick() {
-        if (direction != null) {
-            tryMove(direction.change(this));
+        if (direction == null) {
+            return;
         }
+        Point destination = direction.change(this);
+        if (field.isOutOfBounds(destination)) {
+            direction = null;
+            return;
+        }
+        if (getTrace().contains(destination)) {
+            die();
+            return;
+        }
+        if (isFloating()) {
+            trace.add(new Trace(getPosition()));
+        }
+        move(destination);
+    }
+
+    public void die() {
+        isKilled = true;
+        lives--;
+        direction = null;
+        clearTrace();
     }
 
     private List<Point> getTraceHitbox() {
@@ -160,24 +165,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return Lists.newArrayList(hitbox);
     }
 
-    public void tryMove(Point destination) {
-        if (!field.isInBounds(destination)) {
-            direction = null;
-            return;
-        }
-        if (!isFloating() && field.isSea(destination)) {
-            lastPointOnLand = getPosition();
-        } else if (isFloating() && field.isSea(destination)) {
-            trace.add(new Trace(this));
-        } else if (isFloating() && field.isLand(destination)) {
-            trace.add(new Trace(this));
-            lastPointOnLand = null;
-        }
-        move(destination);
-    }
-
     public boolean isFloating() {
-        return lastPointOnLand != null;
+        return field.isSea(getPosition());
     }
 
     @Override

@@ -27,13 +27,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 public interface Field extends GameField<Player> {
-    boolean canMove(Point from, Point to);
-
     Hero getNewHero(Player player);
 
     boolean isLand(Point point);
 
     boolean isSea(Point point);
 
-    boolean isInBounds(Point point);
+    boolean isOutOfBounds(Point point);
 }
