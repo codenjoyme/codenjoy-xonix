@@ -45,7 +45,7 @@ public class XonixTest extends AbstractGameTest {
 
         // then
         assertE("#####" +
-                "#.x.#" +
+                "#.o.#" +
                 "#.O.#" +
                 "#...#" +
                 "#####");
@@ -229,8 +229,8 @@ public class XonixTest extends AbstractGameTest {
 
         // then
         assertE("##########" +
-                "#.x..xxO.#" +
-                "#.xxxx...#" +
+                "#.o..ooO.#" +
+                "#.oooo...#" +
                 "#........#" +
                 "#........#" +
                 "#........#" +
