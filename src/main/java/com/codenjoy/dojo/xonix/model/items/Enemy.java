@@ -23,11 +23,11 @@ package com.codenjoy.dojo.xonix.model.items;
  */
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.xonix.model.Field;
 
-public interface Enemy {
-    void tick();
-
+public interface Enemy extends Point, Tickable {
     void setField(Field field);
 
     void setDirection(Direction direction);

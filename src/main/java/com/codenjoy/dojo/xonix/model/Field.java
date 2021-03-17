@@ -25,13 +25,18 @@ package com.codenjoy.dojo.xonix.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.xonix.model.items.Enemy;
+
+import java.util.List;
 
 public interface Field extends GameField<Player> {
-    Hero getNewHero(Player player);
+    Hero createNewHero(Player player);
 
     boolean isLand(Point point);
 
     boolean isSea(Point point);
 
     boolean isOutOfBounds(Point point);
+
+    List<Enemy> getEnemies();
 }

@@ -51,41 +51,67 @@ public class XonixGame implements Field {
     private List<LandEnemy> landEnemies;
     private List<MarineEnemy> marineEnemies;
 
-    public List<Enemy> getEnemies() {
-        ArrayList<Enemy> enemies = Lists.newArrayList(this.marineEnemies);
-        enemies.addAll(landEnemies);
-        return enemies;
-    }
-
     public XonixGame(Level level, GameSettings settings) {
         this.settings = settings;
         this.level = level;
         reset();
     }
 
-    public void reset() {
-        sea = level.sea();
-        land = level.land();
-        hero = level.hero();
-        resetMarineEnemies();
-        resetLandEnemies();
+    @Override
+    public void tick() {
+        step();
+        act();
+        check();
     }
 
-    private void resetMarineEnemies() {
-        marineEnemies = level.marineEnemies();
-        marineEnemies.forEach(enemy -> enemy.setField(XonixGame.this));
+    private void step() {
+        getHeroes().forEach(Hero::tick);
+        getEnemies().forEach(Enemy::tick);
     }
 
-    private void resetLandEnemies() {
-        landEnemies = level.landEnemies();
-        landEnemies.forEach(enemy -> enemy.setField(XonixGame.this));
+    private void act() {
+        boolean enemyInHitbox = getEnemies().stream()
+                .anyMatch(hero::isInHitbox);
+
+        if (enemyInHitbox) {
+            hero.die();
+            return;
+        }
+
+        if (hero.isLanded()) {
+            seizeSea(hero);
+            hero.clearTrace();
+            hero.clearDirection();
+        }
+    }
+
+    private void check() {
+        if (hero.isKilled()) {
+            if (hero.getLives() == 0) {
+                players.get(0).event(Event.GAME_OVER);
+                return;
+            }
+            players.get(0).event(Event.KILLED);
+            hero.respawn(level.hero().getPosition());
+            resetLandEnemies();
+            return;
+        }
+        if (isHeroWon()) {
+            players.get(0).event(Event.WIN);
+            hero.setWon(true);
+        }
     }
 
     @Override
-    public Hero getNewHero(Player player) {
+    public Hero createNewHero(Player player) {
         Hero hero = this.hero;
         hero.init(this);
         return hero;
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 
     @Override
@@ -104,59 +130,6 @@ public class XonixGame implements Field {
     }
 
     @Override
-    public void tick() {
-        hero.tick();
-        getEnemies().forEach(Enemy::tick);
-        if (isHeroKilled()) {
-            hero.die();
-            if (hero.getLives() == 0) {
-                players.get(0).event(Event.GAME_OVER);
-                return;
-            }
-            players.get(0).event(Event.KILLED);
-            hero.respawn(level.hero().getPosition());
-            resetLandEnemies();
-        } else if (hero.isLanded()) {
-            seizeSea(hero);
-            hero.clearTrace();
-            hero.clearDirection();
-        }
-        checkWin();
-    }
-
-    private void checkWin() {
-        if ((land.size() - level.landCellsCount()) * 1.0 / level.seaCellsCount() >= settings.integer(VICTORY_CRITERION) * 0.01) {
-            players.get(0).event(Event.WIN);
-            hero.setWon(true);
-        }
-    }
-
-    private boolean isHeroKilled() {
-        if (hero.isKilled()) {
-            return true;
-        }
-        boolean isKilled;
-        if (hero.isFloating()) {
-            isKilled = marineEnemies.stream()
-                    .anyMatch(e -> hero.getHitbox().contains(e));
-        } else {
-            isKilled = landEnemies.stream()
-                    .anyMatch(e -> hero.getHitbox().contains(e));
-        }
-        return isKilled;
-    }
-
-    public int getSize() {
-        return level.size();
-    }
-
-    public List<Hero> getHeroes() {
-        return players.stream()
-                .map(Player::getHero)
-                .collect(toList());
-    }
-
-    @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
@@ -168,6 +141,13 @@ public class XonixGame implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    @Override
+    public List<Enemy> getEnemies() {
+        ArrayList<Enemy> enemies = Lists.newArrayList(this.marineEnemies);
+        enemies.addAll(landEnemies);
+        return enemies;
     }
 
     @Override
@@ -193,9 +173,38 @@ public class XonixGame implements Field {
         };
     }
 
-    @Override
-    public GameSettings settings() {
-        return settings;
+    private int getSize() {
+        return level.size();
+    }
+
+    private List<Hero> getHeroes() {
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
+    }
+
+    private void reset() {
+        sea = level.sea();
+        land = level.land();
+        hero = level.hero();
+        resetMarineEnemies();
+        resetLandEnemies();
+    }
+
+    private void resetMarineEnemies() {
+        marineEnemies = level.marineEnemies();
+        marineEnemies.forEach(enemy -> enemy.setField(XonixGame.this));
+    }
+
+    private void resetLandEnemies() {
+        landEnemies = level.landEnemies();
+        landEnemies.forEach(enemy -> enemy.setField(XonixGame.this));
+    }
+
+    private boolean isHeroWon() {
+        int seizedLand = land.size() - level.landCellsCount();
+        double percentOfSeized = 100.0 * seizedLand / level.seaCellsCount();
+        return percentOfSeized >= settings.integer(VICTORY_CRITERION);
     }
 
     private void seizeSea(Hero hero) {

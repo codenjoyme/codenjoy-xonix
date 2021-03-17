@@ -30,10 +30,8 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -122,20 +120,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return;
         }
         isKilled = true;
-        lives--;
         direction = null;
         clearTrace();
+        lives--;
     }
 
-    public List<Point> getHitbox() {
-        Point position = getPosition();
-        Point left = Direction.LEFT.change(position);
-        Point up = Direction.UP.change(position);
-        Point right = Direction.RIGHT.change(position);
-        Point down = Direction.DOWN.change(position);
-        HashSet<Point> hitbox = Sets.newHashSet(position, left, up, right, down);
-        hitbox.addAll(getTraceHitbox());
-        return Lists.newArrayList(hitbox);
+    public boolean isInHitbox(Point point) {
+        return getHitbox().contains(point);
     }
 
     public boolean isFloating() {
@@ -178,15 +169,19 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return PointImpl.pt(x, y);
     }
 
-    private List<Point> getTraceHitbox() {
-        return trace.stream()
+    private List<Point> getHitbox() {
+        List<Point> points = Lists.newArrayList(trace);
+        points.add(getPosition());
+        return points.stream()
                 .flatMap(tr -> Stream.of(
                         tr,
                         Direction.LEFT.change(tr),
                         Direction.UP.change(tr),
                         Direction.RIGHT.change(tr),
                         Direction.DOWN.change(tr))
-                ).filter(field::isSea)
+                ).distinct()
+                .filter(point -> !field.isOutOfBounds(point))
+                .filter(point -> isFloating() ? field.isSea(point) : field.isLand(point))
                 .collect(Collectors.toList());
     }
 }
