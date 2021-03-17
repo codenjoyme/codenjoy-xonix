@@ -60,22 +60,22 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void up() {
-        changeDirection(Direction.UP);
+        direction = Direction.UP;
     }
 
     @Override
     public void down() {
-        changeDirection(Direction.DOWN);
+        direction = Direction.DOWN;
     }
 
     @Override
     public void left() {
-        changeDirection(Direction.LEFT);
+        direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        changeDirection(Direction.RIGHT);
+        direction = Direction.RIGHT;
     }
 
     @Override
@@ -188,9 +188,5 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                         Direction.DOWN.change(tr))
                 ).filter(field::isSea)
                 .collect(Collectors.toList());
-    }
-
-    private void changeDirection(Direction direction) {
-        this.direction = direction;
     }
 }
