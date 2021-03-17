@@ -26,10 +26,10 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
-public class EnemiesTest extends AbstractGameTest {
+public class EnemyTest extends AbstractGameTest {
 
     @Test
-    public void marineEnemyShouldMove() {
+    public void shouldMove() {
 
         // given
         givenFl("O####" +
@@ -38,9 +38,11 @@ public class EnemiesTest extends AbstractGameTest {
                 "#...#" +
                 "#####");
         game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+
         // when
         game.tick();
 
+        // then
         assertE("O####" +
                 "#.M.#" +
                 "#...#" +
@@ -58,9 +60,11 @@ public class EnemiesTest extends AbstractGameTest {
                 "#...#" +
                 "#####");
         game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+
         // when
         game.tick();
 
+        // then
         assertE("O####" +
                 "##..#" +
                 "#...#" +
@@ -78,6 +82,7 @@ public class EnemiesTest extends AbstractGameTest {
                 "#...#" +
                 "#####");
         game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+
         // when
         game.tick();
 
@@ -102,6 +107,7 @@ public class EnemiesTest extends AbstractGameTest {
                 "#......#" +
                 "########");
         game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+
         // when
         game.tick();
 
@@ -117,10 +123,10 @@ public class EnemiesTest extends AbstractGameTest {
     }
 
     @Test
-    public void marineEnemyShouldProperlyBounce_whenHitTheLand() {
+    public void shouldProperlyBounce_whenHitTheLand() {
 
         // given
-        marineEnemyShouldMove();
+        shouldMove();
 
         // when
         game.tick();
@@ -154,7 +160,7 @@ public class EnemiesTest extends AbstractGameTest {
     }
 
     @Test
-    public void marineEnemyShouldProperlyBounce_whenHitCorner() {
+    public void shouldProperlyBounce_whenHitCorner() {
 
         // given
         givenFl("O####" +

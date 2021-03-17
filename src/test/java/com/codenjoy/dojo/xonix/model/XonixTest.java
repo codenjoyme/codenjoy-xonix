@@ -201,7 +201,7 @@ public class XonixTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldAvoidEnemies_whenMakeLand1() {
+    public void shouldSeizeThatPartOfTheSea_whereAreNoEnemies1() {
 
         // given
         givenFl("##O#######" +
@@ -216,6 +216,7 @@ public class XonixTest extends AbstractGameTest {
                 "##########");
 
         game.getEnemies().forEach(e -> e.setDirection(null));
+
         // when
         hero.down();
         game.tick();
@@ -258,7 +259,7 @@ public class XonixTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldAvoidEnemies_whenMakeLand2() {
+    public void shouldSeizeThatPartOfTheSea_whereAreNoEnemies2() {
 
         // given
         givenFl("####O#####" +
@@ -273,6 +274,7 @@ public class XonixTest extends AbstractGameTest {
                 "##########");
 
         game.getEnemies().forEach(e -> e.setDirection(null));
+
         // when
         hero.down();
         game.tick();
@@ -296,70 +298,6 @@ public class XonixTest extends AbstractGameTest {
                 "#...#....#" +
                 "#M..#...M#" +
                 "####O#####");
-    }
-
-    @Test
-    public void shouldBeKilled_whenMeetsMarineEnemy() {
-        // given
-        givenFl("##O##" +
-                "#...#" +
-                "#...#" +
-                "#.M.#" +
-                "#####");
-        game.getEnemies().forEach(e -> e.setDirection(null));
-
-        // when
-        hero.down();
-        game.tick();
-        game.tick();
-
-        // then
-        fired("[KILLED]");
-    }
-
-    @Test
-    public void shouldBeKilled_whenMeetsLandEnemy() {
-        // given
-        givenFl("##O##" +
-                "#...#" +
-                "#L###" +
-                "#####" +
-                "#####");
-        game.getEnemies().forEach(e -> e.setDirection(null));
-
-        // when
-        hero.down();
-        game.tick();
-        game.tick();
-
-        // then
-        fired("[KILLED]");
-    }
-
-    @Test
-    public void shouldWin_whenMakeRightAmountOfLand() {
-        // given
-        givenFl("##O##" +
-                "#...#" +
-                "#...#" +
-                "#...#" +
-                "#####");
-
-        // when
-        hero.down();
-        game.tick();
-        game.tick();
-        hero.left();
-        game.tick();
-        game.tick();
-
-        // then
-        assertE("#####" +
-                "#.###" +
-                "O####" +
-                "#####" +
-                "#####");
-        fired("[WIN]");
     }
 
     @Test
@@ -428,112 +366,6 @@ public class XonixTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[KILLED]");
-    }
-
-    @Test
-    public void shouldDecreaseOnly1Life_whenHittingOwnTraceAndWhenKilledByEnemy() {
-
-        // given
-        givenFl("##O###" +
-                "#....#" +
-                "#...M#" +
-                "#....#" +
-                "#....#" +
-                "######");
-        game.getEnemies().forEach(e -> e.setDirection(null));
-        int lives = hero.getLives();
-
-        hero.down();
-        game.tick();
-        game.tick();
-        hero.left();
-        game.tick();
-        hero.up();
-        game.tick();
-
-        assertE("######" +
-                "#Oo..#" +
-                "#oo.M#" +
-                "#....#" +
-                "#....#" +
-                "######");
-
-        game.getEnemies().forEach(e -> e.setDirection(Direction.LEFT));
-
-        // when
-        hero.right();
-        game.tick();
-
-        // then
-        fired("[KILLED]");
-        assertEquals(lives - 1, hero.getLives());
-    }
-
-    @Test
-    public void shouldNotBeKilledByLandEnemy_whenFloating() {
-
-        // given
-        givenFl("LLL#O#" +
-                "L....L" +
-                "L....L" +
-                "L....L" +
-                "L....L" +
-                "LLLLLL");
-        game.getEnemies().forEach(e -> e.setDirection(null));
-
-        // when
-        hero.down();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-
-        assertE("LLL###" +
-                "L...oL" +
-                "L...oL" +
-                "L...oL" +
-                "L...OL" +
-                "LLLLLL");
-
-        hero.left();
-        game.tick();
-        game.tick();
-        game.tick();
-        hero.up();
-        game.tick();
-        game.tick();
-        game.tick();
-
-        // then
-        assertE("LLL###" +
-                "LO..oL" +
-                "Lo..oL" +
-                "Lo..oL" +
-                "LooooL" +
-                "LLLLLL");
-
-        neverFired(Event.KILLED);
-    }
-
-    @Test
-    public void shouldNotSeizeSea_whenLandedOnEnemy() {
-
-        // given
-        shouldNotBeKilledByLandEnemy_whenFloating();
-
-        // when
-        hero.up();
-        game.tick();
-
-        // then
-        assertE("LLL#O#" +
-                "L....L" +
-                "L....L" +
-                "L....L" +
-                "L....L" +
-                "LLLLLL");
-
         fired("[KILLED]");
     }
 }
