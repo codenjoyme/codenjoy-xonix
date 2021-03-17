@@ -469,4 +469,71 @@ public class XonixTest extends AbstractGameTest {
         fired("[KILLED]");
         assertEquals(lives - 1, hero.getLives());
     }
+
+    @Test
+    public void shouldNotBeKilledByLandEnemy_whenFloating() {
+
+        // given
+        givenFl("LLL#O#" +
+                "L....L" +
+                "L....L" +
+                "L....L" +
+                "L....L" +
+                "LLLLLL");
+        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertE("LLL###" +
+                "L...oL" +
+                "L...oL" +
+                "L...oL" +
+                "L...OL" +
+                "LLLLLL");
+
+        hero.left();
+        game.tick();
+        game.tick();
+        game.tick();
+        hero.up();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("LLL###" +
+                "LO..oL" +
+                "Lo..oL" +
+                "Lo..oL" +
+                "LooooL" +
+                "LLLLLL");
+
+        neverFired(Event.KILLED);
+    }
+
+    @Test
+    public void shouldNotSeizeSea_whenLandedOnEnemy() {
+
+        // given
+        shouldNotBeKilledByLandEnemy_whenFloating();
+
+        // when
+        hero.up();
+        game.tick();
+
+        // then
+        assertE("LLL#O#" +
+                "L....L" +
+                "L....L" +
+                "L....L" +
+                "L....L" +
+                "LLLLLL");
+
+        fired("[KILLED]");
+    }
 }

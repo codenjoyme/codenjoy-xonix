@@ -105,16 +105,7 @@ public class XonixGame implements Field {
 
     @Override
     public void tick() {
-        players.stream()
-                .map(Player::getHero)
-                .forEach(hero -> {
-                    hero.tick();
-                    if (hero.isLanded()) {
-                        seizeSea(hero);
-                        hero.clearTrace();
-                        hero.clearDirection();
-                    }
-                });
+        hero.tick();
         getEnemies().forEach(Enemy::tick);
         if (isHeroKilled()) {
             hero.die();
@@ -125,6 +116,10 @@ public class XonixGame implements Field {
             players.get(0).event(Event.KILLED);
             hero.respawn(level.hero().getPosition());
             resetLandEnemies();
+        } else if (hero.isLanded()) {
+            seizeSea(hero);
+            hero.clearTrace();
+            hero.clearDirection();
         }
         checkWin();
     }
