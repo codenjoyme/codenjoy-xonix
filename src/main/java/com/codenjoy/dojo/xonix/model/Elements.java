@@ -26,17 +26,18 @@ package com.codenjoy.dojo.xonix.model;
 import com.codenjoy.dojo.services.printer.CharElements;
 
 /**
- * Тут указана легенда всех возможных объектов на поле и их состояний.
+ * Легенда всех возможных объектов на поле и их состояний
  */
 public enum Elements implements CharElements {
-    LAND('#'),
-    SEA('.'),
+    LAND('#'),                  // Земля, тут может ходить Xonix и сухопутый враг
+    SEA('.'),                   // Море, которое нужно осушать; тут плавают морские враги
 
-    TRACE('o'),
+    TRACE('o'),                 // След, который оставляет Xonix двигаясь по морю; уязвим для морских врагов;
+                                    // после выхода Xonix'а на сушу, море, очерченное следом, превращается в сушу
 
-    XONIX('O'),
-    MARINE_ENEMY('M'),
-    LAND_ENEMY('L');
+    XONIX('O'),                 // Сам главный герой игры
+    MARINE_ENEMY('M'),          // Морской враг
+    LAND_ENEMY('L');            // Сухопутный враг
 
     final char ch;
 
