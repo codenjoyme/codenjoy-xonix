@@ -22,8 +22,11 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class XonixTest extends AbstractGameTest {
@@ -426,5 +429,44 @@ public class XonixTest extends AbstractGameTest {
 
         // then
         fired("[KILLED]");
+    }
+
+    @Test
+    public void shouldDecreaseOnly1Life_whenHittingOwnTraceAndWhenKilledByEnemy() {
+
+        // given
+        givenFl("##O###" +
+                "#....#" +
+                "#...M#" +
+                "#....#" +
+                "#....#" +
+                "######");
+        game.getEnemies().forEach(e -> e.setDirection(null));
+        int lives = hero.getLives();
+
+        hero.down();
+        game.tick();
+        game.tick();
+        hero.left();
+        game.tick();
+        hero.up();
+        game.tick();
+
+        assertE("######" +
+                "#Oo..#" +
+                "#oo.M#" +
+                "#....#" +
+                "#....#" +
+                "######");
+
+        game.getEnemies().forEach(e -> e.setDirection(Direction.LEFT));
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        fired("[KILLED]");
+        assertEquals(lives - 1, hero.getLives());
     }
 }

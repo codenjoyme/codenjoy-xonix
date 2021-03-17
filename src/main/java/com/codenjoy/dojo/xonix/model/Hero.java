@@ -48,35 +48,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean isWon = false;
     private int lives;
 
-    public int getLives() {
-        return lives;
-    }
-
-    public boolean isKilled() {
-        return isKilled;
-    }
-
-    public void respawn(Point point) {
-        move(point);
-        isKilled = false;
-    }
-
-    public boolean isLanded() {
-        return !trace.isEmpty() && !isFloating();
-    }
-
-    public List<Trace> getTrace() {
-        return trace;
-    }
-
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public Point getPosition() {
-        return PointImpl.pt(x, y);
-    }
-
     public Hero(Point pt) {
         super(pt);
     }
@@ -87,18 +58,14 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         lives = settings().integer(LIVES_COUNT);
     }
 
-    private void changeDirection(Direction direction) {
-        this.direction = direction;
+    @Override
+    public void up() {
+        changeDirection(Direction.UP);
     }
 
     @Override
     public void down() {
         changeDirection(Direction.DOWN);
-    }
-
-    @Override
-    public void up() {
-        changeDirection(Direction.UP);
     }
 
     @Override
@@ -136,23 +103,28 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         move(destination);
     }
 
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.XONIX;
+    }
+
+    public void respawn(Point point) {
+        move(point);
+        isKilled = false;
+    }
+
+    public boolean isLanded() {
+        return !trace.isEmpty() && !isFloating();
+    }
+
     public void die() {
+        if (isKilled) {
+            return;
+        }
         isKilled = true;
         lives--;
         direction = null;
         clearTrace();
-    }
-
-    private List<Point> getTraceHitbox() {
-        return trace.stream()
-                .flatMap(tr -> Stream.of(
-                        tr,
-                        Direction.LEFT.change(tr),
-                        Direction.UP.change(tr),
-                        Direction.RIGHT.change(tr),
-                        Direction.DOWN.change(tr))
-                ).filter(field::isSea)
-                .collect(Collectors.toList());
     }
 
     public List<Point> getHitbox() {
@@ -170,11 +142,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return field.isSea(getPosition());
     }
 
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.XONIX;
-    }
-
     public void clearTrace() {
         trace = new ArrayList<>();
     }
@@ -189,5 +156,41 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public boolean isWon() {
         return !isKilled && isWon;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public boolean isKilled() {
+        return isKilled;
+    }
+
+    public List<Trace> getTrace() {
+        return trace;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public Point getPosition() {
+        return PointImpl.pt(x, y);
+    }
+
+    private List<Point> getTraceHitbox() {
+        return trace.stream()
+                .flatMap(tr -> Stream.of(
+                        tr,
+                        Direction.LEFT.change(tr),
+                        Direction.UP.change(tr),
+                        Direction.RIGHT.change(tr),
+                        Direction.DOWN.change(tr))
+                ).filter(field::isSea)
+                .collect(Collectors.toList());
+    }
+
+    private void changeDirection(Direction direction) {
+        this.direction = direction;
     }
 }

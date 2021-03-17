@@ -93,5 +93,6 @@ public class MarineEnemy extends AbstractItem implements Enemy {
         if (limiter != 0) {
             move(diagonalStep(position));
         }
+
     }
 }
