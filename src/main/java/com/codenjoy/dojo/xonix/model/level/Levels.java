@@ -29,7 +29,7 @@ public class Levels {
 
     private static final List<Level> levels = new ArrayList<>();
 
-    // TODO сделать левелы изменяемыми на админке и убрать этот хардкод
+    // TODO сделать левелы изменяемыми на админке
     public static int SIZE = level1().size();
 
     static {

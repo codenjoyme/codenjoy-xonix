@@ -48,7 +48,6 @@ public class Level {
         return (int) Math.sqrt(map.length());
     }
 
-
     public List<Land> land() {
         return getObjects(xy, map, Land::new, LAND, XONIX, LAND_ENEMY);
     }
