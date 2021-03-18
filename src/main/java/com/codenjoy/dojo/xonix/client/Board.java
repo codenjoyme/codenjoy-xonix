@@ -57,10 +57,10 @@ public class Board extends AbstractBoard<Elements> {
 
     @Override
     public String toString() {
-        return String.format("%s\nXonix at: %s\n", boardAsString(), getMe());
+        return String.format("%s\nXonix at: %s\n", boardAsString(), getXonix());
     }
 
-    public Point getMe() {
+    public Point getXonix() {
         return get(XONIX).get(0);
     }
 
@@ -68,15 +68,19 @@ public class Board extends AbstractBoard<Elements> {
         return get(SEA);
     }
 
+    public List<Point> getLand() {
+        return get(LAND);
+    }
+
     public List<Point> getTrace() {
         return get(TRACE);
     }
 
-    public List<Point> getMarineEnemy() {
+    public List<Point> getMarineEnemies() {
         return get(MARINE_ENEMY);
     }
 
-    public List<Point> getLandEnemy() {
+    public List<Point> getLandEnemies() {
         return get(LAND_ENEMY);
     }
 }

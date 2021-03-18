@@ -26,26 +26,37 @@ package com.codenjoy.dojo.xonix.client.ai;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.xonix.client.Board;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class AISolver implements Solver<Board> {
 
-    private DeikstraFindWay way;
     private Dice dice;
+    private Direction lastDecision;
+    private GameState state;
 
     public AISolver(Dice dice) {
         this.dice = dice;
-        this.way = new DeikstraFindWay();
     }
 
     @Override
     public String get(final Board board) {
-        return Direction.random(dice).toString();
+        state = new GameState(board);
+
+        Direction directionToAvoidDanger = state.howToAvoidDanger();
+        if (directionToAvoidDanger != null) {
+            lastDecision = directionToAvoidDanger;
+            return directionToAvoidDanger.toString();
+        }
+
+        if (state.isXonixOnLand()) {
+            return Direction.random(dice).toString();
+        }
+
+        if (state.isXonixFloating() && lastDecision != null) {
+            return lastDecision.toString();
+        }
+
+        lastDecision = Direction.random(dice);
+        return lastDecision.toString();
     }
 }
