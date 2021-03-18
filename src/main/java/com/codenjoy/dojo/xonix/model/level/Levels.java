@@ -22,9 +22,6 @@ package com.codenjoy.dojo.xonix.model.level;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Levels {
 
     private static final List<Level> levels = new ArrayList<>();

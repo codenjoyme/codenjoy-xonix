@@ -37,7 +37,6 @@ public class EnemyTest extends AbstractGameTest {
                 "#M..#" +
                 "#...#" +
                 "#####");
-        game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
 
         // when
         game.tick();
@@ -59,7 +58,6 @@ public class EnemyTest extends AbstractGameTest {
                 "#M..#" +
                 "#...#" +
                 "#####");
-        game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
 
         // when
         game.tick();
@@ -81,7 +79,6 @@ public class EnemyTest extends AbstractGameTest {
                 "#M..#" +
                 "#...#" +
                 "#####");
-        game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
 
         // when
         game.tick();
@@ -106,7 +103,6 @@ public class EnemyTest extends AbstractGameTest {
                 "#......#" +
                 "#......#" +
                 "########");
-        game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
 
         // when
         game.tick();
@@ -168,7 +164,6 @@ public class EnemyTest extends AbstractGameTest {
                 "#M..#" +
                 "#...#" +
                 "#####");
-        game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
 
         // when
         game.tick();
@@ -202,7 +197,6 @@ public class EnemyTest extends AbstractGameTest {
                 "#.....#" +
                 "#.....#" +
                 "#######");
-        game.getEnemies().forEach(e -> e.setDirection(Direction.UP));
 
         // when
         hero.down();

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.xonix.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -52,8 +53,10 @@ public abstract class AbstractGameTest {
     }
 
     protected void givenFl(String board) {
+        Dice dice = mock(Dice.class);
+        when(dice.next(anyInt())).thenReturn(2); // Direction always will be UP
         Level level = new Level(board);
-        game = new XonixGame(level, settings);
+        game = new XonixGame(level, settings, dice);
 
         listener = mock(EventListener.class);
         player = new Player(listener, settings);

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.xonix.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -48,6 +49,7 @@ public class XonixGame implements Field {
     private final List<Player> players = new LinkedList<>();
     private final GameSettings settings;
     private final Level level;
+    private final Dice dice;
 
     private Hero hero;
     private List<Sea> sea;
@@ -55,9 +57,10 @@ public class XonixGame implements Field {
     private List<LandEnemy> landEnemies;
     private List<MarineEnemy> marineEnemies;
 
-    public XonixGame(Level level, GameSettings settings) {
+    public XonixGame(Level level, GameSettings settings, Dice dice) {
         this.settings = settings;
         this.level = level;
+        this.dice = dice;
         reset();
     }
 
@@ -197,13 +200,13 @@ public class XonixGame implements Field {
 
     private void resetMarineEnemies() {
         marineEnemies = level.marineEnemyPositions().stream()
-                .map(p -> new MarineEnemy(p, XonixGame.this))
+                .map(p -> new MarineEnemy(p, XonixGame.this, dice))
                 .collect(Collectors.toList());
     }
 
     private void resetLandEnemies() {
         landEnemies = level.landEnemyPositions().stream()
-                .map(p -> new LandEnemy(p, XonixGame.this))
+                .map(p -> new LandEnemy(p, XonixGame.this, dice))
                 .collect(Collectors.toList());
     }
 

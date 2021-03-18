@@ -22,8 +22,11 @@ package com.codenjoy.dojo.xonix.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.xonix.model.level.Level;
+import com.codenjoy.dojo.xonix.model.level.Levels;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
 
@@ -34,7 +37,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         VICTORY_CRITERION("How much sea Xonix should capture for victory in percents"),
         WIN_REWARD("Reward for winning"),
         LIVES_COUNT("Lives count"),
-        DIE_PENALTY("Die penalty");
+        DIE_PENALTY("Die penalty"),
+        LEVELS_COUNT("Levels count");
 
         private String key;
 
@@ -53,5 +57,20 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(WIN_REWARD, 100);
         integer(LIVES_COUNT, 3);
         integer(DIE_PENALTY, 30);
+
+        string(() -> levelName(0), Levels.level1());
+        string(() -> levelName(1), Levels.level2());
+        string(() -> levelName(2), Levels.level3());
+        string(() -> levelName(3), Levels.level4());
+        integer(LEVELS_COUNT, 4);
     }
+
+    public Level level(int levelNumber) {
+        return new Level(string(() -> levelName(levelNumber)));
+    }
+
+    public String levelName(int levelNumber) {
+        return "level[" + levelNumber + "]";
+    }
+
 }

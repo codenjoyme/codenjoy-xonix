@@ -22,6 +22,7 @@ package com.codenjoy.dojo.xonix.model.items.enemies;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
@@ -36,11 +37,11 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
     protected Direction direction;
     protected Field field;
 
-    protected AbstractEnemy(Point pt, Elements element, Field field, Function<Point, Boolean> barrierChecker) {
+    protected AbstractEnemy(Point pt, Elements element, Dice dice, Field field, Function<Point, Boolean> barrierChecker) {
         super(pt, element);
         this.field = field;
         this.barrierChecker = barrierChecker;
-        this.direction = Direction.UP;
+        this.direction = Direction.random(dice);
     }
 
     @Override

@@ -39,7 +39,8 @@ import com.codenjoy.dojo.xonix.client.ai.AISolver;
 import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Player;
 import com.codenjoy.dojo.xonix.model.XonixGame;
-import com.codenjoy.dojo.xonix.model.level.Levels;
+
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LEVELS_COUNT;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -55,12 +56,12 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new XonixGame(Levels.get(levelNumber), settings);
+        return new XonixGame(settings.level(levelNumber), settings, getDice());
     }
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return SimpleParameter.v(Levels.SIZE);
+        return SimpleParameter.v(settings.level(1).size());
     }
 
     @Override
@@ -85,7 +86,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        return MultiplayerType.SINGLE_LEVELS.apply(Levels.count());
+        return MultiplayerType.SINGLE_LEVELS.apply(settings.integer(LEVELS_COUNT));
     }
 
     @Override
