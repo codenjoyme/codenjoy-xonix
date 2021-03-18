@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class XonixGameTest extends AbstractGameTest {
+public class GameTest extends AbstractGameTest {
 
     @Test
     public void xonixShouldBeKilled_whenMeetsMarineEnemy() {
