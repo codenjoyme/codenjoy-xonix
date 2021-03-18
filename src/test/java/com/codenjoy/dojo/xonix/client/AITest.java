@@ -1,31 +1,9 @@
 package com.codenjoy.dojo.xonix.client;
 
-/*-
- * #%L
- * Codenjoy - it's a dojo-like platform from developers to developers.
- * %%
- * Copyright (C) 2018 Codenjoy
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
-
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.xonix.client.ai.AISolver;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,8 +12,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SolverTest {
-
+public class AITest {
     private Dice dice;
     private Solver ai;
 
@@ -43,7 +20,7 @@ public class SolverTest {
     public void setup() {
         dice = mock(Dice.class);
         mockDirection(Direction.UP);
-        ai = new YourSolver(dice);
+        ai = new AISolver(dice);
     }
 
     private Board board(String board) {
@@ -53,7 +30,7 @@ public class SolverTest {
     @Test
     public void should() {
         assertAI(
-                        "##L####" +
+                "##L####" +
                         "####O##" +
                         "#.....#" +
                         "#..M..#" +
@@ -62,30 +39,30 @@ public class SolverTest {
                         "#######", Direction.RIGHT);
 
         assertAI(
-                        "##L###L" +
+                "##L###L" +
                         "####O##" +
                         "#.....#" +
                         "#.....#" +
                         "#.....#" +
                         "#.....#" +
-                        "#######", Direction.RIGHT);
+                        "#######", Direction.DOWN);
 
         assertAI(
-                        "######L" +
+                "######L" +
                         "####O##" +
                         "#..M..#" +
                         "#.....#" +
                         "#.....#" +
                         "#.....#" +
-                        "#######", Direction.RIGHT);
+                        "#######", Direction.LEFT);
         assertAI(
-                        "######L" +
+                "######L" +
                         "#######" +
                         "#.Ooo.#" +
                         "#.....#" +
                         "#.M...#" +
                         "#.....#" +
-                        "#######", Direction.RIGHT);
+                        "#######", Direction.UP);
     }
 
     private void assertAI(String board, Direction expected) {
