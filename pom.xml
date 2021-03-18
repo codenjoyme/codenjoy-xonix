@@ -14,6 +14,7 @@
 
     <properties>
         <module.name>xonix</module.name>
+        <pitest.version>1.6.4</pitest.version>
     </properties>
 
     <repositories>
@@ -60,6 +61,20 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${pitest.version}</version>
+                <configuration>
+                    <targetClasses>
+                        <param>com.codenjoy.dojo.xonix.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>com.codenjoy.dojo.xonix.*</param>
+                    </targetTests>
+                    <reportsDirectory>${project.basedir}/pitest/</reportsDirectory>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
