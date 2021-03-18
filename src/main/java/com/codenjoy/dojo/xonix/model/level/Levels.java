@@ -23,37 +23,8 @@ package com.codenjoy.dojo.xonix.model.level;
  */
 
 public class Levels {
-
-    private static final List<Level> levels = new ArrayList<>();
-
-    // TODO сделать левелы изменяемыми на админке
-    public static int SIZE = level1().size();
-
-    static {
-        levels.add(level1());
-        levels.add(level2());
-        levels.add(level3());
-        levels.add(level4());
-    }
-
-    public static Level get(int number) {
-        if (number < 1) {
-            throw new IllegalArgumentException("Level number should " +
-                    "be greater than 1 but received " + number);
-        }
-        if (number > levels.size()) {
-            throw new IllegalArgumentException("Has only " + count() +
-                    " levels but requested level " + number);
-        }
-        return levels.get(number - 1);
-    }
-
-    public static int count() {
-        return levels.size();
-    }
-
-    private static Level level1() {
-        return new Level(
+    public static String level1() {
+        return
                         "##########O#########" +
                         "####################" +
                         "##................##" +
@@ -73,11 +44,11 @@ public class Levels {
                         "##................##" +
                         "##................##" +
                         "####################" +
-                        "####################");
+                        "####################";
     }
 
-    private static Level level2() {
-        return new Level(
+    public static String level2() {
+        return
                         "##########O#########" +
                         "####################" +
                         "##................##" +
@@ -97,11 +68,11 @@ public class Levels {
                         "##................##" +
                         "##................##" +
                         "############L#######" +
-                        "####################");
+                        "####################";
     }
 
-    private static Level level3() {
-        return new Level(
+    public static String level3() {
+        return
                         "##########O#########" +
                         "####################" +
                         "##................##" +
@@ -121,11 +92,11 @@ public class Levels {
                         "##....M...........##" +
                         "##................##" +
                         "############L#######" +
-                        "####################");
+                        "####################";
     }
 
-    private static Level level4() {
-        return new Level(
+    public static String level4() {
+        return
                         "##########O#########" +
                         "####################" +
                         "##................##" +
@@ -145,6 +116,6 @@ public class Levels {
                         "##....M...........##" +
                         "##................##" +
                         "############L#######" +
-                        "####################");
+                        "####################";
     }
 }
