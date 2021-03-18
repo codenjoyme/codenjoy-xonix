@@ -23,15 +23,15 @@ package com.codenjoy.dojo.xonix.model.level;
  */
 
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.items.Land;
-import com.codenjoy.dojo.xonix.model.items.LandEnemy;
-import com.codenjoy.dojo.xonix.model.items.MarineEnemy;
 import com.codenjoy.dojo.xonix.model.items.Sea;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.utils.LevelUtils.getObjects;
+import static com.codenjoy.dojo.utils.LevelUtils.getPositions;
 import static com.codenjoy.dojo.xonix.model.Elements.*;
 
 public class Level {
@@ -60,19 +60,19 @@ public class Level {
         return getObjects(xy, map, Hero::new, XONIX).get(0);
     }
 
-    public List<MarineEnemy> marineEnemies() {
-        return getObjects(xy, map, MarineEnemy::new, MARINE_ENEMY);
+    public List<Point> marineEnemyPositions() {
+        return getPositions(map, MARINE_ENEMY);
     }
 
-    public List<LandEnemy> landEnemies() {
-        return getObjects(xy, map, LandEnemy::new, LAND_ENEMY);
+    public List<Point> landEnemyPositions() {
+        return getPositions(map, LAND_ENEMY);
     }
 
     public int seaCellsCount() {
-        return getObjects(xy, map, pt -> new Object(), SEA, MARINE_ENEMY).size();
+        return getPositions(map, SEA, MARINE_ENEMY).size();
     }
 
     public int landCellsCount() {
-        return getObjects(xy, map, pt -> new Object(), LAND, XONIX, LAND_ENEMY).size();
+        return getPositions(map, LAND, XONIX, LAND_ENEMY).size();
     }
 }

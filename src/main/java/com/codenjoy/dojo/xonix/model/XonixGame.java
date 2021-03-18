@@ -27,6 +27,9 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.xonix.model.items.*;
+import com.codenjoy.dojo.xonix.model.items.enemies.Enemy;
+import com.codenjoy.dojo.xonix.model.items.enemies.LandEnemy;
+import com.codenjoy.dojo.xonix.model.items.enemies.MarineEnemy;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
@@ -34,6 +37,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.VICTORY_CRITERION;
@@ -192,13 +196,15 @@ public class XonixGame implements Field {
     }
 
     private void resetMarineEnemies() {
-        marineEnemies = level.marineEnemies();
-        marineEnemies.forEach(enemy -> enemy.setField(XonixGame.this));
+        marineEnemies = level.marineEnemyPositions().stream()
+                .map(p -> new MarineEnemy(p, XonixGame.this))
+                .collect(Collectors.toList());
     }
 
     private void resetLandEnemies() {
-        landEnemies = level.landEnemies();
-        landEnemies.forEach(enemy -> enemy.setField(XonixGame.this));
+        landEnemies = level.landEnemyPositions().stream()
+                .map(p -> new LandEnemy(p, XonixGame.this))
+                .collect(Collectors.toList());
     }
 
     private boolean isHeroWon() {
