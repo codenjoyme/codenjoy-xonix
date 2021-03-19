@@ -100,7 +100,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return;
         }
         if (isFloating()) {
-            trace.add(new Trace(getPosition()));
+            trace.add(new Trace(getPosition(), this));
         }
         move(destination);
     }
@@ -131,6 +131,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public Point getStartPosition() {
         return startPosition;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public boolean isInHitbox(Point point) {

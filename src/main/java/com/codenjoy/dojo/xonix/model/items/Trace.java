@@ -24,9 +24,18 @@ package com.codenjoy.dojo.xonix.model.items;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
+import com.codenjoy.dojo.xonix.model.Hero;
+import com.codenjoy.dojo.xonix.model.Player;
 
 public class Trace extends AbstractItem {
-    public Trace(Point pt) {
+    private final Hero hero;
+    public Trace(Point pt, Hero hero) {
         super(pt, Elements.TRACE);
+        this.hero = hero;
+    }
+
+    @Override
+    public Elements state(Player player, Object... objects) {
+        return hero.getPlayer().equals(player) ? Elements.TRACE : Elements.ANOTHER_TRACE;
     }
 }

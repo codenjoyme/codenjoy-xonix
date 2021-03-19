@@ -7,9 +7,9 @@ import static org.mockito.Mockito.verify;
 
 public class MultiplayerTest extends AbstractMultiplayerTest {
 
-    // рисуем несколько игроков
     @Test
-    public void shouldPrint() {
+    public void shouldLookDifferentlyForEachOther() {
+
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -17,13 +17,12 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "#...#" +
                 "###O#");
 
-        dice(0);
         givenPlayer();
         givenPlayer();
         givenPlayer();
 
 
-        // when then
+        // then
         assertF("##O##" +
                 "#...#" +
                 "A...#" +
@@ -43,116 +42,120 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "###O#", game(2));
     }
 
-//    // Каждый игрок может упраыляться за тик игры независимо
-//    @Test
-//    public void shouldJoystick() {
-//        // given
-//        givenFl("☼☼☼☼☼☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼☼☼☼☼☼");
-//
-//        givenThreePlayers();
-//
-//        // when
-//        game(0).getJoystick().act();
-//        game(0).getJoystick().down();
-//        game(1).getJoystick().right();
-//        game(2).getJoystick().down();
-//
-//        tick();
-//
-//        // then
-//        assertF("☼☼☼☼☼☼\n" +
-//                "☼x   ☼\n" +
-//                "☼☺ ☻ ☼\n" +
-//                "☼  ☻ ☼\n" +
-//                "☼    ☼\n" +
-//                "☼☼☼☼☼☼\n", game(0));
-//    }
-//
-//    // игроков можно удалять из игры
-//    @Test
-//    public void shouldRemove() {
-//        // given
-//        givenFl("☼☼☼☼☼☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼☼☼☼☼☼");
-//
-//        givenThreePlayers();
-//
-//        // when
-//        game(2).close();
-//
-//        tick();
-//
-//        // then
-//        assertF("☼☼☼☼☼☼\n" +
-//                "☼☺   ☼\n" +
-//                "☼    ☼\n" +
-//                "☼ ☻  ☼\n" +
-//                "☼    ☼\n" +
-//                "☼☼☼☼☼☼\n", game(0));
-//    }
-//
-//    // игрок может взорваться на бомбе
-//    @Test
-//    public void shouldKill() {
-//        // given
-//        givenFl("☼☼☼☼☼☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼☼☼☼☼☼");
-//
-//        givenThreePlayers();
-//
-//        game(0).getJoystick().down();
-//        game(0).getJoystick().act();
-//        game(2).getJoystick().left();
-//
-//        tick();
-//
-//        assertF("☼☼☼☼☼☼\n" +
-//                "☼x☻  ☼\n" +
-//                "☼☺   ☼\n" +
-//                "☼ ☻  ☼\n" +
-//                "☼    ☼\n" +
-//                "☼☼☼☼☼☼\n", game(0));
-//
-//        // when
-//        game(2).getJoystick().left();
-//        tick();
-//
-//        // then
-//        assertF("☼☼☼☼☼☼\n" +
-//                "☼X   ☼\n" +
-//                "☼☺   ☼\n" +
-//                "☼ ☻  ☼\n" +
-//                "☼    ☼\n" +
-//                "☼☼☼☼☼☼\n", game(0));
-//
-////        verify(listener(2)).event(Events.LOOSE);
-//        assertTrue(game(2).isGameOver());
-//
-//        dice(4, 1);
-//        game(2).newGame();
-//
-//        tick();
-//
-//        assertF("☼☼☼☼☼☼\n" +
-//                "☼    ☼\n" +
-//                "☼☺   ☼\n" +
-//                "☼ ☻  ☼\n" +
-//                "☼   ☻☼\n" +
-//                "☼☼☼☼☼☼\n", game(0));
-//    }
+    @Test
+    public void shouldBeIndependentlyControlled() {
+
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "O...#" +
+                "#...#" +
+                "####O");
+        givenPlayer();
+        givenPlayer();
+        givenPlayer();
+
+        // when
+        game(0).getJoystick().down();
+        game(1).getJoystick().right();
+        game(2).getJoystick().up();
+
+        tick();
+
+        // then
+        assertF("#####" +
+                "#.O.#" +
+                "#A..#" +
+                "#...A" +
+                "#####", game(0));
+    }
+
+    @Test
+    public void playersShouldBeRemovable() {
+
+        // given
+        givenFl("##O##" +
+                "#...#" +
+                "O...#" +
+                "#...#" +
+                "####O");
+        givenPlayer();
+        givenPlayer();
+        givenPlayer();
+
+        // when
+        game(2).close();
+
+        tick();
+
+        // then
+        assertF("##O##" +
+                "#...#" +
+                "A...#" +
+                "#...#" +
+                "#####", game(0));
+    }
+
+    @Test
+    public void tracesShouldLookDifferentlyForEachPlayer() {
+
+        // given
+        givenFl("##########" +
+                "##########" +
+                "#O......##" +
+                "##......##" +
+                "##......O#" +
+                "##......##" +
+                "##......##" +
+                "##......##" +
+                "###O######" +
+                "##########");
+        givenPlayer();
+        givenPlayer();
+        givenPlayer();
+
+        // when
+        game(0).getJoystick().right();
+        game(1).getJoystick().left();
+        game(2).getJoystick().up();
+
+        tick();
+        tick();
+
+        // then
+        assertF("##########" +
+                "##########" +
+                "##oO....##" +
+                "##......##" +
+                "##....Aa##" +
+                "##......##" +
+                "##.A....##" +
+                "##.a....##" +
+                "##########" +
+                "##########", game(0));
+
+        assertF("##########" +
+                "##########" +
+                "##aA....##" +
+                "##......##" +
+                "##....Oo##" +
+                "##......##" +
+                "##.A....##" +
+                "##.a....##" +
+                "##########" +
+                "##########", game(1));
+
+        assertF("##########" +
+                "##########" +
+                "##aA....##" +
+                "##......##" +
+                "##....Aa##" +
+                "##......##" +
+                "##.O....##" +
+                "##.o....##" +
+                "##########" +
+                "##########", game(2));
+    }
 //
 //    // игрок может подобрать золото
 //    @Test
