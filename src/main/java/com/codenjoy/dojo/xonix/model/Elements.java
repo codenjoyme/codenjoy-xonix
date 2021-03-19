@@ -29,7 +29,10 @@ import com.codenjoy.dojo.services.printer.CharElements;
  * Легенда всех возможных объектов на поле и их состояний
  */
 public enum Elements implements CharElements {
-    LAND('#'),                  // Земля, тут может ходить Xonix и сухопутый враг
+    XONIX_LAND('#'),                  // Земля, тут может ходить Xonix и сухопутый враг
+    ENEMY_LAND('@'),
+    FREE_LAND('X'),
+
     SEA('.'),                   // Море, которое нужно осушать; тут плавают морские враги
 
     TRACE('o'),                 // След, который оставляет Xonix двигаясь по морю; уязвим для морских врагов;

@@ -22,13 +22,9 @@ package com.codenjoy.dojo.xonix.client;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
@@ -69,7 +65,7 @@ public class BoardTest {
     @Test
     public void shouldWork_getAt() {
         assertEquals(Elements.SEA, board.getAt(2, 2));
-        assertEquals(Elements.LAND, board.getAt(0, 0));
+        assertEquals(Elements.XONIX_LAND, board.getAt(0, 0));
         assertEquals(Elements.MARINE_ENEMY, board.getAt(5, 12));
         assertEquals(Elements.LAND_ENEMY, board.getAt(18, 11));
     }
@@ -77,7 +73,7 @@ public class BoardTest {
     @Test
     public void shouldWork_getAt_point() {
         assertEquals(Elements.SEA, board.getAt(pt(2, 2)));
-        assertEquals(Elements.LAND, board.getAt(pt(0, 0)));
+        assertEquals(Elements.XONIX_LAND, board.getAt(pt(0, 0)));
         assertEquals(Elements.MARINE_ENEMY, board.getAt(pt(5, 12)));
         assertEquals(Elements.LAND_ENEMY, board.getAt(pt(18, 11)));
     }

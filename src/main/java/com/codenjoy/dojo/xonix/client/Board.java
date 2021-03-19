@@ -69,7 +69,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getLand() {
-        return get(LAND);
+        return get(XONIX_LAND);
     }
 
     public List<Point> getTrace() {

@@ -34,6 +34,8 @@ public interface Field extends GameField<Player> {
 
     boolean isLand(Point point);
 
+    boolean isHeroLand(Point point, Hero hero);
+
     boolean isSea(Point point);
 
     boolean isOutOfBounds(Point point);

@@ -9,7 +9,6 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.GameSettings;
-import com.google.common.base.Splitter;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -26,7 +25,7 @@ public abstract class AbstractMultiplayerTest {
     private List<EventListener> listeners = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
     private Dice dice;
-    private XonixGame field;
+    protected XonixGame field;
     private GameSettings settings;
     private PrinterFactory printerFactory;
 

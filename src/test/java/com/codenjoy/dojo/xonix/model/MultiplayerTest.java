@@ -2,20 +2,17 @@ package com.codenjoy.dojo.xonix.model;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-
 public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldLookDifferentlyForEachOther() {
 
         // given
-        givenFl("##O##" +
-                "#...#" +
-                "O...#" +
-                "#...#" +
-                "###O#");
+        givenFl("XXOXX" +
+                "X...X" +
+                "O...X" +
+                "X...X" +
+                "XXXOX");
 
         givenPlayer();
         givenPlayer();
@@ -23,34 +20,34 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
 
         // then
-        assertF("##O##" +
-                "#...#" +
-                "A...#" +
-                "#...#" +
-                "###A#", game(0));
+        assertF("XXOXX" +
+                "X...X" +
+                "A...X" +
+                "X...X" +
+                "XXXAX", game(0));
 
-        assertF("##A##" +
-                "#...#" +
-                "O...#" +
-                "#...#" +
-                "###A#", game(1));
+        assertF("XXAXX" +
+                "X...X" +
+                "O...X" +
+                "X...X" +
+                "XXXAX", game(1));
 
-        assertF("##A##" +
-                "#...#" +
-                "A...#" +
-                "#...#" +
-                "###O#", game(2));
+        assertF("XXAXX" +
+                "X...X" +
+                "A...X" +
+                "X...X" +
+                "XXXOX", game(2));
     }
 
     @Test
     public void shouldBeIndependentlyControlled() {
 
         // given
-        givenFl("##O##" +
-                "#...#" +
-                "O...#" +
-                "#...#" +
-                "####O");
+        givenFl("XXOXX" +
+                "X...X" +
+                "O...X" +
+                "X...X" +
+                "XXXXO");
         givenPlayer();
         givenPlayer();
         givenPlayer();
@@ -63,22 +60,22 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         tick();
 
         // then
-        assertF("#####" +
-                "#.O.#" +
-                "#A..#" +
-                "#...A" +
-                "#####", game(0));
+        assertF("XX#XX" +
+                "X.O.X" +
+                "@A..X" +
+                "X...A" +
+                "XXXX@", game(0));
     }
 
     @Test
     public void playersShouldBeRemovable() {
 
         // given
-        givenFl("##O##" +
-                "#...#" +
-                "O...#" +
-                "#...#" +
-                "####O");
+        givenFl("XXOXX" +
+                "X...X" +
+                "O...X" +
+                "X...X" +
+                "XXXXO");
         givenPlayer();
         givenPlayer();
         givenPlayer();
@@ -89,30 +86,31 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         tick();
 
         // then
-        assertF("##O##" +
-                "#...#" +
-                "A...#" +
-                "#...#" +
-                "#####", game(0));
+        assertF("XXOXX" +
+                "X...X" +
+                "A...X" +
+                "X...X" +
+                "XXXX@", game(0));
     }
 
     @Test
-    public void tracesShouldLookDifferentlyForEachPlayer() {
+    public void tracesOfEnemiesShouldLookDifferentlyForEachPlayer() {
 
         // given
-        givenFl("##########" +
-                "##########" +
-                "#O......##" +
-                "##......##" +
-                "##......O#" +
-                "##......##" +
-                "##......##" +
-                "##......##" +
-                "###O######" +
-                "##########");
+        givenFl("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XO......XX" +
+                "XX......XX" +
+                "XX......OX" +
+                "XX......XX" +
+                "XX......XX" +
+                "XX....M.XX" +
+                "XXXOXXXXXX" +
+                "XXXXXXXXXX");
         givenPlayer();
         givenPlayer();
         givenPlayer();
+        field.getEnemies().forEach(e -> e.setDirection(null));
 
         // when
         game(0).getJoystick().right();
@@ -123,96 +121,95 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         tick();
 
         // then
-        assertF("##########" +
-                "##########" +
-                "##oO....##" +
-                "##......##" +
-                "##....Aa##" +
-                "##......##" +
-                "##.A....##" +
-                "##.a....##" +
-                "##########" +
-                "##########", game(0));
+        assertF("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "X#oO....XX" +
+                "XX......XX" +
+                "XX....Aa@X" +
+                "XX......XX" +
+                "XX.A....XX" +
+                "XX.a..M.XX" +
+                "XXX@XXXXXX" +
+                "XXXXXXXXXX", game(0));
 
-        assertF("##########" +
-                "##########" +
-                "##aA....##" +
-                "##......##" +
-                "##....Oo##" +
-                "##......##" +
-                "##.A....##" +
-                "##.a....##" +
-                "##########" +
-                "##########", game(1));
+        assertF("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "X@aA....XX" +
+                "XX......XX" +
+                "XX....Oo#X" +
+                "XX......XX" +
+                "XX.A....XX" +
+                "XX.a..M.XX" +
+                "XXX@XXXXXX" +
+                "XXXXXXXXXX", game(1));
 
-        assertF("##########" +
-                "##########" +
-                "##aA....##" +
-                "##......##" +
-                "##....Aa##" +
-                "##......##" +
-                "##.O....##" +
-                "##.o....##" +
-                "##########" +
-                "##########", game(2));
+        assertF("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "X@aA....XX" +
+                "XX......XX" +
+                "XX....Aa@X" +
+                "XX......XX" +
+                "XX.O....XX" +
+                "XX.o..M.XX" +
+                "XXX#XXXXXX" +
+                "XXXXXXXXXX", game(2));
     }
-//
-//    // игрок может подобрать золото
-//    @Test
-//    public void shouldGetGold() {
-//        // given
-//        givenFl("☼☼☼☼☼☼" +
-//                "☼   $☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼☼☼☼☼☼");
-//
-//        givenThreePlayers();
-//
-//        // when
-//        game(2).getJoystick().right();
-//
-//        dice(1, 2);
-//
-//        tick();
-//
-//        // then
-//        assertF("☼☼☼☼☼☼\n" +
-//                "☼☺  ☻☼\n" +
-//                "☼    ☼\n" +
-//                "☼$☻  ☼\n" +
-//                "☼    ☼\n" +
-//                "☼☼☼☼☼☼\n", game(0));
-//
-////        verify(listener(2)).event(Events.WIN);
-//    }
-//
-//    // игрок не может пойи на другого игрока
-//    @Test
-//    public void shouldCantGoOnHero() {
-//        // given
-//        givenFl("☼☼☼☼☼☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼    ☼" +
-//                "☼☼☼☼☼☼");
-//
-//        givenThreePlayers();
-//
-//        // when
-//        game(0).getJoystick().right();
-//        game(2).getJoystick().left();
-//
-//        tick();
-//
-//        // then
-//        assertF("☼☼☼☼☼☼\n" +
-//                "☼ ☺☻ ☼\n" +
-//                "☼    ☼\n" +
-//                "☼ ☻  ☼\n" +
-//                "☼    ☼\n" +
-//                "☼☼☼☼☼☼\n", game(0));
-//    }
+
+    @Test
+    public void seizedLandOfEnemiesShouldLooksDifferentlyForEachPlayer() {
+
+        // given
+        tracesOfEnemiesShouldLookDifferentlyForEachPlayer();
+
+        // when
+        game(0).getJoystick().up();
+        game(2).getJoystick().left();
+
+        tick();
+        game(0).getJoystick().left();
+        tick();
+
+        assertF("XXXXXXXXXX" +
+                "XXOoXXXXXX" +
+                "X#oo....XX" +
+                "XX......XX" +
+                "XX..Aaaa@X" +
+                "XX......XX" +
+                "XAaa....XX" +
+                "XX.a..M.XX" +
+                "XXX@XXXXXX" +
+                "XXXXXXXXXX", game(0));
+
+        game(2).getJoystick().down();
+        tick();
+
+        game(0).getJoystick().down();
+        tick();
+
+        assertF("XXXXXXXXXX" +
+                "X###XXXXXX" +
+                "XO##....XX" +
+                "XX......XX" +
+                "XXAaaaaa@X" +
+                "XX......XX" +
+                "Xaaa....XX" +
+                "Xa.a..M.XX" +
+                "XAX@XXXXXX" +
+                "XXXXXXXXXX", game(0));
+
+        game(2).getJoystick().right();
+        tick();
+        tick();
+
+        assertF("XXXXXXXXXX" +
+                "X###XXXXXX" +
+                "XO##....XX" +
+                "XX......XX" +
+                "Aaaaaaaa@X" +
+                "XX......XX" +
+                "X@@@....XX" +
+                "X@@@..M.XX" +
+                "X@@AXXXXXX" +
+                "XXXXXXXXXX", game(0));
+    }
 }

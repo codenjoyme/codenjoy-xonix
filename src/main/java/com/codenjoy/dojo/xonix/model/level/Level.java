@@ -31,7 +31,6 @@ import com.codenjoy.dojo.xonix.model.items.Sea;
 import java.util.List;
 
 import static com.codenjoy.dojo.utils.LevelUtils.getObjects;
-import static com.codenjoy.dojo.utils.LevelUtils.getPositions;
 import static com.codenjoy.dojo.xonix.model.Elements.*;
 
 public class Level {
@@ -48,8 +47,14 @@ public class Level {
         return (int) Math.sqrt(map.length());
     }
 
-    public List<Land> land() {
-        return getObjects(xy, map, Land::new, LAND, XONIX, LAND_ENEMY);
+    public List<Land> freeLand() {
+        return getObjects(xy, map, Land::new, FREE_LAND, LAND_ENEMY);
+    }
+
+    public List<Land> xonixLand(Hero hero) {
+        List<Land> land = getObjects(xy, map, Land::new, XONIX_LAND, XONIX);
+        land.forEach(l -> l.setOwner(hero));
+        return land;
     }
 
     public List<Sea> sea() {
@@ -73,6 +78,6 @@ public class Level {
     }
 
     public int landCellsCount() {
-        return getObjects(xy, map, pt -> pt, LAND, XONIX, LAND_ENEMY).size();
+        return getObjects(xy, map, pt -> pt, XONIX_LAND, XONIX, LAND_ENEMY).size();
     }
 }

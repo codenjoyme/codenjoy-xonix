@@ -25,9 +25,29 @@ package com.codenjoy.dojo.xonix.model.items;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
+import com.codenjoy.dojo.xonix.model.Hero;
+import com.codenjoy.dojo.xonix.model.Player;
 
 public class Land extends AbstractItem {
+    private Hero owner;
+
     public Land(Point pt) {
-        super(pt, Elements.LAND);
+        super(pt, Elements.XONIX_LAND);
+    }
+
+    public void setOwner(Hero hero) {
+        this.owner = hero;
+    }
+
+    public Hero getOwner() {
+        return owner;
+    }
+
+    @Override
+    public Elements state(Player player, Object... objects) {
+        if (owner == null) {
+            return Elements.FREE_LAND;
+        }
+        return owner.equals(player.getHero()) ? Elements.XONIX_LAND : Elements.ENEMY_LAND;
     }
 }

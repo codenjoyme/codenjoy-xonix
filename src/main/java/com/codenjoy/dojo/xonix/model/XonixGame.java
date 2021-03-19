@@ -77,8 +77,10 @@ public class XonixGame implements Field {
 
     private void act() {
         getHeroes().forEach(hero -> {
-            boolean enemyInHitbox = getEnemies().stream()
-                    .anyMatch(hero::isInHitbox);
+
+            boolean enemyInHitbox = hero.isFloating()
+                    ? marineEnemies.stream().anyMatch(hero::isInHitbox)
+                    : landEnemies.stream().anyMatch(hero::isInHitbox);
 
             if (enemyInHitbox) {
                 hero.die();
@@ -126,12 +128,29 @@ public class XonixGame implements Field {
                 .orElseThrow(IllegalStateException::new);
         Hero hero = new Hero(startPoint, player);
         hero.init(this);
+        land.stream()
+                .filter(p -> p.equals(startPoint))
+                .findFirst()
+                .ifPresent(l -> l.setOwner(hero));
+        land.addAll(level.xonixLand(hero));
         return hero;
     }
 
     @Override
     public boolean isLand(Point point) {
         return land.contains(point);
+    }
+
+    @Override
+    public boolean isHeroLand(Point point, Hero hero) {
+        Land land = this.land.stream()
+                .filter(p -> p.equals(point))
+                .findFirst()
+                .orElse(null);
+        if (land == null) {
+            return false;
+        }
+        return hero.equals(land.getOwner());
     }
 
     @Override
@@ -206,7 +225,7 @@ public class XonixGame implements Field {
 
     private void reset() {
         sea = level.sea();
-        land = level.land();
+        land = level.freeLand();
         resetMarineEnemies();
         resetLandEnemies();
     }
@@ -232,21 +251,21 @@ public class XonixGame implements Field {
     private void seizeSea(Hero hero) {
         List<Trace> trace = hero.getTrace();
         if (trace.size() == 1) { // Like original
-            turnToLand(trace.get(0));
+            turnToLand(trace.get(0), hero);
             return;
         }
         Direction firstWaveDirection = hero.getDirection()
                 .counterClockwise();
         Trace lastTraceCell = trace.get(trace.size() - 1);
-        Collection<Point> points = breadthFirstSearch(firstWaveDirection.change(lastTraceCell));
+        Collection<Point> points = breadthFirstSearch(firstWaveDirection.change(lastTraceCell), hero);
         if (points.size() == 0) {
-            points = breadthFirstSearch(firstWaveDirection.inverted().change(lastTraceCell));
+            points = breadthFirstSearch(firstWaveDirection.inverted().change(lastTraceCell), hero);
         }
         points.addAll(trace);
-        points.forEach(this::turnToLand);
+        points.forEach(p -> turnToLand(p, hero));
     }
 
-    private Collection<Point> breadthFirstSearch(Point start) {
+    private Collection<Point> breadthFirstSearch(Point start, Hero hero) {
         ArrayDeque<Point> queue = Queues.newArrayDeque();
         queue.offer(start);
         HashSet<Point> visited = new HashSet<>();
@@ -263,16 +282,22 @@ public class XonixGame implements Field {
             Stream.of(up, down, left, right)
                     .filter(p -> !visited.contains(p))
                     .filter(p -> !isTrace(p))
-                    .filter(this::isSea)
+                    .filter(p -> !isHeroLand(p, hero))
                     .forEach(queue::offer);
         }
         return visited;
     }
 
-    private void turnToLand(Point point) {
+    private void turnToLand(Point point, Hero hero) {
         if (sea.remove(point)) {
-            land.add(new Land(point));
+            Land land = new Land(point);
+            land.setOwner(hero);
+            this.land.add(land);
         }
+        land.stream()
+                .filter(p -> p.equals(point))
+                .findFirst()
+                .ifPresent(l -> l.setOwner(hero));
     }
 
     private boolean isTrace(Point point) {

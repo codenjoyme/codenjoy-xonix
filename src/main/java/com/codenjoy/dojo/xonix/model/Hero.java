@@ -99,7 +99,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             die();
             return;
         }
-        if (isFloating()) {
+        if (!isOnOwnLand()) {
             trace.add(new Trace(getPosition(), this));
         }
         move(destination);
@@ -116,7 +116,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public boolean isLanded() {
-        return !trace.isEmpty() && !isFloating();
+        return !trace.isEmpty() && isOnOwnLand();
     }
 
     public void die() {
@@ -143,6 +143,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public boolean isFloating() {
         return field.isSea(getPosition());
+    }
+
+    public boolean isOnOwnLand() {
+        return field.isHeroLand(getPosition(), this);
     }
 
     public void clearTrace() {
@@ -193,7 +197,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                         Direction.DOWN.change(tr))
                 ).distinct()
                 .filter(point -> !field.isOutOfBounds(point))
-                .filter(point -> isFloating() ? field.isSea(point) : field.isLand(point))
                 .collect(Collectors.toList());
     }
 }
