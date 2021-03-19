@@ -241,4 +241,39 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         fired(listener(1), Event.KILLED);
         fired(listener(0), Event.ANNIHILATION);
     }
+
+    @Test
+    public void shouldSeizeEnemyLand() {
+
+        // given
+        shouldKillEachOtherIfHitsTrace();
+
+        // when
+        tick();
+        tick();
+        tick();
+        game(0).getJoystick().right();
+        tick();
+        tick();
+        game(0).getJoystick().up();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        // then
+        assertF("XXXXXXXXXX" +
+                "X###XXXXXX" +
+                "X##O....XX" +
+                "X###....XX" +
+                "X###....AX" +
+                "X###....XX" +
+                "X###....XX" +
+                "X###..M.XX" +
+                "X@@AXXXXXX" +
+                "XXXXXXXXXX", game(0));
+
+    }
 }
