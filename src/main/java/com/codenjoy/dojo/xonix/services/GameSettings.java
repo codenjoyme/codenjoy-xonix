@@ -52,7 +52,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        integer(VICTORY_CRITERION, 70);
+        integer(VICTORY_CRITERION, 75);
         integer(WIN_REWARD, 100);
         integer(LIVES_COUNT, 3);
         integer(DIE_PENALTY, 30);

@@ -87,6 +87,13 @@ public class XonixGame implements Field {
                 return;
             }
 
+            getHeroes().stream()
+                    .filter(enemy -> enemy.getTrace().contains(hero))
+                    .forEach(enemy -> {
+                        hero.setKiller(true);
+                        enemy.die();
+                    });
+
             if (hero.isLanded()) {
                 seizeSea(hero);
                 hero.clearTrace();
@@ -97,18 +104,24 @@ public class XonixGame implements Field {
 
     private void check() {
         getHeroes().forEach(hero -> {
+            Player player = hero.getPlayer();
             if (hero.isKilled()) {
                 if (hero.getLives() == 0) {
-                    players.get(0).event(Event.GAME_OVER);
+                    player.event(Event.GAME_OVER);
                     return;
                 }
-                players.get(0).event(Event.KILLED);
+                player.event(Event.KILLED);
                 hero.respawn(hero.getStartPosition());
-                resetLandEnemies();
+                if (getHeroes().size() == 1) {
+                    resetLandEnemies();
+                }
                 return;
             }
-            if (isHeroWon()) {
-                players.get(0).event(Event.WIN);
+            if (hero.isKiller()) {
+                hero.getPlayer().event(Event.ANNIHILATION);
+            }
+            if (getHeroes().size() == 1 && isHeroWon()) {
+                player.event(Event.WIN);
                 hero.setWon(true);
             }
         });
@@ -243,8 +256,11 @@ public class XonixGame implements Field {
     }
 
     private boolean isHeroWon() {
-        int seizedLand = land.size() - level.landCellsCount();
-        double percentOfSeized = 100.0 * seizedLand / level.seaCellsCount();
+        Hero lastHero = getHeroes().get(0);
+        long seizedLand = land.stream()
+                .filter(l -> lastHero.equals(l.getOwner()))
+                .count() - level.xonixLand(lastHero).size();
+        double percentOfSeized = 100.0 * seizedLand / level.sea().size();
         return percentOfSeized >= settings.integer(VICTORY_CRITERION);
     }
 

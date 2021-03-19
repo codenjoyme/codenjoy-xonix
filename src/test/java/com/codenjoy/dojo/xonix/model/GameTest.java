@@ -47,7 +47,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[KILLED]");
+        fired(Event.KILLED);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[KILLED]");
+        fired(Event.KILLED);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class GameTest extends AbstractGameTest {
                 "O####" +
                 "#####" +
                 "#####");
-        fired("[WIN]");
+        fired(Event.WIN);
     }
 
     @Test
@@ -132,7 +132,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[KILLED]");
+        fired(Event.KILLED);
         assertEquals(lives - 1, hero.getLives());
     }
 
@@ -200,6 +200,6 @@ public class GameTest extends AbstractGameTest {
                 "L....L" +
                 "LLLLLL");
 
-        fired("[KILLED]");
+        fired(Event.KILLED);
     }
 }

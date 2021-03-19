@@ -72,12 +72,4 @@ public class Level {
     public List<Point> landEnemyPositions() {
         return getObjects(xy, map, pt -> pt, LAND_ENEMY);
     }
-
-    public int seaCellsCount() {
-        return getObjects(xy, map, pt -> pt, SEA, MARINE_ENEMY).size();
-    }
-
-    public int landCellsCount() {
-        return getObjects(xy, map, pt -> pt, XONIX_LAND, XONIX, LAND_ENEMY).size();
-    }
 }

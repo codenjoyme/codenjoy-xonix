@@ -46,6 +46,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private List<Trace> trace = new ArrayList<>();
     private boolean isKilled = false;
     private boolean isWon = false;
+    private boolean isKiller = false;
     private int lives;
 
     public Hero(Point position, Player player) {
@@ -87,6 +88,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void tick() {
+        isKiller = false;
+
         if (direction == null) {
             return;
         }
@@ -114,6 +117,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         move(point);
         isKilled = false;
     }
+
 
     public boolean isLanded() {
         return !trace.isEmpty() && isOnOwnLand();
@@ -198,5 +202,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 ).distinct()
                 .filter(point -> !field.isOutOfBounds(point))
                 .collect(Collectors.toList());
+    }
+
+    public boolean isKiller() {
+        return isKiller;
+    }
+
+    public void setKiller(boolean killer) {
+        isKiller = killer;
     }
 }

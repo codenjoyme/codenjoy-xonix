@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.xonix.model;
 
+import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
 public class MultiplayerTest extends AbstractMultiplayerTest {
@@ -211,5 +212,33 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "X@@@..M.XX" +
                 "X@@AXXXXXX" +
                 "XXXXXXXXXX", game(0));
+    }
+
+    @Test
+    public void shouldKillEachOtherIfHitsTrace() {
+
+        // given
+        seizedLandOfEnemiesShouldLooksDifferentlyForEachPlayer();
+
+        // when
+        game(0).getJoystick().down();
+        tick();
+        tick();
+
+
+        // then
+        assertF("XXXXXXXXXX" +
+                "X###XXXXXX" +
+                "X###....XX" +
+                "Xo......XX" +
+                "XO......AX" +
+                "XX......XX" +
+                "X@@@....XX" +
+                "X@@@..M.XX" +
+                "X@@AXXXXXX" +
+                "XXXXXXXXXX", game(0));
+
+        fired(listener(1), Event.KILLED);
+        fired(listener(0), Event.ANNIHILATION);
     }
 }

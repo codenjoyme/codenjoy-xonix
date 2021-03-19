@@ -214,7 +214,7 @@ public class EnemyTest extends AbstractGameTest {
                 "#######");
 
 
-        fired("[KILLED]");
+        fired(Event.KILLED);
     }
 
     @Test

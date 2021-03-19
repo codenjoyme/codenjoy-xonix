@@ -318,7 +318,7 @@ public class XonixTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[KILLED]");
+        fired(Event.KILLED);
     }
 
     @Test
@@ -366,6 +366,6 @@ public class XonixTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired("[KILLED]");
+        fired(Event.KILLED);
     }
 }
