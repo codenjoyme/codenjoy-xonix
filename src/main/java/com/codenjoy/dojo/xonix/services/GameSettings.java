@@ -22,7 +22,6 @@ package com.codenjoy.dojo.xonix.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.xonix.model.level.Level;

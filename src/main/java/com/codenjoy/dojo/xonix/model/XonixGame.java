@@ -51,7 +51,6 @@ public class XonixGame implements Field {
     private final Level level;
     private final Dice dice;
 
-    private Hero hero;
     private List<Sea> sea;
     private List<Land> land;
     private List<LandEnemy> landEnemies;
@@ -77,48 +76,57 @@ public class XonixGame implements Field {
     }
 
     private void act() {
-        boolean enemyInHitbox = getEnemies().stream()
-                .anyMatch(hero::isInHitbox);
+        getHeroes().forEach(hero -> {
+            boolean enemyInHitbox = getEnemies().stream()
+                    .anyMatch(hero::isInHitbox);
 
-        if (enemyInHitbox) {
-            hero.die();
-            return;
-        }
+            if (enemyInHitbox) {
+                hero.die();
+                return;
+            }
 
-        if (hero.isLanded()) {
-            seizeSea(hero);
-            hero.clearTrace();
-            hero.clearDirection();
-        }
+            if (hero.isLanded()) {
+                seizeSea(hero);
+                hero.clearTrace();
+                hero.clearDirection();
+            }
+        });
     }
 
     private void check() {
-        if (hero.isKilled()) {
-            if (hero.getLives() == 0) {
-                players.get(0).event(Event.GAME_OVER);
+        getHeroes().forEach(hero -> {
+            if (hero.isKilled()) {
+                if (hero.getLives() == 0) {
+                    players.get(0).event(Event.GAME_OVER);
+                    return;
+                }
+                players.get(0).event(Event.KILLED);
+                hero.respawn(hero.getStartPosition());
+                resetLandEnemies();
                 return;
             }
-            players.get(0).event(Event.KILLED);
-            hero.respawn(level.hero().getPosition());
-            resetLandEnemies();
-            return;
-        }
-        if (isHeroWon()) {
-            players.get(0).event(Event.WIN);
-            hero.setWon(true);
-        }
-    }
-
-    @Override
-    public Hero createNewHero(Player player) {
-        Hero hero = this.hero;
-        hero.init(this);
-        return hero;
+            if (isHeroWon()) {
+                players.get(0).event(Event.WIN);
+                hero.setWon(true);
+            }
+        });
     }
 
     @Override
     public GameSettings settings() {
         return settings;
+    }
+
+    @Override
+    public Hero createNewHero(Player player) {
+        List<Point> starts = level.startPositions();
+        Point startPoint = starts.stream()
+                .filter(p -> !getHeroes().contains(p))
+                .findAny()
+                .orElseThrow(IllegalStateException::new);
+        Hero hero = new Hero(startPoint, player);
+        hero.init(this);
+        return hero;
     }
 
     @Override
@@ -141,7 +149,6 @@ public class XonixGame implements Field {
         if (!players.contains(player)) {
             players.add(player);
         }
-        reset();
         player.newHero(this);
     }
 
@@ -169,8 +176,14 @@ public class XonixGame implements Field {
             @Override
             public Iterable<? extends Point> elements() {
                 return new LinkedList<>() {{
+                    List<Trace> traces = getHeroes().stream()
+                            .filter(Objects::nonNull)
+                            .map(Hero::getTrace)
+                            .flatMap(Collection::stream)
+                            .collect(toList());
+
                     addAll(getHeroes());
-                    addAll(XonixGame.this.getHeroes().get(0).getTrace());
+                    addAll(traces);
                     addAll(XonixGame.this.marineEnemies);
                     addAll(XonixGame.this.landEnemies);
                     addAll(XonixGame.this.sea);
@@ -180,20 +193,20 @@ public class XonixGame implements Field {
         };
     }
 
-    private int getSize() {
+    public int getSize() {
         return level.size();
     }
 
     private List<Hero> getHeroes() {
         return players.stream()
                 .map(Player::getHero)
+                .filter(Objects::nonNull)
                 .collect(toList());
     }
 
     private void reset() {
         sea = level.sea();
         land = level.land();
-        hero = level.hero();
         resetMarineEnemies();
         resetLandEnemies();
     }

@@ -36,6 +36,7 @@ public enum Elements implements CharElements {
                                     // после выхода Xonix'а на сушу, море, очерченное следом, превращается в сушу
 
     XONIX('O'),                 // Сам главный герой игры
+    ANOTHER_XONIX('A'),
     MARINE_ENEMY('M'),          // Морской враг
     LAND_ENEMY('L');            // Сухопутный враг
 

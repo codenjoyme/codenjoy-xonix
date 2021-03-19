@@ -56,23 +56,23 @@ public class Level {
         return getObjects(xy, map, Sea::new, SEA, MARINE_ENEMY);
     }
 
-    public Hero hero() {
-        return getObjects(xy, map, Hero::new, XONIX).get(0);
+    public List<Point> startPositions() {
+        return getObjects(xy, map, pt -> pt, XONIX);
     }
 
     public List<Point> marineEnemyPositions() {
-        return getPositions(map, MARINE_ENEMY);
+        return getObjects(xy, map, pt -> pt, MARINE_ENEMY);
     }
 
     public List<Point> landEnemyPositions() {
-        return getPositions(map, LAND_ENEMY);
+        return getObjects(xy, map, pt -> pt, LAND_ENEMY);
     }
 
     public int seaCellsCount() {
-        return getPositions(map, SEA, MARINE_ENEMY).size();
+        return getObjects(xy, map, pt -> pt, SEA, MARINE_ENEMY).size();
     }
 
     public int landCellsCount() {
-        return getPositions(map, LAND, XONIX, LAND_ENEMY).size();
+        return getObjects(xy, map, pt -> pt, LAND, XONIX, LAND_ENEMY).size();
     }
 }

@@ -61,7 +61,6 @@ public abstract class AbstractGameTest {
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
         game.newGame(player);
-        player.newHero(game);
         hero = player.getHero();
     }
 

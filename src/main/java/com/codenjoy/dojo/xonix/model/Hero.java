@@ -40,14 +40,18 @@ import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
+    private final Point startPosition;
+    private final Player player;
     private Direction direction;
     private List<Trace> trace = new ArrayList<>();
     private boolean isKilled = false;
     private boolean isWon = false;
     private int lives;
 
-    public Hero(Point pt) {
-        super(pt);
+    public Hero(Point position, Player player) {
+        super(position);
+        this.startPosition = position;
+        this.player = player;
     }
 
     @Override
@@ -103,7 +107,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.XONIX;
+        return this.player.equals(player) ? Elements.XONIX : Elements.ANOTHER_XONIX;
     }
 
     public void respawn(Point point) {
@@ -123,6 +127,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         direction = null;
         clearTrace();
         lives--;
+    }
+
+    public Point getStartPosition() {
+        return startPosition;
     }
 
     public boolean isInHitbox(Point point) {
