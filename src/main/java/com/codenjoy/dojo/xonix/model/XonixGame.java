@@ -196,18 +196,17 @@ public class XonixGame implements Field {
         return enemies;
     }
 
+    private List<Trace> getTraces() {
+        return getHeroes().stream()
+                .filter(Objects::nonNull)
+                .map(Hero::getTrace)
+                .flatMap(Collection::stream)
+                .collect(toList());
+    }
+
     @Override
     public BoardReader reader() {
         return new BoardReader() {
-
-            private List<Trace> getTraces() {
-                return getHeroes().stream()
-                        .filter(Objects::nonNull)
-                        .map(Hero::getTrace)
-                        .flatMap(Collection::stream)
-                        .collect(toList());
-            }
-
             @Override
             public int size() {
                 return XonixGame.this.getSize();
@@ -218,10 +217,10 @@ public class XonixGame implements Field {
                 return new LinkedList<>() {{
                     addAll(getHeroes());
                     addAll(getTraces());
-                    addAll(XonixGame.this.marineEnemies);
-                    addAll(XonixGame.this.landEnemies);
-                    addAll(XonixGame.this.sea);
-                    addAll(XonixGame.this.land);
+                    addAll(marineEnemies);
+                    addAll(landEnemies);
+                    addAll(sea);
+                    addAll(land);
                 }};
             }
         };
