@@ -40,6 +40,8 @@ import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Player;
 import com.codenjoy.dojo.xonix.model.XonixGame;
 
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.DISPOSABLE;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
@@ -87,9 +89,10 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
         if (settings.isMultiplayer()) {
-            return MultiplayerType.MULTIPLE_LEVELS.apply(
+            return MultiplayerType.LEVELS.apply(
+                    settings.integer(ROOM_SIZE),
                     settings.integer(LEVELS_COUNT),
-                    settings.integer(ROOM_SIZE));
+                    DISPOSABLE, RELOAD_ALONE);
         } else {
             return MultiplayerType.SINGLE_LEVELS.apply(
                     settings.integer(LEVELS_COUNT));

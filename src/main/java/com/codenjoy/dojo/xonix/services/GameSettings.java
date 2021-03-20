@@ -25,7 +25,10 @@ package com.codenjoy.dojo.xonix.services;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.xonix.model.level.Level;
-import com.codenjoy.dojo.xonix.model.level.Levels;
+import com.codenjoy.dojo.xonix.model.level.MultipleLevels;
+import com.codenjoy.dojo.xonix.model.level.SingleLevels;
+
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
 
@@ -59,14 +62,38 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(LIVES_COUNT, 3);
         integer(DIE_PENALTY, 30);
 
-        bool(IS_MULTIPLAYER, true);
         integer(ROOM_SIZE, 4);
+        add(IS_MULTIPLAYER, true)
+                .onChange(rebuildLevels())
+                .update(true);
+    }
 
-        string(() -> levelName(1), Levels.level1());
-        string(() -> levelName(2), Levels.level2());
-        string(() -> levelName(3), Levels.level3());
-        string(() -> levelName(4), Levels.level4());
+    public Consumer<Boolean> rebuildLevels() {
+        return multiple -> {
+            if (multiple) {
+                useMultiple();
+            } else {
+                useSingle();
+            }
+        };
+    }
+
+    public void useSingle() {
         integer(LEVELS_COUNT, 4);
+
+        string(() -> levelName(1), SingleLevels.level1());
+        string(() -> levelName(2), SingleLevels.level2());
+        string(() -> levelName(3), SingleLevels.level3());
+        string(() -> levelName(4), SingleLevels.level4());
+    }
+
+    public void useMultiple() {
+        integer(LEVELS_COUNT, 1);
+
+        string(() -> levelName(1), MultipleLevels.level1());
+        string(() -> levelName(2), "");
+        string(() -> levelName(3), "");
+        string(() -> levelName(4), "");
     }
 
     public Level level(int levelNumber) {
@@ -74,7 +101,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public String levelName(int levelNumber) {
-        return "level[" + levelNumber + "]";
+        return "Level" + levelNumber;
     }
 
     public Boolean isMultiplayer() {
