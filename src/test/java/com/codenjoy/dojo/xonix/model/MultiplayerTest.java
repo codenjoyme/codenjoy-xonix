@@ -527,4 +527,49 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "..........", game(0));
         fired(listener(0), Event.KILLED);
     }
+
+    @Test
+    public void marineEnemyShouldKill_whenXonixOnLandButTraceAtSea() {
+
+        // given
+        givenFl("XXXXXXXXXX" +
+                "XXO......X" +
+                "X........X" +
+                "X..M.....X" +
+                "X........X" +
+                "XXXXXXXXXX" +
+                ".........." +
+                ".......O.." +
+                ".........." +
+                "..........");
+
+        givenPlayer();
+        givenPlayer();
+        field.getEnemies().forEach(e -> e.setDirection(null));
+
+        // when
+        game(0).getJoystick().right();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        field.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+        tick();
+
+        // then
+        assertF("XXXXXXXXXX" +
+                "XXO......X" +
+                "X...M....X" +
+                "X........X" +
+                "X........X" +
+                "XXXXXXXXXX" +
+                ".........." +
+                ".......A.." +
+                ".........." +
+                "..........", game(0));
+        fired(listener(0), Event.KILLED);
+    }
 }

@@ -30,12 +30,9 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
-import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 
@@ -137,14 +134,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         return player;
     }
 
-    public boolean isInHitbox(Point point) {
-        return getHitbox().contains(point);
-    }
-
-    public boolean isFloating() {
-        return field.isSea(getPosition());
-    }
-
     public boolean isOnOwnLand() {
         return field.isHeroLand(getPosition(), this);
     }
@@ -185,24 +174,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         return PointImpl.pt(x, y);
     }
 
-    private List<Point> getHitbox() {
-        List<Point> points = Lists.newArrayList(trace);
-        points.add(getPosition());
-        return points.stream()
-                .flatMap(tr -> Stream.of(
-                        tr,
-                        Direction.LEFT.change(tr),
-                        Direction.UP.change(tr),
-                        Direction.RIGHT.change(tr),
-                        Direction.DOWN.change(tr))
-                ).distinct()
-                .filter(point -> !field.isOutOfBounds(point))
-                .collect(Collectors.toList());
-    }
-
     public Hero getVictim() {
         return victim;
     }
+
     public void kill(Hero enemy) {
         victim = enemy;
         enemy.die();

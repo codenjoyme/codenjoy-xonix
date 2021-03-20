@@ -29,7 +29,10 @@ import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Field;
 import com.codenjoy.dojo.xonix.model.items.AbstractItem;
 
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AbstractEnemy extends AbstractItem implements Enemy {
 
@@ -52,6 +55,20 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
     @Override
     public Direction getDirection() {
         return direction;
+    }
+
+    @Override
+    public List<Point> getDangerArea() {
+        Point position = getPosition();
+        return Stream.of(
+                position,
+                Direction.LEFT.change(position),
+                Direction.UP.change(position),
+                Direction.RIGHT.change(position),
+                Direction.DOWN.change(position)
+        ).filter(p -> !barrierChecker.apply(p))
+                .filter(p -> !field.isOutOfBounds(p))
+                .collect(Collectors.toList());
     }
 
     @Override

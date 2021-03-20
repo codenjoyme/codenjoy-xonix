@@ -52,6 +52,7 @@ import com.codenjoy.dojo.xonix.client.Board;
 import com.codenjoy.dojo.xonix.client.ai.AISolver;
 import com.codenjoy.dojo.xonix.services.GameRunner;
 import com.codenjoy.dojo.xonix.services.GameSettings;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -61,6 +62,7 @@ import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.IS_MULTIPLAYER;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LEVELS_COUNT;
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class SmokeTest {
 
     @Test

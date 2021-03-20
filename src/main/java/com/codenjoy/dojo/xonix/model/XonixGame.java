@@ -78,9 +78,10 @@ public class XonixGame implements Field {
     private void act() {
         for (Hero hero: getHeroes()) {
 
-            boolean botEnemyInHitbox = hero.isFloating()
-                    ? marineEnemies.stream().anyMatch(hero::isInHitbox)
-                    : landEnemies.stream().anyMatch(hero::isInHitbox);
+            boolean botEnemyInHitbox = getEnemies().stream()
+                    .map(Enemy::getDangerArea)
+                    .flatMap(List::stream)
+                    .anyMatch(p -> hero.equals(p) || hero.getTrace().contains(p));
 
             if (botEnemyInHitbox) {
                 hero.die();
