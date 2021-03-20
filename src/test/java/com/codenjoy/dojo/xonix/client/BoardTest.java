@@ -93,6 +93,6 @@ public class BoardTest {
 
     @Test
     public void shouldWork_getXonix() {
-        assertEquals(pt(17, 15), board.getXonix());
+        assertEquals(pt(17, 15), board.getHero());
     }
 }

@@ -57,10 +57,27 @@ public class Board extends AbstractBoard<Elements> {
 
     @Override
     public String toString() {
-        return String.format("%s\nXonix at: %s\n", boardAsString(), getXonix());
+        return String.format("%s\n" +
+                "Hero at: %s\n" +
+                "Hero trace at: %s\n" +
+                "Hero land at: %s\n" +
+                "Hostile at: %s\n" +
+                "Hostile trace at: %s\n" +
+                "Hostile land at: %s\n" +
+                "Marine enemies at: %s\n" +
+                "Land enemies at: %s\n",
+                boardAsString(),
+                getHero(),
+                getHeroTrace(),
+                getHeroLand(),
+                getHostile(),
+                getHostileTrace(),
+                getHostileLand(),
+                getMarineEnemies(),
+                getLandEnemies());
     }
 
-    public Point getXonix() {
+    public Point getHero() {
         return get(HERO).get(0);
     }
 
@@ -68,12 +85,24 @@ public class Board extends AbstractBoard<Elements> {
         return get(SEA);
     }
 
-    public List<Point> getLand() {
+    public List<Point> getHeroLand() {
         return get(HERO_LAND);
     }
 
-    public List<Point> getTrace() {
+    public List<Point> getHeroTrace() {
         return get(HERO_TRACE);
+    }
+
+    public List<Point> getHostile() {
+        return get(HOSTILE);
+    }
+
+    public List<Point> getHostileLand() {
+        return get(HOSTILE_LAND);
+    }
+
+    public List<Point> getHostileTrace() {
+        return get(HOSTILE_TRACE);
     }
 
     public List<Point> getMarineEnemies() {

@@ -31,10 +31,11 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
+
+import java.util.Arrays;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.IS_MULTIPLAYER;
 import static org.junit.Assert.assertEquals;
@@ -102,6 +103,6 @@ public abstract class AbstractGameTest {
     public void fired(Event... events) {
         ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
         verify(listener, times(events.length)).event(captor.capture());
-        assertEquals(Lists.newArrayList(events), captor.getAllValues());
+        assertEquals(Arrays.asList(events), captor.getAllValues());
     }
 }

@@ -191,7 +191,8 @@ public class XonixGame implements Field {
 
     @Override
     public List<Enemy> getEnemies() {
-        ArrayList<Enemy> enemies = Lists.newArrayList(this.marineEnemies);
+        List<Enemy> enemies = new LinkedList<>();
+        enemies.addAll(marineEnemies);
         enemies.addAll(landEnemies);
         return enemies;
     }
@@ -283,7 +284,7 @@ public class XonixGame implements Field {
     }
 
     private Collection<Point> breadthFirstSearch(Point start, Hero hero) {
-        ArrayDeque<Point> queue = Queues.newArrayDeque();
+        Deque<Point> queue = Queues.newArrayDeque();
         HashSet<Point> visited = new HashSet<>();
         if (hero.getTrace().contains(start)) {
             return visited;
@@ -292,7 +293,7 @@ public class XonixGame implements Field {
         while (!queue.isEmpty()) {
             Point point = queue.poll();
             if (getEnemies().contains(point)) {
-                return Lists.newArrayList();
+                return new LinkedList<>();
             }
             visited.add(point);
             Point left = Direction.LEFT.change(point);

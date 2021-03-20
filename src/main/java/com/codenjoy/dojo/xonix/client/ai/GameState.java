@@ -27,9 +27,9 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.xonix.client.Board;
 import com.codenjoy.dojo.xonix.model.Elements;
-import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -49,10 +49,10 @@ public class GameState {
 
     public GameState(Board board) {
         this.board = board;
-        xonix = board.getXonix();
-        trace = board.getTrace();
+        xonix = board.getHero();
+        trace = board.getHeroTrace();
         sea = board.getSea();
-        land = board.getLand();
+        land = board.getHeroLand();
         landEnemies = board.getLandEnemies();
         marineEnemies = board.getMarineEnemies();
         dangerZone = determineDangerZone();
@@ -74,23 +74,23 @@ public class GameState {
         int x = enemy.getX();
         int y = enemy.getY();
 
-        List<Direction> possibleDirections;
+        List<Direction> possible;
 
         if (x < xonix.getX()) {
             if (y < xonix.getY()) {
-                possibleDirections = Lists.newArrayList(Direction.RIGHT, Direction.UP);
+                possible = Arrays.asList(Direction.RIGHT, Direction.UP);
             } else {
-                possibleDirections = Lists.newArrayList(Direction.RIGHT, Direction.DOWN);
+                possible = Arrays.asList(Direction.RIGHT, Direction.DOWN);
             }
         } else {
             if (y < xonix.getY()) {
-                possibleDirections = Lists.newArrayList(Direction.LEFT, Direction.UP);
+                possible = Arrays.asList(Direction.LEFT, Direction.UP);
             } else {
-                possibleDirections = Lists.newArrayList(Direction.LEFT, Direction.DOWN);
+                possible = Arrays.asList(Direction.LEFT, Direction.DOWN);
             }
         }
 
-        for (Direction direction : possibleDirections) {
+        for (Direction direction : possible) {
             if (!isLand(direction.change(xonix))) {
                 Point fourSteps = direction.change(direction.change(direction.change(direction.change(xonix))));
                 boolean canGoToSea = getPointsAround(fourSteps, 4).stream()
@@ -103,8 +103,8 @@ public class GameState {
         }
 
         // if there is no way to stay on land
-        return possibleDirections.get(
-                new Random().nextInt(possibleDirections.size() - 1)
+        return possible.get(
+                new Random().nextInt(possible.size() - 1)
         );
     }
 
@@ -135,7 +135,7 @@ public class GameState {
     }
 
     private List<Point> getPointsAround(Point point, int areaSize) {
-        List<Point> result = Lists.newArrayList(point);
+        List<Point> result = Arrays.asList(point);
         for (int i = 0; i < areaSize; i++) {
             result = result.stream()
                     .flatMap(p -> {
@@ -165,7 +165,8 @@ public class GameState {
     }
 
     private List<Point> determineDangerZone() {
-        ArrayList<Point> vulnerable = Lists.newArrayList(xonix);
+        List<Point> vulnerable = new LinkedList<>();
+        vulnerable.add(xonix);
         vulnerable.addAll(trace);
         return vulnerable.stream()
                 .flatMap(p -> getPointsAround(p, 2).stream())
