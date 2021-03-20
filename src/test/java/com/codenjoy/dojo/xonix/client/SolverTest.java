@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Direction;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -52,43 +53,40 @@ public class SolverTest {
 
     @Test
     public void should() {
-        assertAI(
-                        "##L####" +
-                        "####O##" +
-                        "#.....#" +
-                        "#..M..#" +
-                        "#.....#" +
-                        "#.....#" +
-                        "#######", Direction.RIGHT);
+        checkAI("##L####" +
+                "####O##" +
+                "#.....#" +
+                "#..M..#" +
+                "#.....#" +
+                "#.....#" +
+                "#######", RIGHT);
 
-        assertAI(
-                        "##L###L" +
-                        "####O##" +
-                        "#.....#" +
-                        "#.....#" +
-                        "#.....#" +
-                        "#.....#" +
-                        "#######", Direction.RIGHT);
+        checkAI("##L###L" +
+                "####O##" +
+                "#.....#" +
+                "#.....#" +
+                "#.....#" +
+                "#.....#" +
+                "#######", RIGHT);
 
-        assertAI(
-                        "######L" +
-                        "####O##" +
-                        "#..M..#" +
-                        "#.....#" +
-                        "#.....#" +
-                        "#.....#" +
-                        "#######", Direction.RIGHT);
-        assertAI(
-                        "######L" +
-                        "#######" +
-                        "#.Ooo.#" +
-                        "#.....#" +
-                        "#.M...#" +
-                        "#.....#" +
-                        "#######", Direction.RIGHT);
+        checkAI("######L" +
+                "####O##" +
+                "#..M..#" +
+                "#.....#" +
+                "#.....#" +
+                "#.....#" +
+                "#######", RIGHT);
+
+        checkAI("######L" +
+                "#######" +
+                "#.Ooo.#" +
+                "#.....#" +
+                "#.M...#" +
+                "#.....#" +
+                "#######", RIGHT);
     }
 
-    private void assertAI(String board, Direction expected) {
+    private void checkAI(String board, Direction expected) {
         String actual = ai.get(board(board));
 
         assertEquals(expected == null ? "" : expected.toString(), actual);
