@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.xonix.model;
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
@@ -319,6 +320,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
         tick();
 
+        // then
         assertF("XXXXXXXXXX" +
                 "XXXXXXXXXX" +
                 "XX......XX" +
@@ -361,6 +363,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
         tick();
 
+        // then
         assertF("XXXXXXXXXX" +
                 "XXXXXXXXXX" +
                 "XX......XX" +
@@ -371,5 +374,135 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "XX....M.XX" +
                 "XXXXXXXXXX" +
                 "XXXXXXXXXX", game(0));
+    }
+
+    @Test
+    public void shouldDieIfEnemyHits() {
+
+        // given
+        givenFl(".M..XX..M." +
+                "....XX...." +
+                ".O..XX...." +
+                "....XX...." +
+                "XXXXXLXXXX" +
+                "XXXXXXXXXX" +
+                "....XX...." +
+                "....XX.O.." +
+                ".M..XX...." +
+                "....XX..M.");
+        givenPlayer();
+        givenPlayer();
+        dice(3);
+
+        // when
+        game(0).getJoystick().right();
+
+        tick();
+        tick();
+        tick();
+        tick();
+
+        // then
+        assertF("....XL...." +
+                "M...XX...." +
+                ".O..XX..M." +
+                "....XX...." +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "....XX...." +
+                "....XX.A.." +
+                "...MXX...." +
+                "....XX..M.", game(0));
+        fired(listener(0), Event.KILLED);
+    }
+
+    @Test
+    public void landEnemyShouldBeAbleToStepOnXonixLand() {
+        givenFl("....XX...." +
+                "....XX...." +
+                ".O..XX...." +
+                "XXXXXX...." +
+                "LXXXXX...." +
+                ".........." +
+                ".........." +
+                ".......O.." +
+                ".........." +
+                "..........");
+        givenPlayer();
+        givenPlayer();
+
+
+        // when
+        game(0).getJoystick().right();
+        tick();
+        tick();
+        tick();
+
+        game(0).getJoystick().up();
+        tick();
+        tick();
+
+
+        game(0).getJoystick().left();
+        tick();
+        tick();
+        tick();
+
+        game(0).getJoystick().down();
+        tick();
+        tick();
+
+        field.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+
+        tick();
+        tick();
+
+        assertF(".####X...." +
+                ".####X...." +
+                ".OL##X...." +
+                "XXXXXX...." +
+                "XXXXXX...." +
+                ".........." +
+                ".........." +
+                ".......A.." +
+                ".........." +
+                "..........", game(0));
+
+    }
+
+    @Test
+    public void landEnemyShouldKillXonixOnFreeLand() {
+        givenFl("XXXXXXXXXX" +
+                "XXOXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "LXXXXXXXXX" +
+                ".........." +
+                ".......O.." +
+                ".........." +
+                "..........");
+        givenPlayer();
+        givenPlayer();
+        field.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+
+
+        // when
+        game(0).getJoystick().right();
+        tick();
+        tick();
+        tick();
+
+        assertF("XXXXXXXXXX" +
+                "XXOXXXXXXX" +
+                "XXXLXXXXXX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                ".........." +
+                ".......A.." +
+                ".........." +
+                "..........", game(0));
+        fired(listener(0), Event.KILLED);
     }
 }
