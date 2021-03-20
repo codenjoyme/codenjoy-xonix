@@ -29,8 +29,7 @@ import org.junit.Test;
 public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
-    public void shouldLookDifferentlyForEachOther() {
-
+    public void shouldLookDifferently_forEachOther() {
         // given
         givenFl("XXOXX" +
                 "X...X" +
@@ -41,7 +40,6 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         givenPlayer();
         givenPlayer();
         givenPlayer();
-
 
         // then
         assertF("XXOXX" +
@@ -65,21 +63,21 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldBeIndependentlyControlled() {
-
         // given
         givenFl("XXOXX" +
                 "X...X" +
                 "O...X" +
                 "X...X" +
                 "XXXXO");
+        
         givenPlayer();
         givenPlayer();
         givenPlayer();
 
         // when
-        game(0).getJoystick().down();
-        game(1).getJoystick().right();
-        game(2).getJoystick().up();
+        hero(0).down();
+        hero(1).right();
+        hero(2).up();
 
         tick();
 
@@ -92,14 +90,14 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void playersShouldBeRemovable() {
-
+    public void shouldPlayersBeRemovable() {
         // given
         givenFl("XXOXX" +
                 "X...X" +
                 "O...X" +
                 "X...X" +
                 "XXXXO");
+        
         givenPlayer();
         givenPlayer();
         givenPlayer();
@@ -118,8 +116,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void tracesOfEnemiesShouldLookDifferentlyForEachPlayer() {
-
+    public void shouldTracesOfEnemiesLookDifferently_forEachPlayer() {
         // given
         givenFl("XXXXXXXXXX" +
                 "XXXXXXXXXX" +
@@ -131,15 +128,17 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "XX....M.XX" +
                 "XXXOXXXXXX" +
                 "XXXXXXXXXX");
+        
         givenPlayer();
         givenPlayer();
         givenPlayer();
-        field.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
-        game(0).getJoystick().right();
-        game(1).getJoystick().left();
-        game(2).getJoystick().up();
+        hero(0).right();
+        hero(1).left();
+        hero(2).up();
 
         tick();
         tick();
@@ -180,17 +179,16 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void seizedLandOfEnemiesShouldLooksDifferentlyForEachPlayer() {
-
+    public void shouldSeizedLandOfEnemiesLooksDifferently_forEachPlayer() {
         // given
-        tracesOfEnemiesShouldLookDifferentlyForEachPlayer();
+        shouldTracesOfEnemiesLookDifferently_forEachPlayer();
 
         // when
-        game(0).getJoystick().up();
-        game(2).getJoystick().left();
+        hero(0).up();
+        hero(2).left();
 
         tick();
-        game(0).getJoystick().left();
+        hero(0).left();
         tick();
 
         assertF("XXXXXXXXXX" +
@@ -204,10 +202,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "XXX@XXXXXX" +
                 "XXXXXXXXXX", game(0));
 
-        game(2).getJoystick().down();
+        hero(2).down();
         tick();
 
-        game(0).getJoystick().down();
+        hero(0).down();
         tick();
 
         assertF("XXXXXXXXXX" +
@@ -221,7 +219,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "XAX@XXXXXX" +
                 "XXXXXXXXXX", game(0));
 
-        game(2).getJoystick().right();
+        hero(2).right();
         tick();
         tick();
 
@@ -238,17 +236,15 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldKillEachOtherIfHitsTrace() {
-
+    public void shouldKillEachOther_whenHitsTrace() {
         // given
-        seizedLandOfEnemiesShouldLooksDifferentlyForEachPlayer();
+        shouldSeizedLandOfEnemiesLooksDifferently_forEachPlayer();
 
         // when
-        game(0).getJoystick().down();
+        hero(0).down();
         tick();
         tick();
-
-
+        
         // then
         assertF("XXXXXXXXXX" +
                 "X###XXXXXX" +
@@ -267,18 +263,17 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldSeizeEnemyLand() {
-
         // given
-        shouldKillEachOtherIfHitsTrace();
+        shouldKillEachOther_whenHitsTrace();
 
         // when
         tick();
         tick();
         tick();
-        game(0).getJoystick().right();
+        hero(0).right();
         tick();
         tick();
-        game(0).getJoystick().up();
+        hero(0).up();
         tick();
         tick();
         tick();
@@ -301,8 +296,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldKillEachOtherWhenHitHeads_case1() {
-
+    public void shouldKillEachOther_whenHitHeads_case1() {
         // given
         givenFl("XXXXXXXXXX" +
                 "XXXXXXXXXX" +
@@ -314,17 +308,19 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "XX....M.XX" +
                 "XXXXXXXXXX" +
                 "XXXXXXXXXX");
+
         givenPlayer();
         givenPlayer();
-        field.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
-        game(1).getJoystick().left();
+        hero(1).left();
 
         tick();
         tick();
 
-        game(0).getJoystick().right();
+        hero(0).right();
 
         tick();
         tick();
@@ -356,8 +352,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldKillEachOtherWhenHitHeads_case2() {
-
+    public void shouldKillEachOther_whenHitHeads_case2() {
         // given
         givenFl("XXXXXXXXXX" +
                 "XXXXXXXXXX" +
@@ -369,19 +364,21 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "XX....M.XX" +
                 "XXXXXXXXXX" +
                 "XXXXXXXXXX");
+
         givenPlayer();
         givenPlayer();
-        field.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
-        game(0).getJoystick().left();
+        hero(0).left();
 
         tick();
-        game(1).getJoystick().left();
+        hero(1).left();
 
         tick();
 
-        game(0).getJoystick().down();
+        hero(0).down();
 
         tick();
 
@@ -399,8 +396,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldDieIfEnemyHits() {
-
+    public void shouldDie_whenEnemyHits() {
         // given
         givenFl(".M..XX..M." +
                 "....XX...." +
@@ -412,12 +408,13 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "....XX.O.." +
                 ".M..XX...." +
                 "....XX..M.");
+
         givenPlayer();
         givenPlayer();
         dice(3);
 
         // when
-        game(0).getJoystick().right();
+        hero(0).right();
 
         tick();
         tick();
@@ -435,11 +432,12 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "....XX.A.." +
                 "...MXX...." +
                 "....XX..M.", game(0));
+
         fired(listener(0), Event.KILLED);
     }
 
     @Test
-    public void landEnemyShouldBeAbleToStepOnXonixLand() {
+    public void shouldLandEnemy_beAbleToStepOnHeroLand() {
         givenFl("....XX...." +
                 "....XX...." +
                 ".O..XX...." +
@@ -450,31 +448,31 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".......O.." +
                 ".........." +
                 "..........");
-        givenPlayer();
-        givenPlayer();
 
+        givenPlayer();
+        givenPlayer();
 
         // when
-        game(0).getJoystick().right();
+        hero(0).right();
         tick();
         tick();
         tick();
 
-        game(0).getJoystick().up();
+        hero(0).up();
         tick();
         tick();
 
 
-        game(0).getJoystick().left();
+        hero(0).left();
         tick();
         tick();
         tick();
 
-        game(0).getJoystick().down();
+        hero(0).down();
         tick();
         tick();
 
-        field.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+        shouldEnemiesGo(Direction.UP);
 
         tick();
         tick();
@@ -489,11 +487,11 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".......A.." +
                 ".........." +
                 "..........", game(0));
-
     }
 
     @Test
-    public void landEnemyShouldKillXonixOnFreeLand() {
+    public void shouldLandEnemy_killHeroOnFreeLand() {
+        // given
         givenFl("XXXXXXXXXX" +
                 "XXOXXXXXXX" +
                 "XXXXXXXXXX" +
@@ -504,13 +502,14 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".......O.." +
                 ".........." +
                 "..........");
-        givenPlayer();
-        givenPlayer();
-        field.getEnemies().forEach(e -> e.setDirection(Direction.UP));
 
+        givenPlayer();
+        givenPlayer();
+
+        shouldEnemiesGo(Direction.UP);
 
         // when
-        game(0).getJoystick().right();
+        hero(0).right();
         tick();
         tick();
         tick();
@@ -525,12 +524,12 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".......A.." +
                 ".........." +
                 "..........", game(0));
+
         fired(listener(0), Event.KILLED);
     }
-
+    
     @Test
-    public void marineEnemyShouldKill_whenXonixOnLandButTraceAtSea() {
-
+    public void shouldKillMarineEnemy_whenHeroOnLandButTraceAtSea() {
         // given
         givenFl("XXXXXXXXXX" +
                 "XXO......X" +
@@ -545,10 +544,11 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
         givenPlayer();
         givenPlayer();
-        field.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
-        game(0).getJoystick().right();
+        hero(0).right();
         tick();
         tick();
         tick();
@@ -556,7 +556,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         tick();
         tick();
 
-        field.getEnemies().forEach(e -> e.setDirection(Direction.UP));
+        shouldEnemiesGo(Direction.UP);
         tick();
 
         // then
@@ -570,12 +570,12 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".......A.." +
                 ".........." +
                 "..........", game(0));
+
         fired(listener(0), Event.KILLED);
     }
 
     @Test
     public void shouldNotSeizeSea_whenLandedOnEnemiesLand() {
-
         // given
         givenFl("XXXXXXXXXX" +
                 ".........." +
@@ -592,7 +592,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         givenPlayer();
 
         // when
-        game(0).getJoystick().down();
+        hero(0).down();
         tick();
         tick();
 
@@ -607,6 +607,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".........." +
                 ".........." +
                 "XXXXXXXXXX", game(0));
+
         fired(listener(0), Event.KILLED);
         fired(listener(1), Event.KILLED);
     }

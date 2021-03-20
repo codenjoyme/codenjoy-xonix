@@ -22,9 +22,7 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -105,10 +103,13 @@ public abstract class AbstractMultiplayerTest {
         field.tick();
     }
 
-    protected void neverFired(EventListener listener, Event event) {
+    public void neverFired(EventListener listener, Event event) {
         verify(listener, never()).event(event);
     }
 
+    public Joystick hero(int index) {
+        return game(index).getJoystick();
+    }
 
     public void fired(EventListener listener, Event event) {
         fired(listener, 1, event);
@@ -122,6 +123,10 @@ public abstract class AbstractMultiplayerTest {
         ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
         verify(listener, times(events.length)).event(captor.capture());
         assertEquals(Arrays.asList(events), captor.getAllValues());
+    }
+
+    public void shouldEnemiesGo(Direction direction) {
+        field.getEnemies().forEach(enemy -> enemy.setDirection(direction));
     }
 
 }

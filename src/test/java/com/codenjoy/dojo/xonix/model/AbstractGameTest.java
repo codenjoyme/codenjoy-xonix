@@ -24,6 +24,7 @@ package com.codenjoy.dojo.xonix.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -104,5 +105,9 @@ public abstract class AbstractGameTest {
         ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
         verify(listener, times(events.length)).event(captor.capture());
         assertEquals(Arrays.asList(events), captor.getAllValues());
+    }
+
+    public void shouldEnemiesGo(Direction direction) {
+        game.getEnemies().forEach(enemy -> enemy.setDirection(direction));
     }
 }

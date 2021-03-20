@@ -31,15 +31,15 @@ import static org.junit.Assert.assertEquals;
 public class GameTest extends AbstractGameTest {
 
     @Test
-    public void xonixShouldBeKilled_whenMeetsMarineEnemy() {
-
+    public void shouldBeKilled_whenMeetsMarineEnemy() {
         // given
         givenFl("##O##" +
                 "#...#" +
                 "#...#" +
                 "#.M.#" +
                 "#####");
-        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
         hero.down();
@@ -51,15 +51,15 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void xonixShouldBeKilled_whenMeetsLandEnemy() {
-
+    public void shouldBeKilled_whenMeetsLandEnemy() {
         // given
         givenFl("##O##" +
                 "#...#" +
                 "#L###" +
                 "#####" +
                 "#####");
-        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
         hero.down();
@@ -72,7 +72,6 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldWin_whenMakeRightAmountOfLand() {
-
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -98,8 +97,7 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldDecreaseOnly1Life_whenXonixIsHittingOwnTraceAndWhenBeingKilledByEnemySimultaneously() {
-
+    public void shouldDecreaseOnly1Life_whenHeroIsHittingOwnTraceAndWhenBeingKilledByEnemySimultaneously() {
         // given
         givenFl("##O###" +
                 "#....#" +
@@ -107,7 +105,8 @@ public class GameTest extends AbstractGameTest {
                 "#....#" +
                 "#....#" +
                 "######");
-        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
         int lives = hero.getLives();
 
         hero.down();
@@ -125,7 +124,7 @@ public class GameTest extends AbstractGameTest {
                 "#....#" +
                 "######");
 
-        game.getEnemies().forEach(e -> e.setDirection(Direction.LEFT));
+        shouldEnemiesGo(Direction.LEFT);
 
         // when
         hero.right();
@@ -137,8 +136,7 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void xonixShouldNotBeKilledByLandEnemy_whenFloating() {
-
+    public void shouldNotBeKilledByLandEnemy_whenFloating() {
         // given
         givenFl("LLL#O#" +
                 "L....L" +
@@ -146,7 +144,8 @@ public class GameTest extends AbstractGameTest {
                 "L....L" +
                 "L....L" +
                 "LLLLLL");
-        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
         hero.down();
@@ -183,10 +182,9 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void xonixShouldNotSeizeSea_whenLandedOnEnemy() {
-
+    public void shouldNotSeizeSea_whenLandedOnEnemy() {
         // given
-        xonixShouldNotBeKilledByLandEnemy_whenFloating();
+        shouldNotBeKilledByLandEnemy_whenFloating();
 
         // when
         hero.up();

@@ -22,18 +22,14 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 
-
-public class XonixTest extends AbstractGameTest {
+public class HeroTest extends AbstractGameTest {
 
     @Test
     public void shouldLeaveTrace_whenGoThroughSea() {
-
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -56,7 +52,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldStop_whenHitsFieldBorders() {
-
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -82,7 +77,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldBeAbleToTurn_whenFloating() {
-
         // given
         shouldLeaveTrace_whenGoThroughSea();
 
@@ -102,7 +96,6 @@ public class XonixTest extends AbstractGameTest {
     @Test
     // https://www.youtube.com/watch?v=POhMfAFZ_6c (1:38)
     public void shouldMakeLandOnlyTrace_whenTraceLengthIsOne() {
-
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -125,7 +118,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldNotStop_whenFloating() {
-
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -150,7 +142,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldStop_whenLanded() {
-
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -177,7 +168,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldNotStop_whenMovingOnLand() {
-
         // given
         givenFl("#####" +
                 "#...#" +
@@ -202,7 +192,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldSeizeThatPartOfTheSea_whereAreNoEnemies1() {
-
         // given
         givenFl("##O#######" +
                 "#........#" +
@@ -260,7 +249,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldSeizeThatPartOfTheSea_whereAreNoEnemies2() {
-
         // given
         givenFl("####O#####" +
                 "#........#" +
@@ -302,7 +290,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldDie_whenTurnsAroundAtSea() {
-
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -323,7 +310,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldNotDie_whenTurnsAroundAtLand() {
-
         // given
         givenFl("##O##" +
                 "#...#" +
@@ -344,7 +330,6 @@ public class XonixTest extends AbstractGameTest {
 
     @Test
     public void shouldDie_whenHitsOwnTrace() {
-
         // given
         givenFl("####O#" +
                 "#....#" +

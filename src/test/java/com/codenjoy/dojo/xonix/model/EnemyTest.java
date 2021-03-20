@@ -22,7 +22,6 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
@@ -30,7 +29,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void shouldMove() {
-
         // given
         givenFl("O####" +
                 "#...#" +
@@ -51,7 +49,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void shouldNotJumpOverCorners() {
-
         // given
         givenFl("O####" +
                 "##..#" +
@@ -72,7 +69,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void shouldBounce_whenHitsCorner() {
-
         // given
         givenFl("O####" +
                 "#.#.#" +
@@ -93,7 +89,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void shouldBounce_whenInNarrowSpace() {
-
         // given
         givenFl("O#######" +
                 "#......#" +
@@ -120,7 +115,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void shouldProperlyBounce_whenHitTheLand() {
-
         // given
         shouldMove();
 
@@ -157,7 +151,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void shouldProperlyBounce_whenHitCorner() {
-
         // given
         givenFl("O####" +
                 "#..##" +
@@ -188,7 +181,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void marineEnemyShouldKill_whenHitTrace() {
-
         // given
         givenFl("#####O#" +
                 "#.....#" +
@@ -219,7 +211,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void marineEnemyShouldNotKill_whenHeroIsOnLand() {
-
         // given
         givenFl("#######" +
                 "#.....#" +
@@ -228,7 +219,8 @@ public class EnemyTest extends AbstractGameTest {
                 "#.MMM.#" +
                 "#.....#" +
                 "#######");
-        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
         game.tick();
@@ -240,7 +232,6 @@ public class EnemyTest extends AbstractGameTest {
 
     @Test
     public void landEnemyShouldNotKill_whenHeroIsAtSea() {
-
         // given
         givenFl("###O###" +
                 "###.###" +
@@ -249,7 +240,8 @@ public class EnemyTest extends AbstractGameTest {
                 "##L.L##" +
                 "##L.L##" +
                 "##LLL##");
-        game.getEnemies().forEach(e -> e.setDirection(null));
+
+        shouldEnemiesGo(null);
 
         // when
         hero.down();
