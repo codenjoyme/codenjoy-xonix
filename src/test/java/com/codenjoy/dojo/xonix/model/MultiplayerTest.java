@@ -257,7 +257,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "X@@AXXXXXX" +
                 "XXXXXXXXXX", game(0));
 
-        fired(listener(1), Event.KILLED);
+        fired(listener(1), Event.DIE);
         fired(listener(0), Event.ANNIHILATION);
     }
 
@@ -433,7 +433,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "...MXX...." +
                 "....XX..M.", game(0));
 
-        fired(listener(0), Event.KILLED);
+        fired(listener(0), Event.DIE);
     }
 
     @Test
@@ -525,7 +525,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".........." +
                 "..........", game(0));
 
-        fired(listener(0), Event.KILLED);
+        fired(listener(0), Event.DIE);
     }
     
     @Test
@@ -571,7 +571,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".........." +
                 "..........", game(0));
 
-        fired(listener(0), Event.KILLED);
+        fired(listener(0), Event.DIE);
     }
 
     @Test
@@ -608,7 +608,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 ".........." +
                 "XXXXXXXXXX", game(0));
 
-        fired(listener(0), Event.KILLED);
-        fired(listener(1), Event.KILLED);
+        fired(listener(0), Event.DIE);
+        fired(listener(1), Event.DIE);
     }
 }

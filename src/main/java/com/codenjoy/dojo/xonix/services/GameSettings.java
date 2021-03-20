@@ -36,10 +36,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        VICTORY_CRITERION("How much sea Xonix should capture for victory in percents"),
-        WIN_REWARD("Reward for winning"),
-        LIVES_COUNT("Lives count"),
+        WIN_CRITERION("How much % sea Hero should get"),
+        WIN_SCORES("Scores for winning"),
         DIE_PENALTY("Die penalty"),
+        LIVES_COUNT("Lives count"),
+
         LEVELS_COUNT("Levels count"),
         IS_MULTIPLAYER("Multiplayer"),
         ROOM_SIZE("Room size");
@@ -57,8 +58,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        integer(VICTORY_CRITERION, 75);
-        integer(WIN_REWARD, 100);
+        integer(WIN_CRITERION, 75);
+        integer(WIN_SCORES, 100);
         integer(LIVES_COUNT, 3);
         integer(DIE_PENALTY, 30);
 

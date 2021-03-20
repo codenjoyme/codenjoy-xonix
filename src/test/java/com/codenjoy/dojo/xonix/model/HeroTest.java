@@ -305,7 +305,7 @@ public class HeroTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired(Event.KILLED);
+        fired(Event.DIE);
     }
 
     @Test
@@ -325,7 +325,7 @@ public class HeroTest extends AbstractGameTest {
         game.tick();
 
         // then
-        neverFired(Event.KILLED);
+        neverFired(Event.DIE);
     }
 
     @Test
@@ -351,6 +351,6 @@ public class HeroTest extends AbstractGameTest {
         game.tick();
 
         // then
-        fired(Event.KILLED);
+        fired(Event.DIE);
     }
 }

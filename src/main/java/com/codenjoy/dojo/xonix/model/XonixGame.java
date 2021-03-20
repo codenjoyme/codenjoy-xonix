@@ -34,14 +34,13 @@ import com.codenjoy.dojo.xonix.model.items.enemies.MarineEnemy;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.VICTORY_CRITERION;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_CRITERION;
 import static java.util.stream.Collectors.toList;
 
 public class XonixGame implements Field {
@@ -109,7 +108,7 @@ public class XonixGame implements Field {
                     player.event(Event.GAME_OVER);
                     return;
                 }
-                player.event(Event.KILLED);
+                player.event(Event.DIE);
                 hero.respawn(hero.getStartPosition());
                 if (!settings.isMultiplayer()) {
                     resetLandEnemies();
@@ -263,7 +262,7 @@ public class XonixGame implements Field {
                 .filter(l -> lastHero.equals(l.getOwner()))
                 .count() - level.xonixLand(lastHero).size();
         double percentOfSeized = 100.0 * seizedLand / level.sea().size();
-        return percentOfSeized >= settings.integer(VICTORY_CRITERION);
+        return percentOfSeized >= settings.integer(WIN_CRITERION);
     }
 
     private void seizeSea(Hero hero) {

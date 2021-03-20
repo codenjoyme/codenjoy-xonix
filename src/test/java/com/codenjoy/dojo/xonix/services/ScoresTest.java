@@ -35,8 +35,8 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void killed() {
-        scores.event(Event.KILLED);
+    public void die() {
+        scores.event(Event.DIE);
     }
 
     public void win() {
@@ -47,6 +47,10 @@ public class ScoresTest {
         scores.event(Event.GAME_OVER);
     }
 
+    public void annihilation() {
+        scores.event(Event.ANNIHILATION);
+    }
+
     @Before
     public void setup() {
         settings = new GameSettings();
@@ -55,10 +59,8 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores() {
-
         // given
         scores = new Scores(140, settings);
-        settings.getParameter(LIVES_COUNT.key()).update(100);
 
         // when
         win();
@@ -66,21 +68,29 @@ public class ScoresTest {
         win();
         win();
 
+        die();
+        die();
+
+        gameOver();
+
+        annihilation();
+        annihilation();
+
         // then
         assertEquals(140
-                + 4 * settings.integer(WIN_REWARD),
+                    + 4 * settings.integer(WIN_SCORES)
+                    - 2 * settings.integer(DIE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldNotLessThanZero() {
-
         // when
-        killed();
-        killed();
-        killed();
-        killed();
-        killed();
+        die();
+        die();
+        die();
+        die();
+        die();
 
         // then
         assertEquals(Scores.MIN_SCORE, scores.getScore());
@@ -88,7 +98,6 @@ public class ScoresTest {
 
     @Test
     public void shouldClearScore() {
-
         // when
         win();
 

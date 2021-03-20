@@ -206,7 +206,7 @@ public class EnemyTest extends AbstractGameTest {
                 "#######");
 
 
-        fired(Event.KILLED);
+        fired(Event.DIE);
     }
 
     @Test

@@ -27,7 +27,8 @@ import com.codenjoy.dojo.services.PlayerScores;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.DIE_PENALTY;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_SCORES;
 
 public class Scores implements PlayerScores {
 
@@ -43,7 +44,7 @@ public class Scores implements PlayerScores {
 
     @Override
     public int clear() {
-        score.set(0);
+        score.set(MIN_SCORE);
         return score.get();
     }
 
@@ -54,17 +55,16 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (!(event instanceof Event)) {
-            throw new IllegalArgumentException("Given object should be an instance of Event class");
-        }
         switch ((Event) event) {
+            case ANNIHILATION:
+                break;
             case GAME_OVER:
                 break;
             case WIN:
-                score.addAndGet(settings.integer(WIN_REWARD));
+                score.addAndGet(settings.integer(WIN_SCORES));
                 break;
-            case KILLED:
-                score.addAndGet(settings.integer(DIE_PENALTY) * -1);
+            case DIE:
+                score.addAndGet(-settings.integer(DIE_PENALTY));
                 break;
         }
         score.accumulateAndGet(MIN_SCORE, Math::max);
