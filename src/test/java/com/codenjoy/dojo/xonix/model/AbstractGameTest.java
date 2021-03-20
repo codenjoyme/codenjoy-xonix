@@ -44,7 +44,7 @@ import static org.mockito.Mockito.*;
 
 public abstract class AbstractGameTest {
 
-    protected XonixGame game;
+    protected Xonix game;
     protected Hero hero;
     protected EventListener listener;
     protected Player player;
@@ -70,7 +70,7 @@ public abstract class AbstractGameTest {
     protected void givenFl(String board) {
         when(dice.next(anyInt())).thenReturn(2); // Direction always will be UP
         Level level = new Level(board);
-        game = new XonixGame(level, settings, dice);
+        game = new Xonix(level, settings, dice);
 
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
@@ -108,6 +108,6 @@ public abstract class AbstractGameTest {
     }
 
     public void shouldEnemiesGo(Direction direction) {
-        game.getEnemies().forEach(enemy -> enemy.setDirection(direction));
+        game.enemies().forEach(enemy -> enemy.setDirection(direction));
     }
 }

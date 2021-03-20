@@ -41,5 +41,5 @@ public interface Field extends GameField<Player> {
 
     boolean isOutOfBounds(Point point);
 
-    List<Enemy> getEnemies();
+    List<Enemy> enemies();
 }

@@ -48,7 +48,7 @@ public abstract class AbstractMultiplayerTest {
     private List<EventListener> listeners = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
     private Dice dice;
-    protected XonixGame field;
+    protected Xonix field;
     private GameSettings settings;
     private PrinterFactory printerFactory;
 
@@ -69,7 +69,7 @@ public abstract class AbstractMultiplayerTest {
     }
 
     public void givenFl(String map) {
-        field = new XonixGame(new Level(map), settings, dice);
+        field = new Xonix(new Level(map), settings, dice);
     }
 
     public Game game(int index) {
@@ -126,7 +126,7 @@ public abstract class AbstractMultiplayerTest {
     }
 
     public void shouldEnemiesGo(Direction direction) {
-        field.getEnemies().forEach(enemy -> enemy.setDirection(direction));
+        field.enemies().forEach(enemy -> enemy.setDirection(direction));
     }
 
 }

@@ -55,7 +55,7 @@ public class Level {
     public List<Land> heroLand(Hero hero) {
         List<Land> land = getObjects(xy, map, Land::new,
                 HERO_LAND, HERO);
-        land.forEach(l -> l.setOwner(hero));
+        land.forEach(l -> l.owner(hero));
         return land;
     }
 

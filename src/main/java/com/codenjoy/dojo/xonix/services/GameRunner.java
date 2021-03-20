@@ -38,7 +38,7 @@ import com.codenjoy.dojo.xonix.client.Board;
 import com.codenjoy.dojo.xonix.client.ai.AISolver;
 import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Player;
-import com.codenjoy.dojo.xonix.model.XonixGame;
+import com.codenjoy.dojo.xonix.model.Xonix;
 
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.DISPOSABLE;
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
@@ -58,7 +58,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new XonixGame(settings.level(levelNumber), settings, getDice());
+        return new Xonix(settings.level(levelNumber), settings, getDice());
     }
 
     @Override

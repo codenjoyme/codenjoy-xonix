@@ -58,7 +58,7 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
     }
 
     @Override
-    public List<Point> getDangerArea() {
+    public List<Point> dangerArea() {
         Point position = getPosition();
         return Stream.of(
                 position,

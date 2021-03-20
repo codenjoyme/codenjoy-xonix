@@ -91,12 +91,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
             direction = null;
             return;
         }
-        if (getTrace().contains(destination)) {
+        if (trace().contains(destination)) {
             die();
             return;
         }
         if (!isOnOwnLand()) {
-            trace.add(new Trace(getPosition(), this));
+            trace.add(new Trace(position(), this));
         }
         move(destination);
     }
@@ -126,16 +126,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         lives--;
     }
 
-    public Point getStartPosition() {
+    public Point start() {
         return startPosition;
     }
 
-    public Player getPlayer() {
+    public Player player() {
         return player;
     }
 
     public boolean isOnOwnLand() {
-        return field.isHeroLand(getPosition(), this);
+        return field.isHeroLand(this, this);
     }
 
     public void clearTrace() {
@@ -154,7 +154,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         return !isKilled && isWon;
     }
 
-    public int getLives() {
+    public int lives() {
         return lives;
     }
 
@@ -162,19 +162,19 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         return isKilled;
     }
 
-    public List<Trace> getTrace() {
+    public List<Trace> trace() {
         return trace;
     }
 
-    public Direction getDirection() {
+    public Direction direction() {
         return direction;
     }
 
-    public Point getPosition() {
+    public Point position() {
         return PointImpl.pt(x, y);
     }
 
-    public Hero getVictim() {
+    public Hero victim() {
         return victim;
     }
 

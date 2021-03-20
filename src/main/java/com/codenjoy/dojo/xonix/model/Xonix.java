@@ -40,10 +40,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.services.QDirection.RIGHT;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_CRITERION;
 import static java.util.stream.Collectors.toList;
 
-public class XonixGame implements Field {
+public class Xonix implements Field {
 
     private final List<Player> players = new LinkedList<>();
     private final GameSettings settings;
@@ -55,7 +57,7 @@ public class XonixGame implements Field {
     private List<LandEnemy> landEnemies;
     private List<MarineEnemy> marineEnemies;
 
-    public XonixGame(Level level, GameSettings settings, Dice dice) {
+    public Xonix(Level level, GameSettings settings, Dice dice) {
         this.settings = settings;
         this.level = level;
         this.dice = dice;
@@ -70,26 +72,26 @@ public class XonixGame implements Field {
     }
 
     private void step() {
-        getHeroes().forEach(Hero::tick);
-        getEnemies().forEach(Enemy::tick);
+        heroes().forEach(Hero::tick);
+        enemies().forEach(Enemy::tick);
     }
 
     private void act() {
-        for (Hero hero: getHeroes()) {
+        for (Hero hero: heroes()) {
 
-            boolean botEnemyInHitbox = getEnemies().stream()
-                    .map(Enemy::getDangerArea)
+            boolean botEnemyInHitbox = enemies().stream()
+                    .map(Enemy::dangerArea)
                     .flatMap(List::stream)
-                    .anyMatch(p -> hero.equals(p) || hero.getTrace().contains(p));
+                    .anyMatch(p -> hero.equals(p) || hero.trace().contains(p));
 
             if (botEnemyInHitbox) {
                 hero.die();
                 return;
             }
 
-            getHeroes().stream()
-                    .filter(enemy -> !enemy.getStartPosition().equals(hero.getStartPosition()))
-                    .filter(enemy -> enemy.getTrace().contains(hero) || enemy.equals(hero))
+            heroes().stream()
+                    .filter(enemy -> !enemy.start().equals(hero.start()))
+                    .filter(enemy -> enemy.trace().contains(hero) || enemy.equals(hero))
                     .forEach(hero::kill);
 
             if (hero.isLanded()) {
@@ -101,22 +103,22 @@ public class XonixGame implements Field {
     }
 
     private void check() {
-        getHeroes().forEach(hero -> {
-            Player player = hero.getPlayer();
+        heroes().forEach(hero -> {
+            Player player = hero.player();
             if (hero.isKilled()) {
-                if (hero.getLives() == 0) {
+                if (hero.lives() == 0) {
                     player.event(Event.GAME_OVER);
                     return;
                 }
                 player.event(Event.DIE);
-                hero.respawn(hero.getStartPosition());
+                hero.respawn(hero.start());
                 if (!settings.isMultiplayer()) {
                     resetLandEnemies();
                 }
                 return;
             }
-            if (hero.getVictim() != null) {
-                hero.getPlayer().event(Event.ANNIHILATION);
+            if (hero.victim() != null) {
+                hero.player().event(Event.ANNIHILATION);
             }
             if (!settings.isMultiplayer() && isHeroWon()) {
                 player.event(Event.WIN);
@@ -134,7 +136,7 @@ public class XonixGame implements Field {
     public Hero createNewHero(Player player) {
         List<Point> starts = level.start();
         Point start = starts.stream()
-                .filter(p -> !getHeroes().contains(p))
+                .filter(p -> !heroes().contains(p))
                 .findAny()
                 .orElseThrow(IllegalStateException::new);
         Hero hero = new Hero(start, player);
@@ -142,7 +144,7 @@ public class XonixGame implements Field {
         land.stream()
                 .filter(p -> p.equals(start))
                 .findFirst()
-                .ifPresent(l -> l.setOwner(hero));
+                .ifPresent(l -> l.owner(hero));
         land.addAll(level.heroLand(hero));
         return hero;
     }
@@ -161,8 +163,8 @@ public class XonixGame implements Field {
         if (land == null || land.getOwner() == null) {
             return false;
         }
-        Point startPosition = land.getOwner().getStartPosition();
-        return hero.getStartPosition().equals(startPosition);
+        Point startPosition = land.getOwner().start();
+        return hero.start().equals(startPosition);
     }
 
     @Override
@@ -189,7 +191,7 @@ public class XonixGame implements Field {
     }
 
     @Override
-    public List<Enemy> getEnemies() {
+    public List<Enemy> enemies() {
         List<Enemy> enemies = new LinkedList<>();
         enemies.addAll(marineEnemies);
         enemies.addAll(landEnemies);
@@ -197,9 +199,9 @@ public class XonixGame implements Field {
     }
 
     private List<Trace> getTraces() {
-        return getHeroes().stream()
+        return heroes().stream()
                 .filter(Objects::nonNull)
-                .map(Hero::getTrace)
+                .map(Hero::trace)
                 .flatMap(Collection::stream)
                 .collect(toList());
     }
@@ -209,13 +211,13 @@ public class XonixGame implements Field {
         return new BoardReader() {
             @Override
             public int size() {
-                return XonixGame.this.getSize();
+                return Xonix.this.getSize();
             }
 
             @Override
             public Iterable<? extends Point> elements() {
                 return new LinkedList<>() {{
-                    addAll(getHeroes());
+                    addAll(heroes());
                     addAll(getTraces());
                     addAll(marineEnemies);
                     addAll(landEnemies);
@@ -230,7 +232,7 @@ public class XonixGame implements Field {
         return level.size();
     }
 
-    private List<Hero> getHeroes() {
+    private List<Hero> heroes() {
         return players.stream()
                 .map(Player::getHero)
                 .filter(Objects::nonNull)
@@ -246,18 +248,18 @@ public class XonixGame implements Field {
 
     private void resetMarineEnemies() {
         marineEnemies = level.marineEnemy().stream()
-                .map(p -> new MarineEnemy(p, XonixGame.this, dice))
+                .map(p -> new MarineEnemy(p, Xonix.this, dice))
                 .collect(Collectors.toList());
     }
 
     private void resetLandEnemies() {
         landEnemies = level.landEnemy().stream()
-                .map(p -> new LandEnemy(p, XonixGame.this, dice))
+                .map(p -> new LandEnemy(p, Xonix.this, dice))
                 .collect(Collectors.toList());
     }
 
     private boolean isHeroWon() {
-        Hero lastHero = getHeroes().get(0);
+        Hero lastHero = heroes().get(0);
         long seizedLand = land.stream()
                 .filter(l -> lastHero.equals(l.getOwner()))
                 .count() - level.heroLand(lastHero).size();
@@ -266,12 +268,12 @@ public class XonixGame implements Field {
     }
 
     private void seizeSea(Hero hero) {
-        List<Trace> trace = hero.getTrace();
+        List<Trace> trace = hero.trace();
         if (trace.size() == 1) { // Like original
             turnToLand(trace.get(0), hero);
             return;
         }
-        Direction firstWaveDirection = hero.getDirection()
+        Direction firstWaveDirection = hero.direction()
                 .counterClockwise();
         Trace lastTraceCell = trace.get(trace.size() - 1);
         Collection<Point> points = breadthFirstSearch(firstWaveDirection.change(lastTraceCell), hero);
@@ -285,24 +287,24 @@ public class XonixGame implements Field {
     private Collection<Point> breadthFirstSearch(Point start, Hero hero) {
         Deque<Point> queue = Queues.newArrayDeque();
         HashSet<Point> visited = new HashSet<>();
-        if (hero.getTrace().contains(start)) {
+        if (hero.trace().contains(start)) {
             return visited;
         }
         queue.offer(start);
         while (!queue.isEmpty()) {
             Point point = queue.poll();
-            if (getEnemies().contains(point)) {
+            if (enemies().contains(point)) {
                 return new LinkedList<>();
             }
             visited.add(point);
-            Point left = Direction.LEFT.change(point);
-            Point up = Direction.UP.change(point);
-            Point right = Direction.RIGHT.change(point);
-            Point down = Direction.DOWN.change(point);
+            Point left = LEFT.change(point);
+            Point up = UP.change(point);
+            Point right = RIGHT.change(point);
+            Point down = DOWN.change(point);
             Stream.of(up, down, left, right)
-                    .filter(p -> !visited.contains(p))
-                    .filter(p -> !isTrace(p))
-                    .filter(p -> !isHeroLand(p, hero))
+                    .filter(pt -> !visited.contains(pt))
+                    .filter(pt -> !isTrace(pt))
+                    .filter(pt -> !isHeroLand(pt, hero))
                     .forEach(queue::offer);
         }
         return visited;
@@ -311,19 +313,19 @@ public class XonixGame implements Field {
     private void turnToLand(Point point, Hero hero) {
         if (sea.remove(point)) {
             Land land = new Land(point);
-            land.setOwner(hero);
+            land.owner(hero);
             this.land.add(land);
             return;
         }
         land.stream()
-                .filter(p -> p.equals(point))
+                .filter(pt -> pt.equals(point))
                 .findFirst()
-                .ifPresent(l -> l.setOwner(hero));
+                .ifPresent(land -> land.owner(hero));
     }
 
     private boolean isTrace(Point point) {
-        return getHeroes().stream()
-                .flatMap(hero -> hero.getTrace().stream())
+        return heroes().stream()
+                .flatMap(hero -> hero.trace().stream())
                 .anyMatch(trace -> trace.equals(point));
     }
 }

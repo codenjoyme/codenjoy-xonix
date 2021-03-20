@@ -36,7 +36,7 @@ public class Land extends AbstractItem {
         super(pt, Elements.HERO_LAND);
     }
 
-    public void setOwner(Hero hero) {
+    public void owner(Hero hero) {
         this.owner = hero;
     }
 

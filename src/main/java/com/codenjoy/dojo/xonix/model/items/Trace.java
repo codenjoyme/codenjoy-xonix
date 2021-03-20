@@ -38,7 +38,7 @@ public class Trace extends AbstractItem {
 
     @Override
     public Elements state(Player player, Object... objects) {
-        return hero.getPlayer().equals(player)
+        return hero.player().equals(player)
                 ? Elements.HERO_TRACE
                 : Elements.HOSTILE_TRACE;
     }

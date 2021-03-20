@@ -107,7 +107,7 @@ public class GameTest extends AbstractGameTest {
                 "######");
 
         shouldEnemiesGo(null);
-        int lives = hero.getLives();
+        int lives = hero.lives();
 
         hero.down();
         game.tick();
@@ -132,7 +132,7 @@ public class GameTest extends AbstractGameTest {
 
         // then
         fired(Event.DIE);
-        assertEquals(lives - 1, hero.getLives());
+        assertEquals(lives - 1, hero.lives());
     }
 
     @Test

@@ -204,7 +204,7 @@ public class HeroTest extends AbstractGameTest {
                 "#M.......#" +
                 "##########");
 
-        game.getEnemies().forEach(e -> e.setDirection(null));
+        game.enemies().forEach(e -> e.setDirection(null));
 
         // when
         hero.down();
@@ -261,7 +261,7 @@ public class HeroTest extends AbstractGameTest {
                 "#M......M#" +
                 "##########");
 
-        game.getEnemies().forEach(e -> e.setDirection(null));
+        game.enemies().forEach(e -> e.setDirection(null));
 
         // when
         hero.down();

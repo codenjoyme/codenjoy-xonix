@@ -34,5 +34,5 @@ public interface Enemy extends Point, Tickable {
 
     Direction getDirection();
 
-    List<Point> getDangerArea();
+    List<Point> dangerArea();
 }
