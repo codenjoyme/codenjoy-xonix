@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.xonix.model.Elements.*;
 import static org.junit.Assert.*;
 
 public class BoardTest {
@@ -39,43 +40,42 @@ public class BoardTest {
 
     @Before
     public void before() {
-        board = board(
-                        "####################" +
-                        "####################" +
-                        "##........o.......##" +
-                        "##........o.......##" +
-                        "##........oooooooO##" +
-                        "##................##" +
-                        "##................##" +
-                        "##...M............##" +
-                        "##................L#" +
-                        "##................##" +
-                        "##................##" +
-                        "##................##" +
-                        "##................##" +
-                        "##................##" +
-                        "##................##" +
-                        "##................##" +
-                        "##................##" +
-                        "##................##" +
-                        "####################" +
-                        "####################");
+        board = board("####################" +
+                    "####################" +
+                    "##........o.......##" +
+                    "##........o.......##" +
+                    "##........oooooooO##" +
+                    "##................##" +
+                    "##................##" +
+                    "##...M............##" +
+                    "##................L#" +
+                    "##................##" +
+                    "##................##" +
+                    "##................##" +
+                    "##................##" +
+                    "##................##" +
+                    "##................##" +
+                    "##................##" +
+                    "##................##" +
+                    "##................##" +
+                    "####################" +
+                    "####################");
     }
 
     @Test
     public void shouldWork_getAt() {
-        assertEquals(Elements.SEA, board.getAt(2, 2));
-        assertEquals(Elements.HERO_LAND, board.getAt(0, 0));
-        assertEquals(Elements.MARINE_ENEMY, board.getAt(5, 12));
-        assertEquals(Elements.LAND_ENEMY, board.getAt(18, 11));
+        assertEquals(SEA, board.getAt(2, 2));
+        assertEquals(HERO_LAND, board.getAt(0, 0));
+        assertEquals(MARINE_ENEMY, board.getAt(5, 12));
+        assertEquals(LAND_ENEMY, board.getAt(18, 11));
     }
 
     @Test
     public void shouldWork_getAt_point() {
-        assertEquals(Elements.SEA, board.getAt(pt(2, 2)));
-        assertEquals(Elements.HERO_LAND, board.getAt(pt(0, 0)));
-        assertEquals(Elements.MARINE_ENEMY, board.getAt(pt(5, 12)));
-        assertEquals(Elements.LAND_ENEMY, board.getAt(pt(18, 11)));
+        assertEquals(SEA, board.getAt(pt(2, 2)));
+        assertEquals(HERO_LAND, board.getAt(pt(0, 0)));
+        assertEquals(MARINE_ENEMY, board.getAt(pt(5, 12)));
+        assertEquals(LAND_ENEMY, board.getAt(pt(18, 11)));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldWork_getXonix() {
+    public void shouldWork_getHero() {
         assertEquals(pt(17, 15), board.getHero());
     }
 }
