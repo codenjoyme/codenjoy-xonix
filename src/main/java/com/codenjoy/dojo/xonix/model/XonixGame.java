@@ -159,10 +159,11 @@ public class XonixGame implements Field {
                 .filter(p -> p.equals(point))
                 .findFirst()
                 .orElse(null);
-        if (land == null) {
+        if (land == null || land.getOwner() == null) {
             return false;
         }
-        return hero.equals(land.getOwner());
+        Point startPosition = land.getOwner().getStartPosition();
+        return hero.getStartPosition().equals(startPosition);
     }
 
     @Override
@@ -284,8 +285,11 @@ public class XonixGame implements Field {
 
     private Collection<Point> breadthFirstSearch(Point start, Hero hero) {
         ArrayDeque<Point> queue = Queues.newArrayDeque();
-        queue.offer(start);
         HashSet<Point> visited = new HashSet<>();
+        if (hero.getTrace().contains(start)) {
+            return visited;
+        }
+        queue.offer(start);
         while (!queue.isEmpty()) {
             Point point = queue.poll();
             if (getEnemies().contains(point)) {
@@ -310,6 +314,7 @@ public class XonixGame implements Field {
             Land land = new Land(point);
             land.setOwner(hero);
             this.land.add(land);
+            return;
         }
         land.stream()
                 .filter(p -> p.equals(point))

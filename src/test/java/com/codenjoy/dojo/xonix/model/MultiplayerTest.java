@@ -572,4 +572,42 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "..........", game(0));
         fired(listener(0), Event.KILLED);
     }
+
+    @Test
+    public void shouldNotSeizeSea_whenLandedOnEnemiesLand() {
+
+        // given
+        givenFl("XXXXXXXXXX" +
+                ".........." +
+                ".........." +
+                "....O....." +
+                ".........." +
+                "....O....." +
+                ".........." +
+                ".........." +
+                ".........." +
+                "XXXXXXXXXX");
+
+        givenPlayer();
+        givenPlayer();
+
+        // when
+        game(0).getJoystick().down();
+        tick();
+        tick();
+
+        // then
+        assertF("XXXXXXXXXX" +
+                ".........." +
+                ".........." +
+                "....O....." +
+                ".........." +
+                "....A....." +
+                ".........." +
+                ".........." +
+                ".........." +
+                "XXXXXXXXXX", game(0));
+        fired(listener(0), Event.KILLED);
+        fired(listener(1), Event.KILLED);
+    }
 }
