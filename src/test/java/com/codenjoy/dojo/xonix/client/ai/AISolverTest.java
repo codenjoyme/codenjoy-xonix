@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.xonix.client;
+package com.codenjoy.dojo.xonix.client.ai;
 
 /*-
  * #%L
@@ -25,6 +25,7 @@ package com.codenjoy.dojo.xonix.client;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.xonix.client.Board;
 import com.codenjoy.dojo.xonix.client.ai.AISolver;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,8 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AITest {
+public class AISolverTest {
+
     private Dice dice;
     private Solver ai;
 
