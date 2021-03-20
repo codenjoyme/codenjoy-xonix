@@ -28,7 +28,9 @@ import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.Player;
 
 public class Trace extends AbstractItem {
+
     private final Hero hero;
+
     public Trace(Point pt, Hero hero) {
         super(pt, Elements.HERO_TRACE);
         this.hero = hero;
@@ -36,6 +38,8 @@ public class Trace extends AbstractItem {
 
     @Override
     public Elements state(Player player, Object... objects) {
-        return hero.getPlayer().equals(player) ? Elements.HERO_TRACE : Elements.HOSTILE_TRACE;
+        return hero.getPlayer().equals(player)
+                ? Elements.HERO_TRACE
+                : Elements.HOSTILE_TRACE;
     }
 }

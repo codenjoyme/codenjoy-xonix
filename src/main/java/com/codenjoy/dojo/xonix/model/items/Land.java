@@ -29,6 +29,7 @@ import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.Player;
 
 public class Land extends AbstractItem {
+
     private Hero owner;
 
     public Land(Point pt) {
@@ -48,6 +49,8 @@ public class Land extends AbstractItem {
         if (owner == null) {
             return Elements.LAND;
         }
-        return owner.equals(player.getHero()) ? Elements.HERO_LAND : Elements.HOSTILE_LAND;
+        return owner.equals(player.getHero())
+                ? Elements.HERO_LAND
+                : Elements.HOSTILE_LAND;
     }
 }

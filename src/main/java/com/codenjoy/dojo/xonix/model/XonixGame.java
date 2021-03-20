@@ -132,7 +132,7 @@ public class XonixGame implements Field {
 
     @Override
     public Hero createNewHero(Player player) {
-        List<Point> starts = level.startPositions();
+        List<Point> starts = level.start();
         Point start = starts.stream()
                 .filter(p -> !getHeroes().contains(p))
                 .findAny()
@@ -143,7 +143,7 @@ public class XonixGame implements Field {
                 .filter(p -> p.equals(start))
                 .findFirst()
                 .ifPresent(l -> l.setOwner(hero));
-        land.addAll(level.xonixLand(hero));
+        land.addAll(level.heroLand(hero));
         return hero;
     }
 
@@ -245,13 +245,13 @@ public class XonixGame implements Field {
     }
 
     private void resetMarineEnemies() {
-        marineEnemies = level.marineEnemyPositions().stream()
+        marineEnemies = level.marineEnemy().stream()
                 .map(p -> new MarineEnemy(p, XonixGame.this, dice))
                 .collect(Collectors.toList());
     }
 
     private void resetLandEnemies() {
-        landEnemies = level.landEnemyPositions().stream()
+        landEnemies = level.landEnemy().stream()
                 .map(p -> new LandEnemy(p, XonixGame.this, dice))
                 .collect(Collectors.toList());
     }
@@ -260,7 +260,7 @@ public class XonixGame implements Field {
         Hero lastHero = getHeroes().get(0);
         long seizedLand = land.stream()
                 .filter(l -> lastHero.equals(l.getOwner()))
-                .count() - level.xonixLand(lastHero).size();
+                .count() - level.heroLand(lastHero).size();
         double percentOfSeized = 100.0 * seizedLand / level.sea().size();
         return percentOfSeized >= settings.integer(WIN_CRITERION);
     }

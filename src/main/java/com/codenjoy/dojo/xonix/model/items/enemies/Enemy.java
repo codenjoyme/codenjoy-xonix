@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Tickable;
 import java.util.List;
 
 public interface Enemy extends Point, Tickable {
+
     void setDirection(Direction direction);
 
     Direction getDirection();

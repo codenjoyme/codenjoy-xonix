@@ -47,42 +47,41 @@ package com.codenjoy.dojo.xonix.model.level;
 public class MultipleLevels {
     
     public static String level1() {
-        return
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
-                "XX.M.............XX.............M.XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX.......O.......XX.......O.......XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XXXXXXXXXXXXXXXLXXXXXXXXXXXXXXXXXXXX" +
-                "XXXXXXXXXXXXXXXXXXXXLXXXXXXXXXXXXXXX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX.......O.......XX.......O.......XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX...............XX...............XX" +
-                "XX.M.............XX.............M.XX" +
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        return "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
+               "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
+               "XX.M.............XX.............M.XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX.......O.......XX.......O.......XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XXXXXXXXXXXXXXXLXXXXXXXXXXXXXXXXXXXX" +
+               "XXXXXXXXXXXXXXXXXXXXLXXXXXXXXXXXXXXX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX.......O.......XX.......O.......XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX...............XX...............XX" +
+               "XX.M.............XX.............M.XX" +
+               "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
+               "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
     }
 }

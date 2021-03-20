@@ -48,28 +48,34 @@ public class Level {
     }
 
     public List<Land> freeLand() {
-        return getObjects(xy, map, Land::new, LAND, LAND_ENEMY);
+        return getObjects(xy, map, Land::new,
+                LAND, LAND_ENEMY);
     }
 
-    public List<Land> xonixLand(Hero hero) {
-        List<Land> land = getObjects(xy, map, Land::new, HERO_LAND, HERO);
+    public List<Land> heroLand(Hero hero) {
+        List<Land> land = getObjects(xy, map, Land::new,
+                HERO_LAND, HERO);
         land.forEach(l -> l.setOwner(hero));
         return land;
     }
 
     public List<Sea> sea() {
-        return getObjects(xy, map, Sea::new, SEA, MARINE_ENEMY);
+        return getObjects(xy, map, Sea::new,
+                SEA, MARINE_ENEMY);
     }
 
-    public List<Point> startPositions() {
-        return getObjects(xy, map, pt -> pt, HERO);
+    public List<Point> start() {
+        return getObjects(xy, map, pt -> pt,
+                HERO);
     }
 
-    public List<Point> marineEnemyPositions() {
-        return getObjects(xy, map, pt -> pt, MARINE_ENEMY);
+    public List<Point> marineEnemy() {
+        return getObjects(xy, map, pt -> pt,
+                MARINE_ENEMY);
     }
 
-    public List<Point> landEnemyPositions() {
-        return getObjects(xy, map, pt -> pt, LAND_ENEMY);
+    public List<Point> landEnemy() {
+        return getObjects(xy, map, pt -> pt,
+                LAND_ENEMY);
     }
 }
