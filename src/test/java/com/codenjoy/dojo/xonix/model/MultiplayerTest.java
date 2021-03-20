@@ -276,4 +276,100 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "XXXXXXXXXX", game(0));
 
     }
+
+    @Test
+    public void shouldKillEachOtherWhenHitHeads_case1() {
+
+        // given
+        givenFl("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XX......XX" +
+                "XX......XX" +
+                "XO......OX" +
+                "XX......XX" +
+                "XX......XX" +
+                "XX....M.XX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX");
+        givenPlayer();
+        givenPlayer();
+        field.getEnemies().forEach(e -> e.setDirection(null));
+
+        // when
+        game(1).getJoystick().left();
+
+        tick();
+        tick();
+
+        game(0).getJoystick().right();
+
+        tick();
+        tick();
+
+        assertF("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XX......XX" +
+                "XX......XX" +
+                "X#oOAaaa@X" +
+                "XX......XX" +
+                "XX......XX" +
+                "XX....M.XX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX", game(0));
+
+        tick();
+
+        assertF("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XX......XX" +
+                "XX......XX" +
+                "XO......AX" +
+                "XX......XX" +
+                "XX......XX" +
+                "XX....M.XX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX", game(0));
+    }
+
+    @Test
+    public void shouldKillEachOtherWhenHitHeads_case2() {
+
+        // given
+        givenFl("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XX......XX" +
+                "XX......OX" +
+                "XX......OX" +
+                "XX......XX" +
+                "XX......XX" +
+                "XX....M.XX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX");
+        givenPlayer();
+        givenPlayer();
+        field.getEnemies().forEach(e -> e.setDirection(null));
+
+        // when
+        game(0).getJoystick().left();
+
+        tick();
+        game(1).getJoystick().left();
+
+        tick();
+
+        game(0).getJoystick().down();
+
+        tick();
+
+        assertF("XXXXXXXXXX" +
+                "XXXXXXXXXX" +
+                "XX......XX" +
+                "XX......OX" +
+                "XX......AX" +
+                "XX......XX" +
+                "XX......XX" +
+                "XX....M.XX" +
+                "XXXXXXXXXX" +
+                "XXXXXXXXXX", game(0));
+    }
 }

@@ -76,30 +76,28 @@ public class XonixGame implements Field {
     }
 
     private void act() {
-        getHeroes().forEach(hero -> {
+        for (Hero hero: getHeroes()) {
 
-            boolean enemyInHitbox = hero.isFloating()
+            boolean botEnemyInHitbox = hero.isFloating()
                     ? marineEnemies.stream().anyMatch(hero::isInHitbox)
                     : landEnemies.stream().anyMatch(hero::isInHitbox);
 
-            if (enemyInHitbox) {
+            if (botEnemyInHitbox) {
                 hero.die();
                 return;
             }
 
             getHeroes().stream()
-                    .filter(enemy -> enemy.getTrace().contains(hero))
-                    .forEach(enemy -> {
-                        hero.setKiller(true);
-                        enemy.die();
-                    });
+                    .filter(enemy -> !enemy.getStartPosition().equals(hero.getStartPosition()))
+                    .filter(enemy -> enemy.getTrace().contains(hero) || enemy.equals(hero))
+                    .forEach(hero::kill);
 
             if (hero.isLanded()) {
                 seizeSea(hero);
                 hero.clearTrace();
                 hero.clearDirection();
             }
-        });
+        }
     }
 
     private void check() {
@@ -117,7 +115,7 @@ public class XonixGame implements Field {
                 }
                 return;
             }
-            if (hero.isKiller()) {
+            if (hero.getVictim() != null) {
                 hero.getPlayer().event(Event.ANNIHILATION);
             }
             if (getHeroes().size() == 1 && isHeroWon()) {

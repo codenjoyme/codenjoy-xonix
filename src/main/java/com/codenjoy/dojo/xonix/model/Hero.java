@@ -46,8 +46,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private List<Trace> trace = new ArrayList<>();
     private boolean isKilled = false;
     private boolean isWon = false;
-    private boolean isKiller = false;
     private int lives;
+    private Hero victim;
 
     public Hero(Point position, Player player) {
         super(position);
@@ -88,7 +88,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void tick() {
-        isKiller = false;
+        victim = null;
 
         if (direction == null) {
             return;
@@ -204,11 +204,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 .collect(Collectors.toList());
     }
 
-    public boolean isKiller() {
-        return isKiller;
+    public Hero getVictim() {
+        return victim;
     }
-
-    public void setKiller(boolean killer) {
-        isKiller = killer;
+    public void kill(Hero enemy) {
+        victim = enemy;
+        enemy.die();
     }
 }
