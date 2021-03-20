@@ -61,7 +61,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Point getXonix() {
-        return get(XONIX).get(0);
+        return get(HERO).get(0);
     }
 
     public List<Point> getSea() {
@@ -69,11 +69,11 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getLand() {
-        return get(XONIX_LAND);
+        return get(HERO_LAND);
     }
 
     public List<Point> getTrace() {
-        return get(TRACE);
+        return get(HERO_TRACE);
     }
 
     public List<Point> getMarineEnemies() {

@@ -198,6 +198,14 @@ public class XonixGame implements Field {
     public BoardReader reader() {
         return new BoardReader() {
 
+            private List<Trace> getTraces() {
+                return getHeroes().stream()
+                        .filter(Objects::nonNull)
+                        .map(Hero::getTrace)
+                        .flatMap(Collection::stream)
+                        .collect(toList());
+            }
+
             @Override
             public int size() {
                 return XonixGame.this.getSize();
@@ -206,14 +214,8 @@ public class XonixGame implements Field {
             @Override
             public Iterable<? extends Point> elements() {
                 return new LinkedList<>() {{
-                    List<Trace> traces = getHeroes().stream()
-                            .filter(Objects::nonNull)
-                            .map(Hero::getTrace)
-                            .flatMap(Collection::stream)
-                            .collect(toList());
-
                     addAll(getHeroes());
-                    addAll(traces);
+                    addAll(getTraces());
                     addAll(XonixGame.this.marineEnemies);
                     addAll(XonixGame.this.landEnemies);
                     addAll(XonixGame.this.sea);

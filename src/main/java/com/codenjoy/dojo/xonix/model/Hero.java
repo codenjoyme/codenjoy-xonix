@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
 import com.google.common.collect.Lists;
@@ -38,7 +39,7 @@ import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
 
     private final Point startPosition;
     private final Player player;
@@ -82,11 +83,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public void act(int... p) {
-        // The hero can only move
-    }
-
-    @Override
     public void tick() {
         victim = null;
 
@@ -110,7 +106,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return this.player.equals(player) ? Elements.XONIX : Elements.ANOTHER_XONIX;
+        return this.player.equals(player) ? Elements.HERO : Elements.HOSTILE;
     }
 
     public void respawn(Point point) {

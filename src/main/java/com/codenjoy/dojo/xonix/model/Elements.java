@@ -29,18 +29,19 @@ import com.codenjoy.dojo.services.printer.CharElements;
  * Легенда всех возможных объектов на поле и их состояний
  */
 public enum Elements implements CharElements {
-    XONIX_LAND('#'),                  // Земля, тут может ходить Xonix и сухопутый враг
-    ENEMY_LAND('@'),
-    FREE_LAND('X'),
 
     SEA('.'),                   // Море, которое нужно осушать; тут плавают морские враги
+    LAND('X'),
 
-    TRACE('o'),                 // След, который оставляет Xonix двигаясь по морю; уязвим для морских врагов;
+    HERO('O'),                 // Сам главный герой игры
+    HERO_LAND('#'),            // Земля, тут может ходить Xonix и сухопутый враг
+    HERO_TRACE('o'),                 // След, который оставляет Xonix двигаясь по морю; уязвим для морских врагов;
                                 // после выхода Xonix'а на сушу, море, очерченное следом, превращается в сушу
-    ANOTHER_TRACE('a'),
 
-    XONIX('O'),                 // Сам главный герой игры
-    ANOTHER_XONIX('A'),
+    HOSTILE('A'),
+    HOSTILE_LAND('@'),
+    HOSTILE_TRACE('a'),
+
     MARINE_ENEMY('M'),          // Морской враг
     LAND_ENEMY('L');            // Сухопутный враг
 

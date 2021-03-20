@@ -32,7 +32,7 @@ public class Land extends AbstractItem {
     private Hero owner;
 
     public Land(Point pt) {
-        super(pt, Elements.XONIX_LAND);
+        super(pt, Elements.HERO_LAND);
     }
 
     public void setOwner(Hero hero) {
@@ -46,8 +46,8 @@ public class Land extends AbstractItem {
     @Override
     public Elements state(Player player, Object... objects) {
         if (owner == null) {
-            return Elements.FREE_LAND;
+            return Elements.LAND;
         }
-        return owner.equals(player.getHero()) ? Elements.XONIX_LAND : Elements.ENEMY_LAND;
+        return owner.equals(player.getHero()) ? Elements.HERO_LAND : Elements.HOSTILE_LAND;
     }
 }
