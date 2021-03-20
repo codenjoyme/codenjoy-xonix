@@ -34,7 +34,9 @@ import com.codenjoy.dojo.xonix.services.GameSettings;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
+import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.IS_MULTIPLAYER;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -45,16 +47,25 @@ public abstract class AbstractGameTest {
     protected EventListener listener;
     protected Player player;
     protected PrinterFactory printer;
-    private GameSettings settings;
+    protected GameSettings settings;
+    private Dice dice;
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
+        settings = new GameSettings()
+                .bool(IS_MULTIPLAYER, false);
+    }
+
+    public void dice(int... ints) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : ints) {
+            when = when.thenReturn(i);
+        }
     }
 
     protected void givenFl(String board) {
-        Dice dice = mock(Dice.class);
         when(dice.next(anyInt())).thenReturn(2); // Direction always will be UP
         Level level = new Level(board);
         game = new XonixGame(level, settings, dice);

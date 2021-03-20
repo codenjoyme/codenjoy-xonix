@@ -40,7 +40,7 @@ import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Player;
 import com.codenjoy.dojo.xonix.model.XonixGame;
 
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LEVELS_COUNT;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -86,7 +86,14 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        return MultiplayerType.SINGLE_LEVELS.apply(settings.integer(LEVELS_COUNT));
+        if (settings.isMultiplayer()) {
+            return MultiplayerType.MULTIPLE_LEVELS.apply(
+                    settings.integer(LEVELS_COUNT),
+                    settings.integer(ROOM_SIZE));
+        } else {
+            return MultiplayerType.SINGLE_LEVELS.apply(
+                    settings.integer(LEVELS_COUNT));
+        }
     }
 
     @Override

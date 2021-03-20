@@ -110,7 +110,7 @@ public class XonixGame implements Field {
                 }
                 player.event(Event.KILLED);
                 hero.respawn(hero.getStartPosition());
-                if (getHeroes().size() == 1) {
+                if (!settings.isMultiplayer()) {
                     resetLandEnemies();
                 }
                 return;
@@ -118,7 +118,7 @@ public class XonixGame implements Field {
             if (hero.getVictim() != null) {
                 hero.getPlayer().event(Event.ANNIHILATION);
             }
-            if (getHeroes().size() == 1 && isHeroWon()) {
+            if (!settings.isMultiplayer() && isHeroWon()) {
                 player.event(Event.WIN);
                 hero.setWon(true);
             }
@@ -133,14 +133,14 @@ public class XonixGame implements Field {
     @Override
     public Hero createNewHero(Player player) {
         List<Point> starts = level.startPositions();
-        Point startPoint = starts.stream()
+        Point start = starts.stream()
                 .filter(p -> !getHeroes().contains(p))
                 .findAny()
                 .orElseThrow(IllegalStateException::new);
-        Hero hero = new Hero(startPoint, player);
+        Hero hero = new Hero(start, player);
         hero.init(this);
         land.stream()
-                .filter(p -> p.equals(startPoint))
+                .filter(p -> p.equals(start))
                 .findFirst()
                 .ifPresent(l -> l.setOwner(hero));
         land.addAll(level.xonixLand(hero));

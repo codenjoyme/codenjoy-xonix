@@ -18,6 +18,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.IS_MULTIPLAYER;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -37,7 +38,8 @@ public abstract class AbstractMultiplayerTest {
     public void setup() {
         dice = mock(Dice.class);
         printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new GameSettings()
+                .bool(IS_MULTIPLAYER, true);
     }
 
     public void dice(int... ints) {

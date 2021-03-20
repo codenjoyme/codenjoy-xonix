@@ -37,7 +37,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         WIN_REWARD("Reward for winning"),
         LIVES_COUNT("Lives count"),
         DIE_PENALTY("Die penalty"),
-        LEVELS_COUNT("Levels count");
+        LEVELS_COUNT("Levels count"),
+        IS_MULTIPLAYER("Multiplayer"),
+        ROOM_SIZE("Room size");
 
         private String key;
 
@@ -57,10 +59,13 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(LIVES_COUNT, 3);
         integer(DIE_PENALTY, 30);
 
-        string(() -> levelName(0), Levels.level1());
-        string(() -> levelName(1), Levels.level2());
-        string(() -> levelName(2), Levels.level3());
-        string(() -> levelName(3), Levels.level4());
+        bool(IS_MULTIPLAYER, true);
+        integer(ROOM_SIZE, 4);
+
+        string(() -> levelName(1), Levels.level1());
+        string(() -> levelName(2), Levels.level2());
+        string(() -> levelName(3), Levels.level3());
+        string(() -> levelName(4), Levels.level4());
         integer(LEVELS_COUNT, 4);
     }
 
@@ -70,6 +75,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public String levelName(int levelNumber) {
         return "level[" + levelNumber + "]";
+    }
+
+    public Boolean isMultiplayer() {
+        return bool(IS_MULTIPLAYER);
     }
 
 }
