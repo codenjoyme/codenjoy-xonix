@@ -34,10 +34,8 @@ import com.codenjoy.dojo.xonix.model.items.enemies.MarineEnemy;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
-import com.google.common.collect.Queues;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.Direction.*;
@@ -79,12 +77,7 @@ public class Xonix implements Field {
     private void act() {
         for (Hero hero: heroes()) {
 
-            boolean botEnemyInHitbox = enemies().stream()
-                    .map(Enemy::dangerArea)
-                    .flatMap(List::stream)
-                    .anyMatch(p -> hero.equals(p) || hero.trace().contains(p));
-
-            if (botEnemyInHitbox) {
+            if (enemyInHitBox(hero)) {
                 hero.die();
                 return;
             }
@@ -100,6 +93,13 @@ public class Xonix implements Field {
                 hero.clearDirection();
             }
         }
+    }
+
+    private boolean enemyInHitBox(Hero hero) {
+        return enemies().stream()
+                .map(Enemy::dangerArea)
+                .flatMap(List::stream)
+                .anyMatch(pt -> hero.equals(pt) || hero.trace().contains(pt));
     }
 
     private void check() {
@@ -134,30 +134,38 @@ public class Xonix implements Field {
 
     @Override
     public Hero newHero(Player player) {
-        List<Point> starts = level.start();
-        Point start = starts.stream()
-                .filter(pt -> !heroes().contains(pt))
-                .findAny()
-                .orElseThrow(IllegalStateException::new);
+        Point start = freeStart();
         Hero hero = new Hero(start, player);
         hero.init(this);
-        islands.stream()
-                .filter(pt -> pt.equals(start))
-                .findFirst()
-                .ifPresent(land -> land.owner(hero));
+
+        recolorLand(start, hero);
         islands.addAll(level.heroLand(hero));
         return hero;
     }
 
-    @Override
-    public boolean isLand(Point point) {
-        return islands.contains(point);
+    public void recolorLand(Point start, Hero hero) {
+        islands.stream()
+                .filter(pt -> pt.equals(start))
+                .findFirst()
+                .ifPresent(land -> land.owner(hero));
+    }
+
+    public Point freeStart() {
+        return level.start().stream()
+                .filter(pt -> !heroes().contains(pt))
+                .findAny()
+                .orElseThrow(IllegalStateException::new);
     }
 
     @Override
-    public boolean isHeroLand(Point point, Hero hero) {
+    public boolean isLand(Point pt) {
+        return islands.contains(pt);
+    }
+
+    @Override
+    public boolean isHeroLand(Point pt, Hero hero) {
         Land land = islands.stream()
-                .filter(pt -> pt.equals(point))
+                .filter(point -> point.equals(pt))
                 .findFirst()
                 .orElse(null);
         if (land == null || land.owner() == null) {
@@ -168,13 +176,13 @@ public class Xonix implements Field {
     }
 
     @Override
-    public boolean isSea(Point point) {
-        return oceans.contains(point);
+    public boolean isSea(Point pt) {
+        return oceans.contains(pt);
     }
 
     @Override
-    public boolean isOutOfBounds(Point point) {
-        return point.isOutOf(level.size());
+    public boolean isOutOfBounds(Point pt) {
+        return pt.isOutOf(level.size());
     }
 
     @Override
@@ -310,17 +318,14 @@ public class Xonix implements Field {
         return visited;
     }
 
-    private void turnToLand(Point point, Hero hero) {
-        if (oceans.remove(point)) {
-            Land land = new Land(point);
+    private void turnToLand(Point pt, Hero hero) {
+        if (oceans.remove(pt)) {
+            Land land = new Land(pt);
             land.owner(hero);
             islands.add(land);
             return;
         }
-        islands.stream()
-                .filter(pt -> pt.equals(point))
-                .findFirst()
-                .ifPresent(land -> land.owner(hero));
+        recolorLand(pt, hero);
     }
 
     private boolean isTrace(Point point) {

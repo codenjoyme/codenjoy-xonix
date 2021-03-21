@@ -30,9 +30,9 @@ import java.util.List;
 
 public interface Enemy extends Point, Tickable {
 
-    void setDirection(Direction direction);
+    void direction(Direction direction);
 
-    Direction getDirection();
+    Direction direction();
 
     List<Point> dangerArea();
 }

@@ -108,6 +108,6 @@ public abstract class AbstractGameTest {
     }
 
     public void shouldEnemiesGo(Direction direction) {
-        game.enemies().forEach(enemy -> enemy.setDirection(direction));
+        game.enemies().forEach(enemy -> enemy.direction(direction));
     }
 }

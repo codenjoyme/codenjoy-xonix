@@ -37,7 +37,7 @@ public abstract class AbstractItem extends PointImpl implements State<Elements, 
         this.element = element;
     }
 
-    public Point getPosition() {
+    public Point position() {
         return PointImpl.pt(x, y);
     }
 

@@ -27,9 +27,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Field;
 
+import static com.codenjoy.dojo.xonix.model.Elements.LAND_ENEMY;
+
 public class LandEnemy extends AbstractEnemy {
 
     public LandEnemy(Point pt, Field field, Dice dice) {
-        super(pt, Elements.LAND_ENEMY, dice, field, field::isSea);
+        super(pt, LAND_ENEMY, dice, field, field::isSea);
     }
 }

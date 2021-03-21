@@ -31,44 +31,46 @@ import com.codenjoy.dojo.xonix.model.items.AbstractItem;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.codenjoy.dojo.services.Direction.*;
+import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractEnemy extends AbstractItem implements Enemy {
 
-    private final Function<Point, Boolean> barrierChecker;
+    private final Function<Point, Boolean> barrier;
     protected Direction direction;
     protected Field field;
 
-    protected AbstractEnemy(Point pt, Elements element, Dice dice, Field field, Function<Point, Boolean> barrierChecker) {
+    protected AbstractEnemy(Point pt, Elements element, Dice dice, Field field, Function<Point, Boolean> barrier) {
         super(pt, element);
         this.field = field;
-        this.barrierChecker = barrierChecker;
+        this.barrier = barrier;
         this.direction = Direction.random(dice);
     }
 
     @Override
-    public void setDirection(Direction direction) {
+    public void direction(Direction direction) {
         this.direction = direction;
     }
 
     @Override
-    public Direction getDirection() {
+    public Direction direction() {
         return direction;
     }
 
     @Override
     public List<Point> dangerArea() {
-        Point position = getPosition();
+        Point pos = position();
         return Stream.of(
-                position,
-                Direction.LEFT.change(position),
-                Direction.UP.change(position),
-                Direction.RIGHT.change(position),
-                Direction.DOWN.change(position)
-        ).filter(p -> !barrierChecker.apply(p))
-                .filter(p -> !field.isOutOfBounds(p))
-                .collect(Collectors.toList());
+                pos,
+                LEFT.change(pos),
+                UP.change(pos),
+                RIGHT.change(pos),
+                DOWN.change(pos)
+        ).filter(pt -> !barrier.apply(pt))
+                .filter(pt -> !field.isOutOfBounds(pt))
+                .collect(toList());
     }
 
     @Override
@@ -76,18 +78,18 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
         if (direction == null) {
             return;
         }
-        Point position = getPosition();
+        Point position = position();
         int limiter = 4;
-        while ((barrierChecker.apply(diagonalStep(position))
-                || barrierChecker.apply(direction.change(position))
-                || barrierChecker.apply(direction.clockwise().change(position))
+        while ((barrier.apply(diagonalStep(position))
+                || barrier.apply(direction.change(position))
+                || barrier.apply(direction.clockwise().change(position))
                 || field.isOutOfBounds(diagonalStep(position)))
                 && limiter > 0) {
-            if (barrierChecker.apply(direction.change(position))) {
+            if (barrier.apply(direction.change(position))) {
                 direction = direction.clockwise();
-            } else if (barrierChecker.apply(direction.clockwise().change(position))) {
+            } else if (barrier.apply(direction.clockwise().change(position))) {
                 direction = direction.counterClockwise();
-            } else if (barrierChecker.apply(diagonalStep(position))) {
+            } else if (barrier.apply(diagonalStep(position))) {
                 direction = direction.inverted();
             } else {
                 direction = direction.counterClockwise();
@@ -103,11 +105,11 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
         Point position = direction.change(point);
         switch (direction) {
             case LEFT:
-                return Direction.UP.change(position);
+                return UP.change(position);
             case UP:
-                return Direction.RIGHT.change(position);
+                return RIGHT.change(position);
             case RIGHT:
-                return Direction.DOWN.change(position);
+                return DOWN.change(position);
             case DOWN:
                 return Direction.LEFT.change(position);
             default:

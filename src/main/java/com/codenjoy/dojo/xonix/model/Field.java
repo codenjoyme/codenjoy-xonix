@@ -33,13 +33,13 @@ public interface Field extends GameField<Player> {
 
     Hero newHero(Player player);
 
-    boolean isLand(Point point);
+    boolean isLand(Point pt);
 
-    boolean isHeroLand(Point point, Hero hero);
+    boolean isHeroLand(Point pt, Hero hero);
 
-    boolean isSea(Point point);
+    boolean isSea(Point pt);
 
-    boolean isOutOfBounds(Point point);
+    boolean isOutOfBounds(Point pt);
 
     List<Enemy> enemies();
 }

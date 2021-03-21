@@ -126,7 +126,7 @@ public abstract class AbstractMultiplayerTest {
     }
 
     public void shouldEnemiesGo(Direction direction) {
-        field.enemies().forEach(enemy -> enemy.setDirection(direction));
+        field.enemies().forEach(enemy -> enemy.direction(direction));
     }
 
 }
