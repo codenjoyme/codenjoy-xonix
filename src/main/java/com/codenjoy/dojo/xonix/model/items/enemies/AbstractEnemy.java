@@ -78,40 +78,37 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
         if (direction == null) {
             return;
         }
-        Point position = position();
+        Point pt = position();
         int limiter = 4;
-        while ((barrier.apply(diagonalStep(position))
-                || barrier.apply(direction.change(position))
-                || barrier.apply(direction.clockwise().change(position))
-                || field.isOutOfBounds(diagonalStep(position)))
-                && limiter > 0) {
-            if (barrier.apply(direction.change(position))) {
+        do {
+            if (barrier.apply(direction.change(pt))) {
                 direction = direction.clockwise();
-            } else if (barrier.apply(direction.clockwise().change(position))) {
+            } else if (barrier.apply(direction.clockwise().change(pt))) {
                 direction = direction.counterClockwise();
-            } else if (barrier.apply(diagonalStep(position))) {
+            } else if (barrier.apply(diagonal(pt))) {
                 direction = direction.inverted();
-            } else {
+            } else if (field.isOutOfBounds(diagonal(pt))) {
                 direction = direction.counterClockwise();
+            } else {
+                break;
             }
-            limiter--;
-        }
+        } while (--limiter > 0);
         if (limiter != 0) {
-            move(diagonalStep(position));
+            move(diagonal(pt));
         }
     }
 
-    private Point diagonalStep(Point point) {
-        Point position = direction.change(point);
+    private Point diagonal(Point from) {
+        Point dest = direction.change(from);
         switch (direction) {
             case LEFT:
-                return UP.change(position);
+                return UP.change(dest);
             case UP:
-                return RIGHT.change(position);
+                return RIGHT.change(dest);
             case RIGHT:
-                return DOWN.change(position);
+                return DOWN.change(dest);
             case DOWN:
-                return Direction.LEFT.change(position);
+                return LEFT.change(dest);
             default:
                 throw new IllegalStateException("Direction should be LEFT, RIGHT, UP or DOWN");
         }
