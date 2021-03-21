@@ -27,11 +27,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Field;
 
-import static com.codenjoy.dojo.xonix.model.Elements.MARINE_ENEMY;
+import static com.codenjoy.dojo.xonix.model.Elements.LAND_ENEMY;
 
-public class MarineEnemy extends AbstractEnemy {
+public class Hunter extends AbstractEnemy {
 
-    public MarineEnemy(Point pt, Field field, Dice dice) {
-        super(pt, MARINE_ENEMY, dice, field, field::isLand);
+    public Hunter(Point pt, Field field, Dice dice) {
+        super(pt, LAND_ENEMY, dice, field, field::isSea);
     }
 }

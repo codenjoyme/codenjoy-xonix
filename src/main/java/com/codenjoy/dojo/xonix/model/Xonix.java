@@ -29,8 +29,8 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.xonix.model.items.*;
 import com.codenjoy.dojo.xonix.model.items.enemies.Enemy;
-import com.codenjoy.dojo.xonix.model.items.enemies.LandEnemy;
-import com.codenjoy.dojo.xonix.model.items.enemies.MarineEnemy;
+import com.codenjoy.dojo.xonix.model.items.enemies.Hunter;
+import com.codenjoy.dojo.xonix.model.items.enemies.Mariner;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
@@ -52,8 +52,8 @@ public class Xonix implements Field {
 
     private List<Sea> oceans;
     private List<Land> islands;
-    private List<LandEnemy> landEnemies;
-    private List<MarineEnemy> marineEnemies;
+    private List<Hunter> hunters;
+    private List<Mariner> mariners;
 
     public Xonix(Level level, GameSettings settings, Dice dice) {
         this.settings = settings;
@@ -88,7 +88,7 @@ public class Xonix implements Field {
                     .forEach(hero::kill);
 
             if (hero.isLanded()) {
-                seizeSea(hero);
+                capture(hero);
                 hero.clearTrace();
                 hero.clearDirection();
             }
@@ -113,7 +113,7 @@ public class Xonix implements Field {
                 player.event(Event.DIE);
                 hero.respawn(hero.start());
                 if (settings.single()) {
-                    resetLandEnemies();
+                    resetHunters();
                 }
                 return;
             }
@@ -196,8 +196,8 @@ public class Xonix implements Field {
     @Override
     public List<Enemy> enemies() {
         List<Enemy> result = new LinkedList<>();
-        result.addAll(marineEnemies);
-        result.addAll(landEnemies);
+        result.addAll(mariners);
+        result.addAll(hunters);
         return result;
     }
 
@@ -221,8 +221,8 @@ public class Xonix implements Field {
                 return new LinkedList<>() {{
                     addAll(heroes());
                     addAll(getTraces());
-                    addAll(marineEnemies);
-                    addAll(landEnemies);
+                    addAll(mariners);
+                    addAll(hunters);
                     addAll(oceans);
                     addAll(islands);
                 }};
@@ -243,19 +243,19 @@ public class Xonix implements Field {
     private void reset() {
         oceans = level.sea();
         islands = level.freeLand();
-        resetMarineEnemies();
-        resetLandEnemies();
+        resetMariners();
+        resetHunters();
     }
 
-    private void resetMarineEnemies() {
-        marineEnemies = level.marineEnemy().stream()
-                .map(pt -> new MarineEnemy(pt, Xonix.this, dice))
+    private void resetMariners() {
+        mariners = level.marineEnemy().stream()
+                .map(pt -> new Mariner(pt, Xonix.this, dice))
                 .collect(toList());
     }
 
-    private void resetLandEnemies() {
-        landEnemies = level.landEnemy().stream()
-                .map(pt -> new LandEnemy(pt, Xonix.this, dice))
+    private void resetHunters() {
+        hunters = level.landEnemy().stream()
+                .map(pt -> new Hunter(pt, Xonix.this, dice))
                 .collect(toList());
     }
 
@@ -268,47 +268,47 @@ public class Xonix implements Field {
         return percent >= settings.integer(WIN_CRITERION);
     }
 
-    private void seizeSea(Hero hero) {
+    private void capture(Hero hero) {
         List<Trace> trace = hero.trace();
-        if (trace.size() == 1) { // Like original
+        if (trace.size() == 1) {
             turnToLand(trace.get(0), hero);
             return;
         }
         Direction firstWave = hero.direction().counterClockwise();
         Trace last = trace.get(trace.size() - 1);
-        Collection<Point> points = breadthFirstSearch(firstWave.change(last), hero);
-        if (points.size() == 0) {
-            points = breadthFirstSearch(firstWave.inverted().change(last), hero);
+        Collection<Point> area = area(firstWave.change(last), hero);
+        if (area.isEmpty()) {
+            area = area(firstWave.inverted().change(last), hero);
         }
-        points.addAll(trace);
-        points.forEach(pt -> turnToLand(pt, hero));
+        area.addAll(trace);
+        area.forEach(pt -> turnToLand(pt, hero));
     }
 
-    private Collection<Point> breadthFirstSearch(Point start, Hero hero) {
-        Deque<Point> queue = new ArrayDeque<>();
-        Set<Point> visited = new HashSet<>();
+    private Set<Point> area(Point start, Hero hero) {
+        Queue<Point> queue = new LinkedList<>();
+        Set<Point> result = new HashSet<>();
         if (hero.trace().contains(start)) {
-            return visited;
+            return result;
         }
         queue.offer(start);
         while (!queue.isEmpty()) {
             Point point = queue.poll();
             if (enemies().contains(point)) {
-                return new LinkedList<>();
+                return new HashSet<>();
             }
-            visited.add(point);
+            result.add(point);
 
             Point left = LEFT.change(point);
             Point up = UP.change(point);
             Point right = RIGHT.change(point);
             Point down = DOWN.change(point);
             Stream.of(up, down, left, right)
-                    .filter(pt -> !visited.contains(pt))
+                    .filter(pt -> !result.contains(pt))
                     .filter(pt -> !isTrace(pt))
                     .filter(pt -> !isHeroLand(pt, hero))
                     .forEach(queue::offer);
         }
-        return visited;
+        return result;
     }
 
     private void turnToLand(Point pt, Hero hero) {

@@ -38,7 +38,7 @@ import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractEnemy extends AbstractItem implements Enemy {
 
-    private final Function<Point, Boolean> barrier;
+    private Function<Point, Boolean> barrier;
     protected Direction direction;
     protected Field field;
 
