@@ -88,7 +88,7 @@ public class Xonix implements Field {
                     .forEach(hero::kill);
 
             if (hero.isLanded()) {
-                capture(hero);
+                hero.capture();
                 hero.clearTrace();
                 hero.clearDirection();
             }
@@ -268,50 +268,8 @@ public class Xonix implements Field {
         return percent >= settings.integer(WIN_CRITERION);
     }
 
-    private void capture(Hero hero) {
-        List<Trace> trace = hero.trace();
-        if (trace.size() == 1) {
-            turnToLand(trace.get(0), hero);
-            return;
-        }
-        Direction firstWave = hero.direction().counterClockwise();
-        Trace last = trace.get(trace.size() - 1);
-        Collection<Point> area = area(firstWave.change(last), hero);
-        if (area.isEmpty()) {
-            area = area(firstWave.inverted().change(last), hero);
-        }
-        area.addAll(trace);
-        area.forEach(pt -> turnToLand(pt, hero));
-    }
-
-    private Set<Point> area(Point start, Hero hero) {
-        Queue<Point> queue = new LinkedList<>();
-        Set<Point> result = new HashSet<>();
-        if (hero.trace().contains(start)) {
-            return result;
-        }
-        queue.offer(start);
-        while (!queue.isEmpty()) {
-            Point point = queue.poll();
-            if (enemies().contains(point)) {
-                return new HashSet<>();
-            }
-            result.add(point);
-
-            Point left = LEFT.change(point);
-            Point up = UP.change(point);
-            Point right = RIGHT.change(point);
-            Point down = DOWN.change(point);
-            Stream.of(up, down, left, right)
-                    .filter(pt -> !result.contains(pt))
-                    .filter(pt -> !isTrace(pt))
-                    .filter(pt -> !isHeroLand(pt, hero))
-                    .forEach(queue::offer);
-        }
-        return result;
-    }
-
-    private void turnToLand(Point pt, Hero hero) {
+    @Override
+    public void turnToLand(Point pt, Hero hero) {
         if (oceans.remove(pt)) {
             Land land = new Land(pt);
             land.owner(hero);
@@ -321,7 +279,8 @@ public class Xonix implements Field {
         recolorLand(pt, hero);
     }
 
-    private boolean isTrace(Point pt) {
+    @Override
+    public boolean isTrace(Point pt) {
         return heroes().stream()
                 .flatMap(hero -> hero.trace().stream())
                 .anyMatch(trace -> trace.equals(pt));

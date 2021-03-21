@@ -30,8 +30,8 @@ import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.xonix.model.Elements.HERO;
@@ -181,4 +181,48 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         victim = enemy;
         enemy.die();
     }
+
+    public void capture() {
+        if (trace.size() == 1) {
+            field.turnToLand(trace.get(0), this);
+            return;
+        }
+        Direction wave = direction.counterClockwise();
+        Trace last = trace.get(trace.size() - 1);
+        Collection<Point> area = area(wave.change(last));
+        if (area.isEmpty()) {
+            area = area(wave.inverted().change(last));
+        }
+        area.addAll(trace);
+        area.forEach(pt -> field.turnToLand(pt, this));
+    }
+
+    private Set<Point> area(Point start) {
+        if (trace.contains(start)) {
+            return new HashSet<>();
+        }
+
+        Set<Point> result = new HashSet<>();
+        Queue<Point> queue = new LinkedList<>();
+        queue.offer(start);
+        while (!queue.isEmpty()) {
+            Point point = queue.poll();
+            if (field.enemies().contains(point)) {
+                return new HashSet<>();
+            }
+            result.add(point);
+
+            Point left = LEFT.change(point);
+            Point up = UP.change(point);
+            Point right = RIGHT.change(point);
+            Point down = DOWN.change(point);
+            Stream.of(up, down, left, right)
+                    .filter(pt -> !result.contains(pt))
+                    .filter(pt -> !field.isTrace(pt))
+                    .filter(pt -> !field.isHeroLand(pt, this))
+                    .forEach(queue::offer);
+        }
+        return result;
+    }
+
 }

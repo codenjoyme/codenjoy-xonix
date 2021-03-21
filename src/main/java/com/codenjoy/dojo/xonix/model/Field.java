@@ -42,4 +42,8 @@ public interface Field extends GameField<Player> {
     List<Enemy> enemies();
 
     int size();
+
+    void turnToLand(Point pt, Hero hero);
+
+    boolean isTrace(Point pt);
 }
