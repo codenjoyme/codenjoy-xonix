@@ -39,7 +39,7 @@ public interface Field extends GameField<Player> {
 
     boolean isSea(Point pt);
 
-    boolean isOutOfBounds(Point pt);
-
     List<Enemy> enemies();
+
+    int size();
 }

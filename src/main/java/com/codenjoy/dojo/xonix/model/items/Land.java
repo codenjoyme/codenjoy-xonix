@@ -28,12 +28,14 @@ import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.Player;
 
+import static com.codenjoy.dojo.xonix.model.Elements.*;
+
 public class Land extends AbstractItem {
 
     private Hero owner;
 
     public Land(Point pt) {
-        super(pt, Elements.HERO_LAND);
+        super(pt, LAND);
     }
 
     public void owner(Hero hero) {
@@ -45,12 +47,12 @@ public class Land extends AbstractItem {
     }
 
     @Override
-    public Elements state(Player player, Object... objects) {
+    public Elements state(Player painter, Object... objects) {
         if (owner == null) {
-            return Elements.LAND;
+            return element;
         }
-        return owner.equals(player.getHero())
-                ? Elements.HERO_LAND
-                : Elements.HOSTILE_LAND;
+        return owner.equals(painter.getHero())
+                ? HERO_LAND
+                : HOSTILE_LAND;
     }
 }

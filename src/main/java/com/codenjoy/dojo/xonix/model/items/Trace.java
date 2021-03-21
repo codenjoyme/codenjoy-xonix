@@ -22,24 +22,26 @@ package com.codenjoy.dojo.xonix.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.Player;
 
+import static com.codenjoy.dojo.xonix.model.Elements.HERO_TRACE;
+import static com.codenjoy.dojo.xonix.model.Elements.HOSTILE_TRACE;
+
 public class Trace extends AbstractItem {
 
-    private final Hero hero;
+    private Hero owner;
 
-    public Trace(Point pt, Hero hero) {
-        super(pt, Elements.HERO_TRACE);
-        this.hero = hero;
+    public Trace(Hero owner) {
+        super(owner.copy(), HERO_TRACE);
+        this.owner = owner;
     }
 
     @Override
-    public Elements state(Player player, Object... objects) {
-        return hero.player().equals(player)
-                ? Elements.HERO_TRACE
-                : Elements.HOSTILE_TRACE;
+    public Elements state(Player painter, Object... objects) {
+        return owner.player().equals(painter)
+                ? HERO_TRACE
+                : HOSTILE_TRACE;
     }
 }

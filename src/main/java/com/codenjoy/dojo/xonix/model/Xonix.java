@@ -181,11 +181,6 @@ public class Xonix implements Field {
     }
 
     @Override
-    public boolean isOutOfBounds(Point pt) {
-        return pt.isOutOf(level.size());
-    }
-
-    @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);

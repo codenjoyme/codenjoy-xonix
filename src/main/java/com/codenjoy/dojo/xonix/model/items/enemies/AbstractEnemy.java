@@ -61,15 +61,14 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
 
     @Override
     public List<Point> dangerArea() {
-        Point pos = position();
         return Stream.of(
-                pos,
-                LEFT.change(pos),
-                UP.change(pos),
-                RIGHT.change(pos),
-                DOWN.change(pos)
+                this.copy(),
+                LEFT.change(this),
+                UP.change(this),
+                RIGHT.change(this),
+                DOWN.change(this)
         ).filter(pt -> !barrier.apply(pt))
-                .filter(pt -> !field.isOutOfBounds(pt))
+                .filter(pt -> !pt.isOutOf(field.size()))
                 .collect(toList());
     }
 
@@ -78,7 +77,7 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
         if (direction == null) {
             return;
         }
-        Point pt = position();
+        Point pt = this.copy();
         int limiter = 4;
         do {
             if (barrier.apply(direction.change(pt))) {
@@ -87,7 +86,7 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
                 direction = direction.counterClockwise();
             } else if (barrier.apply(diagonal(pt))) {
                 direction = direction.inverted();
-            } else if (field.isOutOfBounds(diagonal(pt))) {
+            } else if (diagonal(pt).isOutOf(field.size())) {
                 direction = direction.counterClockwise();
             } else {
                 break;

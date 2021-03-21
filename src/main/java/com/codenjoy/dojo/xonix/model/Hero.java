@@ -41,8 +41,8 @@ import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
 
-    private final Point start;
-    private final Player player;
+    private Point start;
+    private Player player;
     private Direction direction;
     private List<Trace> trace = new ArrayList<>();
     private boolean killed = false;
@@ -89,24 +89,26 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         if (direction == null) {
             return;
         }
-        Point destination = direction.change(this);
-        if (field.isOutOfBounds(destination)) {
+        Point dest = direction.change(this);
+        if (dest.isOutOf(field.size())) {
             direction = null;
             return;
         }
-        if (trace().contains(destination)) {
+        if (trace().contains(dest)) {
             die();
             return;
         }
         if (!isOnOwnLand()) {
-            trace.add(new Trace(position(), this));
+            trace.add(new Trace(this));
         }
-        move(destination);
+        move(dest);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return this.player.equals(player) ? HERO : HOSTILE;
+    public Elements state(Player painter, Object... alsoAtPoint) {
+        return player.equals(painter)
+                ? HERO
+                : HOSTILE;
     }
 
     public void respawn(Point point) {
@@ -171,10 +173,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
 
     public Direction direction() {
         return direction;
-    }
-
-    public Point position() {
-        return PointImpl.pt(x, y);
     }
 
     public Hero victim() {
