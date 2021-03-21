@@ -212,17 +212,21 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
             }
             result.add(point);
 
-            Point left = LEFT.change(point);
-            Point up = UP.change(point);
-            Point right = RIGHT.change(point);
-            Point down = DOWN.change(point);
-            Stream.of(up, down, left, right)
+            around(point).stream()
                     .filter(pt -> !result.contains(pt))
                     .filter(pt -> !field.isTrace(pt))
                     .filter(pt -> !field.isHeroLand(pt, this))
                     .forEach(queue::offer);
         }
         return result;
+    }
+
+    private List<Point> around(Point point) {
+        Point left = LEFT.change(point);
+        Point up = UP.change(point);
+        Point right = RIGHT.change(point);
+        Point down = DOWN.change(point);
+        return Arrays.asList(up, down, left, right);
     }
 
 }
