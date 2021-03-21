@@ -328,9 +328,9 @@ public class Xonix implements Field {
         recolorLand(pt, hero);
     }
 
-    private boolean isTrace(Point point) {
+    private boolean isTrace(Point pt) {
         return heroes().stream()
                 .flatMap(hero -> hero.trace().stream())
-                .anyMatch(trace -> trace.equals(point));
+                .anyMatch(trace -> trace.equals(pt));
     }
 }
