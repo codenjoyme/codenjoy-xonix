@@ -208,7 +208,6 @@ public class Xonix implements Field {
 
     private List<Trace> getTraces() {
         return heroes().stream()
-                .filter(Objects::nonNull)
                 .map(Hero::trace)
                 .flatMap(Collection::stream)
                 .collect(toList());
@@ -243,7 +242,6 @@ public class Xonix implements Field {
     private List<Hero> heroes() {
         return players.stream()
                 .map(Player::getHero)
-                .filter(Objects::nonNull)
                 .collect(toList());
     }
 

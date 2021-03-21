@@ -35,6 +35,7 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener, settings);
     }
 
+    @Override
     public Hero getHero() {
         return hero;
     }
