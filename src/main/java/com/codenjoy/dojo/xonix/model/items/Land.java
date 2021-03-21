@@ -40,7 +40,7 @@ public class Land extends AbstractItem {
         this.owner = hero;
     }
 
-    public Hero getOwner() {
+    public Hero owner() {
         return owner;
     }
 

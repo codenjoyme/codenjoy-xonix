@@ -31,7 +31,7 @@ import java.util.List;
 
 public interface Field extends GameField<Player> {
 
-    Hero createNewHero(Player player);
+    Hero newHero(Player player);
 
     boolean isLand(Point point);
 

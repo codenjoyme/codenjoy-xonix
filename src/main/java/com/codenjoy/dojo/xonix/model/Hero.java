@@ -34,22 +34,25 @@ import com.codenjoy.dojo.xonix.model.items.Trace;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.xonix.model.Elements.HERO;
+import static com.codenjoy.dojo.xonix.model.Elements.HOSTILE;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
 
-    private final Point startPosition;
+    private final Point start;
     private final Player player;
     private Direction direction;
     private List<Trace> trace = new ArrayList<>();
-    private boolean isKilled = false;
-    private boolean isWon = false;
+    private boolean killed = false;
+    private boolean won = false;
     private int lives;
     private Hero victim;
 
-    public Hero(Point position, Player player) {
-        super(position);
-        this.startPosition = position;
+    public Hero(Point pt, Player player) {
+        super(pt);
+        this.start = pt;
         this.player = player;
     }
 
@@ -61,22 +64,22 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
 
     @Override
     public void up() {
-        direction = Direction.UP;
+        direction = UP;
     }
 
     @Override
     public void down() {
-        direction = Direction.DOWN;
+        direction = DOWN;
     }
 
     @Override
     public void left() {
-        direction = Direction.LEFT;
+        direction = LEFT;
     }
 
     @Override
     public void right() {
-        direction = Direction.RIGHT;
+        direction = RIGHT;
     }
 
     @Override
@@ -103,12 +106,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return this.player.equals(player) ? Elements.HERO : Elements.HOSTILE;
+        return this.player.equals(player) ? HERO : HOSTILE;
     }
 
     public void respawn(Point point) {
         move(point);
-        isKilled = false;
+        killed = false;
     }
 
 
@@ -117,17 +120,17 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     public void die() {
-        if (isKilled) {
+        if (killed) {
             return;
         }
-        isKilled = true;
+        killed = true;
         direction = null;
         clearTrace();
         lives--;
     }
 
     public Point start() {
-        return startPosition;
+        return start;
     }
 
     public Player player() {
@@ -147,11 +150,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     public void setWon(boolean value) {
-        this.isWon = value;
+        this.won = value;
     }
 
     public boolean isWon() {
-        return !isKilled && isWon;
+        return !killed && won;
     }
 
     public int lives() {
@@ -159,7 +162,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     public boolean isKilled() {
-        return isKilled;
+        return killed;
     }
 
     public List<Trace> trace() {
