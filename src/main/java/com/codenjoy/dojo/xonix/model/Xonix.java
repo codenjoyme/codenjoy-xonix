@@ -112,7 +112,7 @@ public class Xonix implements Field {
                 }
                 player.event(Event.DIE);
                 hero.respawn(hero.start());
-                if (!settings.isMultiplayer()) {
+                if (settings.single()) {
                     resetLandEnemies();
                 }
                 return;
@@ -120,7 +120,7 @@ public class Xonix implements Field {
             if (hero.victim() != null) {
                 hero.player().event(Event.ANNIHILATION);
             }
-            if (!settings.isMultiplayer() && isHeroWon()) {
+            if (settings.single() && heroWon()) {
                 player.event(Event.WIN);
                 hero.setWon(true);
             }
@@ -264,7 +264,7 @@ public class Xonix implements Field {
                 .collect(toList());
     }
 
-    private boolean isHeroWon() {
+    private boolean heroWon() {
         Hero last = heroes().get(0);
         long seized = islands.stream()
                 .filter(land -> last.equals(land.owner()))

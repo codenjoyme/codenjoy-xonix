@@ -88,7 +88,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        if (settings.isMultiplayer()) {
+        if (settings.single()) {
             return MultiplayerType.LEVELS.apply(
                     settings.integer(ROOM_SIZE),
                     settings.integer(LEVELS_COUNT),

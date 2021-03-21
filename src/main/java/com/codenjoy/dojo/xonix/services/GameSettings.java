@@ -105,8 +105,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return "Level" + levelNumber;
     }
 
-    public Boolean isMultiplayer() {
-        return bool(IS_MULTIPLAYER);
+    public boolean single() {
+        return !bool(IS_MULTIPLAYER);
     }
 
 }
