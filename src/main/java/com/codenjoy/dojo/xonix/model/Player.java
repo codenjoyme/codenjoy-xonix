@@ -52,7 +52,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public boolean isWin() {
-        return hero.isWon();
+        return hero.isWin();
     }
 
     @Override

@@ -122,7 +122,7 @@ public class Xonix implements Field {
             }
             if (settings.single() && heroWon()) {
                 player.event(Event.WIN);
-                hero.setWon(true);
+                hero.win(true);
             }
         });
     }

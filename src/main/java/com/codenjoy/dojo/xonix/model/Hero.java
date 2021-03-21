@@ -25,7 +25,6 @@ package com.codenjoy.dojo.xonix.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
@@ -46,7 +45,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     private Direction direction;
     private List<Trace> trace = new ArrayList<>();
     private boolean killed = false;
-    private boolean won = false;
+    private boolean win = false;
     private int lives;
     private Hero victim;
 
@@ -116,7 +115,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         killed = false;
     }
 
-
     public boolean isLanded() {
         return !trace.isEmpty() && isOnOwnLand();
     }
@@ -151,12 +149,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         this.direction = null;
     }
 
-    public void setWon(boolean value) {
-        this.won = value;
+    public void win(boolean win) {
+        this.win = win;
     }
 
-    public boolean isWon() {
-        return !killed && won;
+    public boolean isWin() {
+        return !killed && win;
     }
 
     public int lives() {
