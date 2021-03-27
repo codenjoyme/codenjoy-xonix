@@ -76,8 +76,7 @@ public class SmokeTest {
         LocalGameRunner.printTick = true;
         LocalGameRunner.printBoardOnly = true;
 
-        String soul = "580763458903465890346";
-        Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, 100, 200));
+        Dice dice = LocalGameRunner.getDice("580763458903465890346", 100, 200);
 
         GameRunner gameRunner = new GameRunner() {
             @Override
@@ -2497,8 +2496,7 @@ public class SmokeTest {
         LocalGameRunner.printTick = true;
         LocalGameRunner.printBoardOnly = true;
 
-        String soul = "580763458903465890346";
-        Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, 100, 200));
+        Dice dice = LocalGameRunner.getDice("580763458903465890346", 100, 200);
 
         GameRunner gameType = new GameRunner() {
             @Override
