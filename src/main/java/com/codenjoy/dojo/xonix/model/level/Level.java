@@ -24,6 +24,7 @@ package com.codenjoy.dojo.xonix.model.level;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.items.Land;
 import com.codenjoy.dojo.xonix.model.items.Sea;
@@ -35,11 +36,11 @@ import static com.codenjoy.dojo.xonix.model.Elements.*;
 
 public class Level {
 
-    private final String map;
-    private final LengthToXY xy;
+    private String map;
+    private LengthToXY xy;
 
     public Level(String map) {
-        this.map = map;
+        this.map = LevelUtils.clear(map);
         this.xy = new LengthToXY(size());
     }
 

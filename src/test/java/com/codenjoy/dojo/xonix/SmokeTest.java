@@ -66,26 +66,26 @@ public class SmokeTest {
                         settings.bool(IS_MULTIPLAYER, true)
                                 .integer(LEVELS_COUNT, 1)
                                 .string(() -> settings.levelName(1),
-                                        "XXXXXXXXXXOXXXXXXXXX" +
-                                        "XXXXXXXXXXXXXXXXXXXX" +
-                                        "XX................XX" +
-                                        "XX................XX" +
-                                        "XX................XX" +
-                                        "XX................XX" +
-                                        "XX................XX" +
-                                        "XX................XX" +
-                                        "XX...M............XX" +
-                                        "XX................XX" +
-                                        "LX................XL" +
-                                        "XX..........M.....XX" +
-                                        "XX................XX" +
-                                        "XX................XX" +
-                                        "XX................XX" +
-                                        "XX................XX" +
-                                        "XX....M...........XX" +
-                                        "XX................XX" +
-                                        "XXXXXXXXXXXXXXXXXXXX" +
-                                        "XXXXXXXXXXOXXXXXXXXX");
+                                        "XXXXXXXXXXOXXXXXXXXX\n" +
+                                        "XXXXXXXXXXXXXXXXXXXX\n" +
+                                        "XX................XX\n" +
+                                        "XX................XX\n" +
+                                        "XX................XX\n" +
+                                        "XX................XX\n" +
+                                        "XX................XX\n" +
+                                        "XX................XX\n" +
+                                        "XX...M............XX\n" +
+                                        "XX................XX\n" +
+                                        "LX................XL\n" +
+                                        "XX..........M.....XX\n" +
+                                        "XX................XX\n" +
+                                        "XX................XX\n" +
+                                        "XX................XX\n" +
+                                        "XX................XX\n" +
+                                        "XX....M...........XX\n" +
+                                        "XX................XX\n" +
+                                        "XXXXXXXXXXXXXXXXXXXX\n" +
+                                        "XXXXXXXXXXOXXXXXXXXX\n");
                         return settings;
                     }
                 },
