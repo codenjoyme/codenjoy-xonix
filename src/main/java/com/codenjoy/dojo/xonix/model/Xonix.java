@@ -24,10 +24,11 @@ package com.codenjoy.dojo.xonix.model;
 
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.xonix.model.items.*;
+import com.codenjoy.dojo.xonix.model.items.Land;
+import com.codenjoy.dojo.xonix.model.items.Sea;
+import com.codenjoy.dojo.xonix.model.items.Trace;
 import com.codenjoy.dojo.xonix.model.items.enemies.Enemy;
 import com.codenjoy.dojo.xonix.model.items.enemies.Hunter;
 import com.codenjoy.dojo.xonix.model.items.enemies.Mariner;
@@ -35,11 +36,10 @@ import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
 
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
-import static com.codenjoy.dojo.services.Direction.*;
-import static com.codenjoy.dojo.services.QDirection.RIGHT;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_CRITERION;
 import static java.util.stream.Collectors.toList;
 
@@ -137,9 +137,10 @@ public class Xonix implements Field {
         Point start = freeStart();
         Hero hero = new Hero(start, player);
         hero.init(this);
-
         recolorLand(start, hero);
-        islands.addAll(level.heroLand(hero));
+        if (settings.single()) {
+            islands.forEach(i -> i.owner(hero));
+        }
         return hero;
     }
 
@@ -242,7 +243,7 @@ public class Xonix implements Field {
 
     private void reset() {
         oceans = level.sea();
-        islands = level.freeLand();
+        islands = level.land();
         resetMariners();
         resetHunters();
     }
@@ -260,11 +261,8 @@ public class Xonix implements Field {
     }
 
     private boolean heroWon() {
-        Hero last = heroes().get(0);
-        long seized = islands.stream()
-                .filter(land -> last.equals(land.owner()))
-                .count() - level.heroLand(last).size();
-        double percent = 100.0 * seized / level.sea().size();
+        long seized = islands.size();
+        double percent = 100.0 * seized / Math.pow(level.size(), 2);
         return percent >= settings.integer(WIN_CRITERION);
     }
 

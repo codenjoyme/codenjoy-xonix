@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.xonix.model.Elements.HERO;
@@ -40,13 +39,14 @@ import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
 
-    private Point start;
-    private Player player;
-    private Direction direction;
+    private final Point start;
+    private final Player player;
+
     private List<Trace> trace = new ArrayList<>();
     private boolean killed = false;
     private boolean win = false;
     private int lives;
+    private Direction direction;
     private Hero victim;
 
     public Hero(Point pt, Player player) {
@@ -201,24 +201,26 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         if (trace.contains(start)) {
             return new HashSet<>();
         }
-
-        Set<Point> result = new HashSet<>();
+        Set<Point> visited = new HashSet<>();
         Queue<Point> queue = new LinkedList<>();
         queue.offer(start);
+        visited.add(start);
         while (!queue.isEmpty()) {
             Point point = queue.poll();
             if (field.enemies().contains(point)) {
                 return new HashSet<>();
             }
-            result.add(point);
-
             around(point).stream()
-                    .filter(pt -> !result.contains(pt))
+                    .filter(pt -> !visited.contains(pt))
                     .filter(pt -> !field.isTrace(pt))
                     .filter(pt -> !field.isHeroLand(pt, this))
-                    .forEach(queue::offer);
+                    .filter(pt -> !pt.isOutOf(field.size()))
+                    .forEach(pt -> {
+                        queue.offer(pt);
+                        visited.add(pt);
+                    });
         }
-        return result;
+        return visited;
     }
 
     private List<Point> around(Point point) {
@@ -228,5 +230,4 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         Point down = DOWN.change(point);
         return Arrays.asList(up, down, left, right);
     }
-
 }

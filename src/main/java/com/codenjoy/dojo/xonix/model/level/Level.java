@@ -36,8 +36,8 @@ import static com.codenjoy.dojo.xonix.model.Elements.*;
 
 public class Level {
 
-    private String map;
-    private LengthToXY xy;
+    private final String map;
+    private final LengthToXY xy;
 
     public Level(String map) {
         this.map = LevelUtils.clear(map);
@@ -48,16 +48,9 @@ public class Level {
         return (int) Math.sqrt(map.length());
     }
 
-    public List<Land> freeLand() {
+    public List<Land> land() {
         return getObjects(xy, map, Land::new,
-                LAND, LAND_ENEMY);
-    }
-
-    public List<Land> heroLand(Hero hero) {
-        List<Land> land = getObjects(xy, map, Land::new,
-                HERO_LAND, HERO);
-        land.forEach(l -> l.owner(hero));
-        return land;
+                LAND, HERO_LAND, LAND_ENEMY, HERO);
     }
 
     public List<Sea> sea() {
