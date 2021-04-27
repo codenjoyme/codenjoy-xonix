@@ -24,30 +24,19 @@ package com.codenjoy.dojo.xonix.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.xonix.services.GameSettings;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
     @Override
-    public Hero getHero() {
-        return hero;
-    }
-
-    @Override
-    public void newHero(Field field) {
-        hero = field.newHero(this);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return !hero.isKilled();
+    public Hero createHero(Point pt) {
+        return field.newHero(this);
     }
 
     @Override
@@ -55,8 +44,4 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero.isWin();
     }
 
-    @Override
-    public void event(Object e) {
-        super.event(e);
-    }
 }

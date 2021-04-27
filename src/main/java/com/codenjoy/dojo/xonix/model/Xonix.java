@@ -105,7 +105,7 @@ public class Xonix implements Field {
     private void check() {
         heroes().forEach(hero -> {
             Player player = hero.player();
-            if (hero.isKilled()) {
+            if (!hero.isAlive()) {
                 if (hero.lives() == 0) {
                     player.event(Event.GAME_OVER);
                     return;

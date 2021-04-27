@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.xonix.model.items.Trace;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.xonix.model.Elements.HERO;
@@ -44,7 +43,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     private Player player;
     private Direction direction;
     private List<Trace> trace = new ArrayList<>();
-    private boolean killed = false;
+    private boolean alive = true;
     private boolean win = false;
     private int lives;
     private Hero victim;
@@ -112,7 +111,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
 
     public void respawn(Point point) {
         move(point);
-        killed = false;
+        alive = true;
     }
 
     public boolean isLanded() {
@@ -120,10 +119,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     public void die() {
-        if (killed) {
+        if (!alive) {
             return;
         }
-        killed = true;
+        alive = false;
         direction = null;
         clearTrace();
         lives--;
@@ -154,15 +153,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     public boolean isWin() {
-        return !killed && win;
+        return isAlive() && win;
     }
 
     public int lives() {
         return lives;
     }
 
-    public boolean isKilled() {
-        return killed;
+    @Override
+    public boolean isAlive() {
+        return alive;
     }
 
     public List<Trace> trace() {
