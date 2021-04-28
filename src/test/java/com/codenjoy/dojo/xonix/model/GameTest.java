@@ -23,6 +23,7 @@ package com.codenjoy.dojo.xonix.model;
  */
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
@@ -124,7 +125,7 @@ public class GameTest extends AbstractGameTest {
                 "#....#" +
                 "######");
 
-        shouldEnemiesGo(Direction.LEFT);
+        shouldEnemiesGo(QDirection.LEFT_UP);
 
         // when
         hero.right();

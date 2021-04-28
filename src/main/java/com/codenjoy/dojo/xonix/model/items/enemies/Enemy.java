@@ -22,17 +22,17 @@ package com.codenjoy.dojo.xonix.model.items.enemies;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.List;
 
 public interface Enemy extends Point, Tickable {
 
-    void direction(Direction direction);
+    void direction(QDirection direction);
 
-    Direction direction();
+    QDirection direction();
 
     List<Point> dangerArea();
 }

@@ -22,7 +22,7 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
@@ -408,7 +408,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "....XX.O.." +
                 ".M..XX...." +
                 "....XX..M.");
-
+        shouldEnemiesGo(QDirection.LEFT_DOWN);
         givenPlayer();
         givenPlayer();
         dice(3);
@@ -419,19 +419,18 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         tick();
         tick();
         tick();
-        tick();
 
         // then
-        assertF("....XL...." +
-                "M...XX...." +
-                ".O..XX..M." +
-                "....XX...." +
+        assertF("....XX...." +
+                "..M.XX...." +
+                ".O..XX...." +
+                "....XX.M.." +
                 "XXXXXXXXXX" +
                 "XXXXXXXXXX" +
                 "....XX...." +
-                "....XX.A.." +
-                "...MXX...." +
-                "....XX..M.", game(0));
+                "..M.LX.A.." +
+                "....XX.M.." +
+                "....XX....", game(0));
 
         fired(listener(0), Event.DIE);
     }
@@ -472,7 +471,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         tick();
         tick();
 
-        shouldEnemiesGo(Direction.UP);
+        shouldEnemiesGo(QDirection.RIGHT_UP);
 
         tick();
         tick();
@@ -506,7 +505,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         givenPlayer();
         givenPlayer();
 
-        shouldEnemiesGo(Direction.UP);
+        shouldEnemiesGo(QDirection.RIGHT_UP);
 
         // when
         hero(0).right();
@@ -556,7 +555,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         tick();
         tick();
 
-        shouldEnemiesGo(Direction.UP);
+        shouldEnemiesGo(QDirection.RIGHT_UP);
         tick();
 
         // then

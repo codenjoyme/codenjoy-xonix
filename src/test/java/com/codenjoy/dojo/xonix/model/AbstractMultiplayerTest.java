@@ -125,7 +125,7 @@ public abstract class AbstractMultiplayerTest {
         assertEquals(Arrays.asList(events), captor.getAllValues());
     }
 
-    public void shouldEnemiesGo(Direction direction) {
+    public void shouldEnemiesGo(QDirection direction) {
         field.enemies().forEach(enemy -> enemy.direction(direction));
     }
 
