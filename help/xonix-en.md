@@ -1,0 +1,3 @@
+{title=Xonix codenjoy — how to play? | Games at work}
+
+# Preparation...
