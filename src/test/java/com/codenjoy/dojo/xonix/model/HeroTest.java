@@ -22,6 +22,7 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
@@ -204,7 +205,7 @@ public class HeroTest extends AbstractGameTest {
                 "#M.......#" +
                 "##########");
 
-        game.enemies().forEach(e -> e.direction(null));
+        game.enemies().forEach(e -> e.direction((Direction) null));
 
         // when
         hero.down();
@@ -261,7 +262,7 @@ public class HeroTest extends AbstractGameTest {
                 "#M......M#" +
                 "##########");
 
-        game.enemies().forEach(e -> e.direction(null));
+        game.enemies().forEach(e -> e.direction((Direction) null));
 
         // when
         hero.down();
