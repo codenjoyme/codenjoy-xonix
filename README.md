@@ -1,3 +1,5 @@
+How to play: [[EN]](help/xonix-en.md) [[RUS]](help/xonix.md)
+
 For **Non-Java** languages go to `./src/main/<language>` and follow README.md instructions.  
 
 For **Java**:
