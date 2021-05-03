@@ -22,6 +22,7 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.xonix.services.Event;
 import org.junit.Test;
 
@@ -35,7 +36,7 @@ public class EnemyTest extends AbstractGameTest {
                 "#M..#" +
                 "#...#" +
                 "#####");
-
+        shouldEnemiesGo(QDirection.RIGHT_UP);
         // when
         game.tick();
 
@@ -157,7 +158,7 @@ public class EnemyTest extends AbstractGameTest {
                 "#M..#" +
                 "#...#" +
                 "#####");
-
+        shouldEnemiesGo(QDirection.RIGHT_UP);
         // when
         game.tick();
 
@@ -189,7 +190,7 @@ public class EnemyTest extends AbstractGameTest {
                 "#.....#" +
                 "#.....#" +
                 "#######");
-
+        shouldEnemiesGo(QDirection.RIGHT_UP);
         // when
         hero.down();
         game.tick();
@@ -253,5 +254,31 @@ public class EnemyTest extends AbstractGameTest {
 
         // then
         neverFired(Event.GAME_OVER);
+    }
+
+    @Test
+    public void landEnemyShouldNotKill_whenHeroIsAtSea1() {
+        // given
+        givenFl("O......" +
+                ".###..." +
+                ".#.#..." +
+                ".#.#..." +
+                ".##L..." +
+                ".###..." +
+                ".###...");
+
+        shouldEnemiesGo(QDirection.RIGHT_UP);
+
+        // when
+        game.tick();
+
+        // then
+        assertE("O......" +
+                ".###..." +
+                ".#.#..." +
+                ".#.#..." +
+                ".###..." +
+                ".#L#..." +
+                ".###...");
     }
 }
