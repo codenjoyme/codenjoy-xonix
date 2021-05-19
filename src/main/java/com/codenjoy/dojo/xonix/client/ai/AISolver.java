@@ -39,7 +39,9 @@ public class AISolver implements Solver<Board> {
     }
 
     @Override
-    public String get(final Board board) {
+    public String get(Board board) {
+        if (board.getHero() == null) return "";
+
         state = new GameState(board);
 
         Direction directionToAvoidDanger = state.howToAvoidDanger();
