@@ -30,7 +30,7 @@ import com.codenjoy.dojo.xonix.model.level.SingleLevels;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
 
@@ -76,8 +76,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
                 .update(true);
     }
 
-    public Consumer<Boolean> rebuildLevels() {
-        return multiple -> {
+    public BiConsumer<Boolean, Boolean> rebuildLevels() {
+        return (old, multiple) -> {
             if (multiple) {
                 useMultiple();
             } else {
