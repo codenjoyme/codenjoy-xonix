@@ -31,7 +31,7 @@ import com.codenjoy.dojo.xonix.model.items.Sea;
 import java.util.List;
 
 import static com.codenjoy.dojo.utils.LevelUtils.getObjects;
-import static com.codenjoy.dojo.xonix.client.Element.*;
+import static com.codenjoy.dojo.games.xonix.Element.*;
 
 public class Level {
 

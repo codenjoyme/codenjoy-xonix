@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.xonix.model.Field;
 
-import static com.codenjoy.dojo.xonix.client.Element.LAND_ENEMY;
+import static com.codenjoy.dojo.games.xonix.Element.LAND_ENEMY;
 
 public class Hunter extends AbstractEnemy {
 

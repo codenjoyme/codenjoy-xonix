@@ -22,12 +22,12 @@ package com.codenjoy.dojo.xonix.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.xonix.client.Element;
+import com.codenjoy.dojo.games.xonix.Element;
 import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.Player;
 
-import static com.codenjoy.dojo.xonix.client.Element.HERO_TRACE;
-import static com.codenjoy.dojo.xonix.client.Element.HOSTILE_TRACE;
+import static com.codenjoy.dojo.games.xonix.Element.HERO_TRACE;
+import static com.codenjoy.dojo.games.xonix.Element.HOSTILE_TRACE;
 
 public class Trace extends AbstractItem {
 

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.xonix.model.items;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.xonix.client.Element;
+import com.codenjoy.dojo.games.xonix.Element;
 
 public class Sea extends AbstractItem {
     public Sea(Point pt) {

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
-import com.codenjoy.dojo.xonix.client.Board;
+import com.codenjoy.dojo.games.xonix.Board;
 import com.codenjoy.dojo.xonix.services.ai.AISolver;
 import com.codenjoy.dojo.xonix.services.GameRunner;
 import com.codenjoy.dojo.xonix.services.GameSettings;

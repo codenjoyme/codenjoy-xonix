@@ -28,14 +28,14 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.xonix.client.Element;
+import com.codenjoy.dojo.games.xonix.Element;
 import com.codenjoy.dojo.xonix.model.items.Trace;
 
 import java.util.*;
 
 import static com.codenjoy.dojo.services.Direction.*;
-import static com.codenjoy.dojo.xonix.client.Element.HERO;
-import static com.codenjoy.dojo.xonix.client.Element.HOSTILE;
+import static com.codenjoy.dojo.games.xonix.Element.HERO;
+import static com.codenjoy.dojo.games.xonix.Element.HOSTILE;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 
 public class Hero extends PlayerHero<Field> implements State<Element, Player>, NoActJoystick {

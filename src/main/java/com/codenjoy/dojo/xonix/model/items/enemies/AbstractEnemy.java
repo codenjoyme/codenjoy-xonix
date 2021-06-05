@@ -25,7 +25,7 @@ package com.codenjoy.dojo.xonix.model.items.enemies;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
-import com.codenjoy.dojo.xonix.client.Element;
+import com.codenjoy.dojo.games.xonix.Element;
 import com.codenjoy.dojo.xonix.model.Field;
 import com.codenjoy.dojo.xonix.model.items.AbstractItem;
 
