@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.xonix.model;
+package com.codenjoy.dojo.xonix.client;
 
 /*-
  * #%L
@@ -25,10 +25,7 @@ package com.codenjoy.dojo.xonix.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-/**
- * Легенда всех возможных объектов на поле и их состояний
- */
-public enum Elements implements CharElements {
+public enum Element implements CharElements {
 
     SEA('.'),           // Море, которое нужно осушать. Тут плавают морские враги
     LAND('X'),          // Ничейная суша. Тут бегают сухопутные враги.
@@ -47,7 +44,7 @@ public enum Elements implements CharElements {
 
     final char ch;
 
-    Elements(char ch) {
+    Element(char ch) {
         this.ch = ch;
     }
 
@@ -61,8 +58,8 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements byCode(char ch) {
-        for (Elements el : Elements.values()) {
+    public static Element byCode(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }

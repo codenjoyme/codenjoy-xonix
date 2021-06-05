@@ -22,12 +22,11 @@ package com.codenjoy.dojo.xonix.client;
  * #L%
  */
 
-import com.codenjoy.dojo.xonix.model.Elements;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.xonix.model.Elements.*;
+import static com.codenjoy.dojo.xonix.client.Element.*;
 import static org.junit.Assert.*;
 
 public class BoardTest {

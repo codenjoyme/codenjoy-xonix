@@ -25,7 +25,7 @@ package com.codenjoy.dojo.xonix.model.items.enemies;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
-import com.codenjoy.dojo.xonix.model.Elements;
+import com.codenjoy.dojo.xonix.client.Element;
 import com.codenjoy.dojo.xonix.model.Field;
 import com.codenjoy.dojo.xonix.model.items.AbstractItem;
 
@@ -42,7 +42,7 @@ public abstract class AbstractEnemy extends AbstractItem implements Enemy {
     protected QDirection direction;
     protected Field field;
 
-    protected AbstractEnemy(Point pt, Elements element, Dice dice, Field field, Function<Point, Boolean> isBarrier) {
+    protected AbstractEnemy(Point pt, Element element, Dice dice, Field field, Function<Point, Boolean> isBarrier) {
         super(pt, element);
         this.field = field;
         this.isBarrier = isBarrier;

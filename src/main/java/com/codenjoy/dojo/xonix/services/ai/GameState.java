@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.xonix.client.Board;
-import com.codenjoy.dojo.xonix.model.Elements;
+import com.codenjoy.dojo.xonix.client.Element;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -188,7 +188,7 @@ public class GameState {
         return !board.isOutOfField(point.getX(), point.getY());
     }
 
-    public Elements getAt(Point point) {
+    public Element getAt(Point point) {
         return board.getAt(point);
     }
 

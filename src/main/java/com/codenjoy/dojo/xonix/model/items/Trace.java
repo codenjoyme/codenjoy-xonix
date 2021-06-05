@@ -22,12 +22,12 @@ package com.codenjoy.dojo.xonix.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.xonix.model.Elements;
+import com.codenjoy.dojo.xonix.client.Element;
 import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.Player;
 
-import static com.codenjoy.dojo.xonix.model.Elements.HERO_TRACE;
-import static com.codenjoy.dojo.xonix.model.Elements.HOSTILE_TRACE;
+import static com.codenjoy.dojo.xonix.client.Element.HERO_TRACE;
+import static com.codenjoy.dojo.xonix.client.Element.HOSTILE_TRACE;
 
 public class Trace extends AbstractItem {
 
@@ -39,7 +39,7 @@ public class Trace extends AbstractItem {
     }
 
     @Override
-    public Elements state(Player painter, Object... objects) {
+    public Element state(Player painter, Object... objects) {
         return owner.player().equals(painter)
                 ? HERO_TRACE
                 : HOSTILE_TRACE;

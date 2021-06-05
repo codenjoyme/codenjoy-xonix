@@ -24,10 +24,9 @@ package com.codenjoy.dojo.xonix.model.items.enemies;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Field;
 
-import static com.codenjoy.dojo.xonix.model.Elements.MARINE_ENEMY;
+import static com.codenjoy.dojo.xonix.client.Element.MARINE_ENEMY;
 
 public class Mariner extends AbstractEnemy {
 

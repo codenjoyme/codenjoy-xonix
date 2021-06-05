@@ -28,16 +28,17 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.xonix.client.Element;
 import com.codenjoy.dojo.xonix.model.items.Trace;
 
 import java.util.*;
 
 import static com.codenjoy.dojo.services.Direction.*;
-import static com.codenjoy.dojo.xonix.model.Elements.HERO;
-import static com.codenjoy.dojo.xonix.model.Elements.HOSTILE;
+import static com.codenjoy.dojo.xonix.client.Element.HERO;
+import static com.codenjoy.dojo.xonix.client.Element.HOSTILE;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LIVES_COUNT;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
+public class Hero extends PlayerHero<Field> implements State<Element, Player>, NoActJoystick {
 
     private final Point start;
     private final Player player;
@@ -104,7 +105,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     @Override
-    public Elements state(Player painter, Object... alsoAtPoint) {
+    public Element state(Player painter, Object... alsoAtPoint) {
         return player.equals(painter)
                 ? HERO
                 : HOSTILE;

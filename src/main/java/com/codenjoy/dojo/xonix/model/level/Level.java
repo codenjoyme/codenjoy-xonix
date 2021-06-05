@@ -25,14 +25,13 @@ package com.codenjoy.dojo.xonix.model.level;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.LevelUtils;
-import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.items.Land;
 import com.codenjoy.dojo.xonix.model.items.Sea;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.utils.LevelUtils.getObjects;
-import static com.codenjoy.dojo.xonix.model.Elements.*;
+import static com.codenjoy.dojo.xonix.client.Element.*;
 
 public class Level {
 

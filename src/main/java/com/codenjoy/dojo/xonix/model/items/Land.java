@@ -24,11 +24,11 @@ package com.codenjoy.dojo.xonix.model.items;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.xonix.model.Elements;
+import com.codenjoy.dojo.xonix.client.Element;
 import com.codenjoy.dojo.xonix.model.Hero;
 import com.codenjoy.dojo.xonix.model.Player;
 
-import static com.codenjoy.dojo.xonix.model.Elements.*;
+import static com.codenjoy.dojo.xonix.client.Element.*;
 
 public class Land extends AbstractItem {
 
@@ -47,7 +47,7 @@ public class Land extends AbstractItem {
     }
 
     @Override
-    public Elements state(Player painter, Object... objects) {
+    public Element state(Player painter, Object... objects) {
         if (owner == null) {
             return element;
         }
