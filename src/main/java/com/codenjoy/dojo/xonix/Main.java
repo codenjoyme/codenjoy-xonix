@@ -24,9 +24,7 @@ package com.codenjoy.dojo.xonix;
 
 import com.codenjoy.dojo.client.KeyboardSolver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.xonix.client.Board;
-import com.codenjoy.dojo.xonix.client.ai.AISolver;
 import com.codenjoy.dojo.xonix.services.GameRunner;
 
 public class Main {

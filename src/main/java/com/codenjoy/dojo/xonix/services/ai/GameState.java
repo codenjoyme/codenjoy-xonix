@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.xonix.client.ai;
+package com.codenjoy.dojo.xonix.services.ai;
 
 /*-
  * #%L

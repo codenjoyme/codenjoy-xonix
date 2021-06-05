@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.xonix.client.ai;
+package com.codenjoy.dojo.xonix.services.ai;
 
 /*-
  * #%L
@@ -26,7 +26,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.xonix.client.Board;
-import com.codenjoy.dojo.xonix.client.ai.AISolver;
+import com.codenjoy.dojo.xonix.services.ai.AISolver;
 import org.junit.Before;
 import org.junit.Test;
 

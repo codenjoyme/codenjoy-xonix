@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.xonix.client.Board;
-import com.codenjoy.dojo.xonix.client.ai.AISolver;
+import com.codenjoy.dojo.xonix.services.ai.AISolver;
 import com.codenjoy.dojo.xonix.model.Elements;
 import com.codenjoy.dojo.xonix.model.Player;
 import com.codenjoy.dojo.xonix.model.Xonix;
