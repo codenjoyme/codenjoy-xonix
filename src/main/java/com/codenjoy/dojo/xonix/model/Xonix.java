@@ -39,6 +39,7 @@ import com.codenjoy.dojo.xonix.services.GameSettings;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_CRITERION;
 import static java.util.stream.Collectors.toList;
@@ -218,15 +219,13 @@ public class Xonix implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<>() {{
-                    addAll(heroes());
-                    addAll(getTraces());
-                    addAll(mariners);
-                    addAll(hunters);
-                    addAll(oceans);
-                    addAll(islands);
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(heroes());
+                processor.accept(getTraces());
+                processor.accept(mariners);
+                processor.accept(hunters);
+                processor.accept(oceans);
+                processor.accept(islands);
             }
         };
     }
