@@ -39,11 +39,17 @@ public class Level extends AbstractLevel {
     }
 
     public List<Land> land() {
-        return find(Land::new, LAND, HERO_LAND, LAND_ENEMY, HERO);
+        return find(Land::new,
+                LAND,
+                HERO_LAND,
+                LAND_ENEMY,
+                HERO);
     }
 
     public List<Sea> sea() {
-        return find(Sea::new, SEA, MARINE_ENEMY);
+        return find(Sea::new,
+                SEA,
+                MARINE_ENEMY);
     }
 
     public List<Point> start() {
