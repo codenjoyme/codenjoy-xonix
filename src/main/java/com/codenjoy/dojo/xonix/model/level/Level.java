@@ -22,53 +22,39 @@ package com.codenjoy.dojo.xonix.model.level;
  * #L%
  */
 
-import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.utils.LevelUtils;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.xonix.model.items.Land;
 import com.codenjoy.dojo.xonix.model.items.Sea;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.utils.LevelUtils.getObjects;
 import static com.codenjoy.dojo.games.xonix.Element.*;
+import static java.util.function.UnaryOperator.identity;
 
-public class Level {
-
-    private final String map;
-    private final LengthToXY xy;
+public class Level extends AbstractLevel {
 
     public Level(String map) {
-        this.map = LevelUtils.clear(map);
-        this.xy = new LengthToXY(size());
-    }
-
-    public int size() {
-        return (int) Math.sqrt(map.length());
+        super(map);
     }
 
     public List<Land> land() {
-        return getObjects(xy, map, Land::new,
-                LAND, HERO_LAND, LAND_ENEMY, HERO);
+        return find(Land::new, LAND, HERO_LAND, LAND_ENEMY, HERO);
     }
 
     public List<Sea> sea() {
-        return getObjects(xy, map, Sea::new,
-                SEA, MARINE_ENEMY);
+        return find(Sea::new, SEA, MARINE_ENEMY);
     }
 
     public List<Point> start() {
-        return getObjects(xy, map, pt -> pt,
-                HERO);
+        return find(identity(), HERO);
     }
 
     public List<Point> marineEnemy() {
-        return getObjects(xy, map, pt -> pt,
-                MARINE_ENEMY);
+        return find(identity(), MARINE_ENEMY);
     }
 
     public List<Point> landEnemy() {
-        return getObjects(xy, map, pt -> pt,
-                LAND_ENEMY);
+        return find(identity(), LAND_ENEMY);
     }
 }
