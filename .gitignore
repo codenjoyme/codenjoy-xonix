@@ -1,5 +1,5 @@
-/pitest/
 /target/
 /*.iml
 /**/*-servers.zip
 /.idea/
+/**/pitest/**
