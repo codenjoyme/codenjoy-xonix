@@ -24,35 +24,40 @@ package com.codenjoy.dojo.xonix;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.games.xonix.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
-import com.codenjoy.dojo.games.xonix.Board;
-import com.codenjoy.dojo.xonix.services.ai.AISolver;
 import com.codenjoy.dojo.xonix.services.GameRunner;
 import com.codenjoy.dojo.xonix.services.GameSettings;
+import com.codenjoy.dojo.xonix.services.ai.AISolver;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.IS_MULTIPLAYER;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LEVELS_COUNT;
-import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
+    private Smoke smoke;
+    private Dice dice;
+    private Supplier<Solver> solver;
+
+    @Before
+    public void setup() {
+        smoke = new Smoke();
+        dice = smoke.dice();
+        solver = () -> new AISolver(dice);
+    }
+
     @Test
     public void test() {
-        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 1000, 200);
-
         // about 2.8 sec
         int players = 2;
         int ticks = 1000;
-        Supplier<Solver> solver = () -> new AISolver(dice);
 
-        Smoke.play(ticks, "SmokeTest.data",
+        smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {
@@ -88,9 +93,6 @@ public class SmokeTest {
                         return settings;
                     }
                 },
-                Stream.generate(solver)
-                        .limit(players).collect(toList()),
-                Stream.generate(() -> new Board())
-                        .limit(players).collect(toList()));
+                players, solver, Board::new);
     }
 }
