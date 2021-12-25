@@ -66,31 +66,31 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        GameSettings settings = new GameSettings();
-                        settings.bool(IS_MULTIPLAYER, true)
-                                .integer(LEVELS_COUNT, 1)
-                                .string(() -> settings.levelName(1),
-                                        "XXXXXXXXXXOXXXXXXXXX\n" +
-                                        "XXXXXXXXXXXXXXXXXXXX\n" +
-                                        "XX................XX\n" +
-                                        "XX................XX\n" +
-                                        "XX................XX\n" +
-                                        "XX................XX\n" +
-                                        "XX................XX\n" +
-                                        "XX................XX\n" +
-                                        "XX...M............XX\n" +
-                                        "XX................XX\n" +
-                                        "LX................XL\n" +
-                                        "XX..........M.....XX\n" +
-                                        "XX................XX\n" +
-                                        "XX................XX\n" +
-                                        "XX................XX\n" +
-                                        "XX................XX\n" +
-                                        "XX....M...........XX\n" +
-                                        "XX................XX\n" +
-                                        "XXXXXXXXXXXXXXXXXXXX\n" +
-                                        "XXXXXXXXXXOXXXXXXXXX\n");
-                        return settings;
+                        return new TestGameSettings(){{
+                            bool(IS_MULTIPLAYER, true);
+                            integer(LEVELS_COUNT, 1);
+                            string(() -> levelName(1),
+                                    "XXXXXXXXXXOXXXXXXXXX\n" +
+                                    "XXXXXXXXXXXXXXXXXXXX\n" +
+                                    "XX................XX\n" +
+                                    "XX................XX\n" +
+                                    "XX................XX\n" +
+                                    "XX................XX\n" +
+                                    "XX................XX\n" +
+                                    "XX................XX\n" +
+                                    "XX...M............XX\n" +
+                                    "XX................XX\n" +
+                                    "LX................XL\n" +
+                                    "XX..........M.....XX\n" +
+                                    "XX................XX\n" +
+                                    "XX................XX\n" +
+                                    "XX................XX\n" +
+                                    "XX................XX\n" +
+                                    "XX....M...........XX\n" +
+                                    "XX................XX\n" +
+                                    "XXXXXXXXXXXXXXXXXXXX\n" +
+                                    "XXXXXXXXXXOXXXXXXXXX\n");
+                        }};
                     }
                 },
                 players, solver, Board::new);

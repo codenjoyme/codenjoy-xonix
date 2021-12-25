@@ -25,24 +25,26 @@ package com.codenjoy.dojo.xonix.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.xonix.Board;
+import com.codenjoy.dojo.games.xonix.Element;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.ScoresImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
-import com.codenjoy.dojo.games.xonix.Board;
-import com.codenjoy.dojo.xonix.services.ai.AISolver;
-import com.codenjoy.dojo.games.xonix.Element;
 import com.codenjoy.dojo.xonix.model.Player;
 import com.codenjoy.dojo.xonix.model.Xonix;
+import com.codenjoy.dojo.xonix.services.ai.AISolver;
 
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.DISPOSABLE;
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.LEVELS_COUNT;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.ROOM_SIZE;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -53,7 +55,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new Scores(Integer.valueOf(score.toString()), settings);
+        return new ScoresImpl<>(Integer.parseInt(score.toString()), settings.calculator());
     }
 
     @Override

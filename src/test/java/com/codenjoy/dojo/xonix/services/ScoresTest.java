@@ -24,10 +24,14 @@ package com.codenjoy.dojo.xonix.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.xonix.TestGameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.DIE_PENALTY;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_SCORE;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -53,14 +57,13 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
-        scores = new Scores(0, settings);
+        settings = new TestGameSettings();
     }
 
     @Test
     public void shouldCollectScores() {
         // given
-        scores = new Scores(140, settings);
+        givenScores(140);
 
         // when
         win();
@@ -78,13 +81,20 @@ public class ScoresTest {
 
         // then
         assertEquals(140
-                    + 4 * settings.integer(WIN_SCORES)
-                    - 2 * settings.integer(DIE_PENALTY),
+                    + 4 * settings.integer(WIN_SCORE)
+                    + 2 * settings.integer(DIE_PENALTY),
                 scores.getScore());
+    }
+
+    private void givenScores(int score) {
+        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
     }
 
     @Test
     public void shouldNotLessThanZero() {
+        // given
+        givenScores(0);
+
         // when
         die();
         die();
@@ -93,17 +103,77 @@ public class ScoresTest {
         die();
 
         // then
-        assertEquals(Scores.MIN_SCORE, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        // when
+        // given
+        givenScores(0);
         win();
 
+        // when
         scores.clear();
 
         // then
-        assertEquals(Scores.MIN_SCORE, scores.getScore());
+        assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenWin() {
+        // given
+        givenScores(140);
+
+        // when
+        win();
+        win();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(WIN_SCORE),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenDie() {
+        // given
+        givenScores(140);
+
+        // when
+        die();
+        die();
+
+        // then
+        assertEquals(140
+                    + 2 * settings.integer(DIE_PENALTY),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenGameOver() {
+        // given
+        givenScores(140);
+
+        // when
+        gameOver();
+        gameOver();
+
+        // then
+        assertEquals(140,
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_whenAnnihilation() {
+        // given
+        givenScores(140);
+
+        // when
+        annihilation();
+        annihilation();
+
+        // then
+        assertEquals(140,
+                scores.getScore());
     }
 }

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.xonix.TestGameSettings;
 import com.codenjoy.dojo.xonix.model.level.Level;
 import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
@@ -38,7 +39,6 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.IS_MULTIPLAYER;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -56,8 +56,7 @@ public abstract class AbstractGameTest {
     public void setup() {
         dice = mock(Dice.class);
         printer = new PrinterFactoryImpl();
-        settings = new GameSettings()
-                .bool(IS_MULTIPLAYER, false);
+        settings = new TestGameSettings();
     }
 
     public void dice(int... ints) {

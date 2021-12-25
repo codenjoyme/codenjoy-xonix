@@ -23,55 +23,21 @@ package com.codenjoy.dojo.xonix.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
-
-import java.util.concurrent.atomic.AtomicInteger;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.DIE_PENALTY;
-import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_SCORES;
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_SCORE;
 
-public class Scores implements PlayerScores {
+public class Scores extends ScoresMap<Void> {
 
-    public static final int MIN_SCORE = 0;
+    public Scores(SettingsReader settings) {
+        super(settings);
 
-    private final AtomicInteger score;
-    private final GameSettings settings;
+        put(Event.WIN,
+                value -> settings.integer(WIN_SCORE));
 
-    public Scores(int startScore, GameSettings settings) {
-        this.score = new AtomicInteger(startScore);
-        this.settings = settings;
-    }
-
-    @Override
-    public int clear() {
-        score.set(MIN_SCORE);
-        return score.get();
-    }
-
-    @Override
-    public Integer getScore() {
-        return score.get();
-    }
-
-    @Override
-    public void event(Object event) {
-        switch ((Event) event) {
-            case ANNIHILATION:
-                break;
-            case GAME_OVER:
-                break;
-            case WIN:
-                score.addAndGet(settings.integer(WIN_SCORES));
-                break;
-            case DIE:
-                score.addAndGet(-settings.integer(DIE_PENALTY));
-                break;
-        }
-        score.accumulateAndGet(MIN_SCORE, Math::max);
-    }
-
-    @Override
-    public void update(Object score) {
-        this.score.set(Integer.parseInt(score.toString()));
+        put(Event.DIE,
+                value -> settings.integer(DIE_PENALTY));
     }
 }

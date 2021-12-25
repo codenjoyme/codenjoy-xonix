@@ -24,12 +24,14 @@ package com.codenjoy.dojo.xonix;
 
 import com.codenjoy.dojo.xonix.services.GameSettings;
 
+import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.IS_MULTIPLAYER;
+
 public class TestGameSettings extends GameSettings {
 
     /**
      * Here you can override the settings for all tests.
      */
     public TestGameSettings() {
-
+        bool(IS_MULTIPLAYER, false);
     }
 }

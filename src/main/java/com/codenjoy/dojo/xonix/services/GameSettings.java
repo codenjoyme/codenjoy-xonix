@@ -22,6 +22,7 @@ package com.codenjoy.dojo.xonix.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.event.Calculator;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.xonix.model.level.Level;
@@ -38,14 +39,14 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        WIN_CRITERION("How much % sea Hero should get"),
-        WIN_SCORES("Scores for winning"),
-        DIE_PENALTY("Die penalty"),
-        LIVES_COUNT("Lives count"),
+        WIN_CRITERION("[Game] How much % sea Hero should get"),
+        WIN_SCORE("[Score] Scores for winning"),
+        DIE_PENALTY("[Score] Die penalty"),
+        LIVES_COUNT("[Game] Lives count"),
 
-        LEVELS_COUNT("Levels count"),
-        IS_MULTIPLAYER("Multiplayer"),
-        ROOM_SIZE("Room size");
+        LEVELS_COUNT("[Level] Levels count"),
+        IS_MULTIPLAYER("[Game] Multiplayer"),
+        ROOM_SIZE("[Level] Room size");
 
         private String key;
 
@@ -66,9 +67,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public GameSettings() {
         integer(WIN_CRITERION, 75);
-        integer(WIN_SCORES, 100);
+        integer(WIN_SCORE, 100);
         integer(LIVES_COUNT, 3);
-        integer(DIE_PENALTY, 30);
+        integer(DIE_PENALTY, -30);
 
         integer(ROOM_SIZE, 4);
         add(IS_MULTIPLAYER, true)
@@ -116,4 +117,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return !bool(IS_MULTIPLAYER);
     }
 
+    public Calculator<Void> calculator() {
+        return new Calculator<>(new Scores(this));
+    }
 }
