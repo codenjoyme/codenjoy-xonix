@@ -96,7 +96,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
                     settings.integer(LEVELS_COUNT),
                     DISPOSABLE, RELOAD_ALONE);
         } else {
-            return MultiplayerType.SINGLE_LEVELS.apply(
+            return MultiplayerType.ALL_SINGLE.apply(
                     settings.integer(LEVELS_COUNT));
         }
     }
