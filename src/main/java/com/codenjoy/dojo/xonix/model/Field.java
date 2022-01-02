@@ -29,7 +29,7 @@ import com.codenjoy.dojo.xonix.model.items.enemies.Enemy;
 
 import java.util.List;
 
-public interface Field extends GameField<Player> {
+public interface Field extends GameField<Player, Hero> {
 
     Hero newHero(Player player);
 
