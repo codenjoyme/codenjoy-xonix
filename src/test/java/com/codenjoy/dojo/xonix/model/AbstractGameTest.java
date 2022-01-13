@@ -23,9 +23,9 @@ package com.codenjoy.dojo.xonix.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -35,7 +35,6 @@ import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 
@@ -50,24 +49,21 @@ public abstract class AbstractGameTest {
     protected Player player;
     protected PrinterFactory printer;
     protected GameSettings settings;
-    private Dice dice;
+    private MockDice dice;
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         printer = new PrinterFactoryImpl();
         settings = new TestGameSettings();
     }
 
-    public void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    private void dice(Integer... next) {
+        dice.then(next);
     }
 
     protected void givenFl(String board) {
-        when(dice.next(anyInt())).thenReturn(2); // Direction always will be UP
+        dice(2); // Direction always will be UP
         Level level = new Level(board);
         game = new Xonix(level, settings, dice);
 

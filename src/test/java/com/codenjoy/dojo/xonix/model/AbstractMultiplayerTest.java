@@ -22,7 +22,11 @@ package com.codenjoy.dojo.xonix.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.dice.MockDice;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -32,7 +36,6 @@ import com.codenjoy.dojo.xonix.services.Event;
 import com.codenjoy.dojo.xonix.services.GameSettings;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -40,14 +43,13 @@ import java.util.List;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.IS_MULTIPLAYER;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public abstract class AbstractMultiplayerTest {
 
     private List<EventListener> listeners = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
-    private Dice dice;
+    private MockDice dice;
     protected Xonix field;
     private GameSettings settings;
     private PrinterFactory printerFactory;
@@ -55,17 +57,14 @@ public abstract class AbstractMultiplayerTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        dice = mock(Dice.class);
+        dice = new MockDice();
         printerFactory = new PrinterFactoryImpl();
         settings = new GameSettings()
                 .bool(IS_MULTIPLAYER, true);
     }
 
-    public void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    protected void dice(Integer... next) {
+        dice.then(next);
     }
 
     public void givenFl(String map) {
@@ -85,10 +84,6 @@ public abstract class AbstractMultiplayerTest {
         game.on(field);
         game.newGame();
         return player;
-    }
-
-    public void dice(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
     }
 
     public void assertF(String expected, Game game) {
