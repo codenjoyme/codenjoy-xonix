@@ -22,11 +22,11 @@ package com.codenjoy.dojo.xonix.services.ai;
  * #L%
  */
 
+import com.codenjoy.dojo.games.xonix.Board;
+import com.codenjoy.dojo.games.xonix.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.games.xonix.Board;
-import com.codenjoy.dojo.games.xonix.Element;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -185,7 +185,7 @@ public class GameState {
     }
 
     public boolean isInBounds(Point point) {
-        return !board.isOutOfField(point.getX(), point.getY());
+        return !board.isOutOf(point.getX(), point.getY());
     }
 
     public Element getAt(Point point) {
