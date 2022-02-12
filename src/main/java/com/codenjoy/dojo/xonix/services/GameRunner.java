@@ -48,6 +48,8 @@ import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.ROOM_SIZE;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
+    public static final String GAME_NAME = "xonix";
+
     @Override
     public GameSettings getSettings() {
         return new GameSettings();
@@ -70,7 +72,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public String name() {
-        return "xonix";
+        return GAME_NAME;
     }
 
     @Override
