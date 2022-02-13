@@ -23,6 +23,7 @@ package com.codenjoy.dojo.xonix.services;
  */
 
 import com.codenjoy.dojo.services.event.Calculator;
+import com.codenjoy.dojo.services.settings.PropertiesKey;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.xonix.model.level.Level;
@@ -33,25 +34,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import static com.codenjoy.dojo.xonix.services.GameRunner.GAME_NAME;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    public enum Keys implements Key {
+    public enum Keys implements PropertiesKey {
 
-        WIN_CRITERION("[Game] How much % sea Hero should get"),
-        WIN_SCORE("[Score] Scores for winning"),
-        DIE_PENALTY("[Score] Die penalty"),
-        LIVES_COUNT("[Game] Lives count"),
-
-        LEVELS_COUNT("[Level] Levels count"),
-        IS_MULTIPLAYER("[Game] Multiplayer"),
-        ROOM_SIZE("[Level] Room size");
+        WIN_CRITERION,
+        WIN_SCORE,
+        DIE_PENALTY,
+        LIVES_COUNT,
+        LEVELS_COUNT,
+        IS_MULTIPLAYER,
+        ROOM_SIZE;
 
         private String key;
 
-        Keys(String key) {
-            this.key = key;
+        Keys() {
+            this.key = key(GAME_NAME);
         }
 
         @Override
