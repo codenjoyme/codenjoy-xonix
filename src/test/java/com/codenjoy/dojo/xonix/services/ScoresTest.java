@@ -23,157 +23,97 @@ package com.codenjoy.dojo.xonix.services;
  */
 
 
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.event.Calculator;
-import com.codenjoy.dojo.services.event.ScoresImpl;
+import com.codenjoy.dojo.services.event.ScoresMap;
+import com.codenjoy.dojo.utils.scorestest.AbstractScoresTest;
 import com.codenjoy.dojo.xonix.TestGameSettings;
-import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.DIE_PENALTY;
 import static com.codenjoy.dojo.xonix.services.GameSettings.Keys.WIN_SCORE;
-import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class ScoresTest extends AbstractScoresTest {
 
-    private PlayerScores scores;
-    private GameSettings settings;
-
-    public void die() {
-        scores.event(Event.DIE);
+    @Override
+    public GameSettings settings() {
+        return new TestGameSettings()
+                .integer(WIN_SCORE, 1)
+                .integer(DIE_PENALTY, -1);
     }
 
-    public void win() {
-        scores.event(Event.WIN);
+    @Override
+    protected Class<? extends ScoresMap> scores() {
+        return Scores.class;
     }
 
-    public void gameOver() {
-        scores.event(Event.GAME_OVER);
-    }
-
-    public void annihilation() {
-        scores.event(Event.ANNIHILATION);
-    }
-
-    @Before
-    public void setup() {
-        settings = new TestGameSettings();
+    @Override
+    protected Class<? extends Enum> eventTypes() {
+        return Event.class;
     }
 
     @Test
     public void shouldCollectScores() {
-        // given
-        givenScores(140);
-
-        // when
-        win();
-        win();
-        win();
-        win();
-
-        die();
-        die();
-
-        gameOver();
-
-        annihilation();
-        annihilation();
-
-        // then
-        assertEquals(140
-                    + 4 * settings.integer(WIN_SCORE)
-                    + 2 * settings.integer(DIE_PENALTY),
-                scores.getScore());
-    }
-
-    private void givenScores(int score) {
-        scores = new ScoresImpl<>(score, new Calculator<>(new Scores(settings)));
+        assertEvents("100:\n" +
+                "WIN > +1 = 101\n" +
+                "WIN > +1 = 102\n" +
+                "WIN > +1 = 103\n" +
+                "WIN > +1 = 104\n" +
+                "DIE > -1 = 103\n" +
+                "DIE > -1 = 102\n" +
+                "GAME_OVER > +0 = 102\n" +
+                "ANNIHILATION > +0 = 102\n" +
+                "ANNIHILATION > +0 = 102");
     }
 
     @Test
     public void shouldNotLessThanZero() {
-        // given
-        givenScores(0);
-
-        // when
-        die();
-        die();
-        die();
-        die();
-        die();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("2:\n" +
+                "DIE > -1 = 1\n" +
+                "DIE > -1 = 0\n" +
+                "DIE > +0 = 0\n" +
+                "DIE > +0 = 0");
     }
 
     @Test
     public void shouldCleanScore() {
-        // given
-        givenScores(0);
-        win();
-
-        // when
-        scores.clear();
-
-        // then
-        assertEquals(0, scores.getScore());
+        assertEvents("100:\n" +
+                "WIN > +1 = 101\n" +
+                "(CLEAN) > -101 = 0\n" +
+                "WIN > +1 = 1");
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
         // given
-        givenScores(140);
+        settings.integer(WIN_SCORE, 1);
 
-        // when
-        win();
-        win();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(WIN_SCORE),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "WIN > +1 = 101\n" +
+                "WIN > +1 = 102");
     }
 
     @Test
     public void shouldCollectScores_whenDie() {
         // given
-        givenScores(140);
+        settings.integer(DIE_PENALTY, -1);
 
-        // when
-        die();
-        die();
-
-        // then
-        assertEquals(140
-                    + 2 * settings.integer(DIE_PENALTY),
-                scores.getScore());
+        // when then
+        assertEvents("100:\n" +
+                "DIE > -1 = 99\n" +
+                "DIE > -1 = 98");
     }
 
     @Test
     public void shouldCollectScores_whenGameOver() {
-        // given
-        givenScores(140);
-
-        // when
-        gameOver();
-        gameOver();
-
-        // then
-        assertEquals(140,
-                scores.getScore());
+        assertEvents("100:\n" +
+                "GAME_OVER > +0 = 100\n" +
+                "GAME_OVER > +0 = 100");
     }
 
     @Test
     public void shouldCollectScores_whenAnnihilation() {
-        // given
-        givenScores(140);
-
-        // when
-        annihilation();
-        annihilation();
-
-        // then
-        assertEquals(140,
-                scores.getScore());
+        assertEvents("100:\n" +
+                "ANNIHILATION > +0 = 100\n" +
+                "ANNIHILATION > +0 = 100");
     }
 }
